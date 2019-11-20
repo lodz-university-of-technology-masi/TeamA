@@ -1,0 +1,105 @@
+/*#39557C*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width:100vw;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#form {
+    width: 100%;
+    max-width: 330px;
+    height:100%;
+    max-height: 380px;
+    background: #fff;
+    box-shadow: 0 0 5px 1px #ccc;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+    #form > header {
+        width:100%;
+        text-align:center;
+        background: #39557C;
+        padding: 14px 0;
+        display: block;
+    }
+        #form > header > h1 {
+            font-size: 1.4em;
+            font-family: 'Open Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fff;
+            display: block;
+        }
+
+    main {
+        flex: 1 1;
+        padding: 10px 0;
+    }
+        .input {
+            width:calc(100% - 40px);
+            padding: 15px 20px;
+        }
+            .input > h3 {
+                font-size: 1.2em;
+                font-family: 'Open Sans', sans-serif;
+                margin-bottom: 5px;
+            }
+            .input > input {
+                width: 100%;
+                padding: 5px 0;
+                font-size: 1em;
+                font-family: 'Open Sans', sans-serif;
+                border:none;
+                border-bottom: solid 2px #ccc;
+            }
+            .input > input:focus {
+                border-bottom-color: #39557C;
+            }
+
+            #additions {
+                width:100%;
+                text-align: center;
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+                #additions > button {
+                    font-size: 1em;
+                    font-family: 'Open Sans', sans-serif;
+                    padding: 7px 30px;
+                    background: #39557C;
+                    border:none;
+                    border-radius: 20px;
+                    color: #fff;
+                }
+                #additions > p {
+                    width: 100%;
+                    padding: 3px 0;
+                    text-decoration: underline;
+                    font-size: 0.8em;
+                    font-family: 'Open Sans', sans-serif;
+                    text-align:center;
+                    color: #999;
+                    cursor: pointer;
+                }
+
+    #form > footer {
+        width:100%;
+        background: #eee;
+    }
+        #form > footer > p {
+            width: 100%;
+            padding: 3px 0;
+            font-size: 0.8em;
+            font-family: 'Open Sans', sans-serif;
+            text-align:center;
+            color: #999;
+        }
