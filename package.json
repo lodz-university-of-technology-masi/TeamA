@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --mode development --watch",
     "build": "webpack --mode production",
-    "live": "webpack-dev-server --inline --hot"
+    "live": "webpack-dev-server --inline --hot --content-base dist/"
   },
   "author": "Team A",
   "license": "ISC",

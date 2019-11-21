@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="css/home.css">
+    <link rel="stylesheet" type="text/css" href="./css/home.css">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <title>Login</title>
@@ -90,14 +90,14 @@
         <input id="addForm-formName" type="text" placeholder="Enter form name" />
 
         <div id="addForm-addQuestions">
-            <button onclick="addNewOpenQuestion()">Add new Open Question</button>
-            <button onclick="addNewClosedQuestion()">Add new Close Question</button>
+            <button id="addForm-addQuestions-openButton">Add new Open Question</button>
+            <button id="addForm-addQuestions-closedButton">Add new Close Question</button>
         </div>
 
         <main id="addForm-questionList"></main>
         
         <div id="addForm-final">
-            <button onclick="saveFormToDataBase()">Save Form to Base</button>
+            <button id="addForm-final-button">Save Form to Base</button>
         </div>
     </div>
 </section>
@@ -116,9 +116,9 @@
 
     <div id="addUserToForm-content">
         <header>
-            <div onclick="AddUserToForm.chooseSection(0);" class="addUserToForm-headerPost">Użytkownicy</div>
-            <div onclick="AddUserToForm.chooseSection(1);" class="addUserToForm-headerPost">Formularz</div>
-            <div onclick="AddUserToForm.chooseSection(2);" class="addUserToForm-headerPost">Zakończenie</div>
+            <div class="addUserToForm-headerPost">Użytkownicy</div>
+            <div class="addUserToForm-headerPost">Formularz</div>
+            <div class="addUserToForm-headerPost">Zakończenie</div>
             <div id="addUserToForm-headerLine"></div>
         </header>
         <div id="addUserToForm-main">
@@ -168,7 +168,7 @@
                         </label>
                     </div>
                 </div>
-                <button onclick="AddUserToForm.chooseSection(1);">Dalej</button>
+                <button id="addUserToForm-users-button">Dalej</button>
             </div>
             <div class="addUserToForm-main-post" id="addUserToForm-form">
                 <h4>Wybierz formularz</h4>
@@ -192,7 +192,7 @@
                         </label>
                     </div>
                 </div>
-                <button onclick="AddUserToForm.chooseSection(2);">Dalej</button>
+                <button id="addUserToForm-form-button">Dalej</button>
             </div>
             <div class="addUserToForm-main-post" id="addUserToForm-summary">
                 <h4>Podsumowanie</h4>

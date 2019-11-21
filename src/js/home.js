@@ -41,24 +41,6 @@ const SectionManager = {
         button.addEventListener('click', () => SectionManager.goBack());
 })();
 
-window.onload = () => {
-    $id('panel-btn-1-1')
-        .addEventListener('click', () => {
-            SectionManager.choose('addForm');
-        });
-
-    $id('panel-btn-2-1')
-        .addEventListener('click', () => {
-            AddUserToForm.init();
-            SectionManager.choose('addUserToForm');
-        });
-
-    $id('panel-btn-3-1')
-        .addEventListener('click', () => {
-            SectionManager.choose('import');
-        });
-};
-
 const AddUserToForm = {
     initialized: false,
     chosen: null,
@@ -112,6 +94,7 @@ const AddUserToForm = {
             let form = Array.from($('.addUserToForm-formInput')).find(el => {
                 if (el.checked)
                     return true;
+                return false;
             });
 
             if (typeof form !== 'undefined') {
@@ -127,71 +110,128 @@ const AddUserToForm = {
             $id('addUserToForm-summary-text').innerHTML = 'Nie wybrano żadnego użytkownika!';
             $id('addUserToForm-acceptBtn').setAttribute('name', 'inactive');
         }
+    },
+
+    assignEventListeners() {
+        for (let i = 0; i < 3; i++) {
+            $('.addUserToForm-headerPost')[i]
+                .addEventListener('click', () => {
+                    AddUserToForm.chooseSection(i);
+                });
+        }
+
+        $id('addUserToForm-users-button')
+            .addEventListener('click', () => {
+                AddUserToForm.chooseSection(1);
+            });
+
+        $id('addUserToForm-form-button')
+            .addEventListener('click', () => {
+                AddUserToForm.chooseSection(2);
+            });
     }
 };
 
-let newQuestion = (id, isOpen) => {
-    const question = document.createElement("input");
-    question.setAttribute("class","question");
-    question.setAttribute("id", id);
-    question.setAttribute("type","text");
-    if (isOpen)
-        question.setAttribute("placeholder", "Enter your open question");
-    else
-        question.setAttribute("placeholder", "Enter your closed question");
-    return question;
-};
+const AddForm = {
+    addNewOpenQuestion() {
+        const main = $id('addForm-questionList');
+        const openQuestion = document.createElement('div');
+        openQuestion.classList.add('input');
+        openQuestion.appendChild(this.addNewQuestion('open question', true));
+        main.appendChild(openQuestion);
+    },
 
-let newAnswer = (placeholder) => {
-    const answer = document.createElement("input");
-    answer.setAttribute("class","question");
-    answer.setAttribute("type","text");
-    answer.setAttribute("placeholder", placeholder);
-    return answer;
-};
+    addNewClosedQuestion() {
+        const main = $id('addForm-questionList');
+        const closedQuestion = document.createElement('div');
+        closedQuestion.classList.add('input');
+        closedQuestion.appendChild(this.addNewQuestion('closed question', false));
 
-let addNewOpenQuestion = () => {
-    const main = document.getElementById("addForm-questionList");
-    const openQuestion = document.createElement("div");
-    openQuestion.setAttribute("class","input");
-    openQuestion.appendChild(newQuestion("open question", true));
-    main.appendChild(openQuestion);
-};
+        ['1.', '2.', '3.'].forEach(no => {
+            closedQuestion.appendChild(this.addNewAnswer(no));
+        });
 
-let addNewClosedQuestion = () => {
-    const main = document.getElementById("addForm-questionList");
-    const closedQuestion = document.createElement("div");
-    closedQuestion.setAttribute("class","input");
-    closedQuestion.appendChild(newQuestion("closed question", false));
+        main.appendChild(closedQuestion);
+    },
 
-    ["1. ", "2. ", "3. "].forEach((v) => {
-        closedQuestion.appendChild(newAnswer(v));
-    });
+    addNewQuestion(id, isOpen) {
+        const question = document.createElement('input');
+        question.classList.add('question');
+        question.id = id;
+        if (isOpen)
+            question.placeholder = 'Enter your open question';
+        else
+            question.placeholder = 'Enter your closed question';
+        return question;
+    },
 
-    main.appendChild(closedQuestion);
-};
+    addNewAnswer(placeholder) {
+        const answer = document.createElement('input');
+        answer.classList.add('question');
+        answer.placeholder = placeholder;
+        return answer;
+    },
 
-let saveFormToDataBase = () => {
-    const doc = document.getElementsByClassName("question");
-    let questionList = {"name": document.getElementById("name").value};
+    saveFormToDataBase() {
+        const doc = document.getElementsByClassName('question');
+        let questionList = { name: $id('name').value };
 
-    for (let i = 0, number = 1; i < doc.length; i++, number++) {
-        if (doc[i].id === "open question") {
-            questionList["question" + number] = doc[i].value;
-        }
+        let number = 1;
+        for (let i = 0; i < doc.length; i++) {
+            if (doc[i].id === 'open question') {
+                questionList[`question${number}`] = doc[i].value;
+            } else {
+                const question = { question: doc[i].value };
 
-        else {
-            let question = {"question": doc[i].value};
+                for (let j = i + 1; j < i + 4; j++)
+                    question[`answer${j - 1}`] = doc[j].value;
 
-            for (let j = i + 1; j < i + 4; j++) {
-                question["answer" + (j - 1)] = doc[j].value;
+                i += 3;
+                questionList[`question${number}`] = question;
             }
 
-            i += 3;
-            questionList["question" + number] = question;
+            number++;
         }
-    }
 
-    questionList = JSON.stringify(questionList);
-    /* todo */
+        questionList = JSON.stringify(questionList);
+        /* todo */
+    },
+
+    assignEventListeners() {
+        $id('addForm-addQuestions-openButton')
+            .addEventListener('click', () => {
+                this.addNewOpenQuestion();
+            });
+
+        $id('addForm-addQuestions-closedButton')
+            .addEventListener('click', () => {
+                this.addNewClosedQuestion();
+            });
+
+        $id('addForm-final-button')
+            .addEventListener('click', () => {
+                this.saveFormToDataBase();
+            });
+    }
+};
+
+window.onload = () => {
+    AddForm.assignEventListeners();
+    AddUserToForm.assignEventListeners();
+
+    $id('panel-btn-1-1')
+        .addEventListener('click', () => {
+            SectionManager.choose('addForm');
+        });
+
+    $id('panel-btn-2-1')
+        .addEventListener('click', () => {
+            SectionManager.choose('addUserToForm');
+            AddUserToForm.init();
+        });
+
+    $id('panel-btn-3-1')
+        .addEventListener('click', () => {
+            SectionManager.choose('import');
+        });
 };
