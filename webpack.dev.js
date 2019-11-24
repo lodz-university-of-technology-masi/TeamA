@@ -32,12 +32,7 @@ module.exports = merge(common, {
                         }
                     },
                     'extract-loader',
-                    {
-                        loader: 'html-loader',
-                        options: {
-                            attrs: ["img:src", "link:href"]
-                        }
-                    }
+                    'html-loader'
                 ]
             }
         ]

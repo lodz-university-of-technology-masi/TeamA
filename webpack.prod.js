@@ -5,9 +5,6 @@ const common = require('./webpack.common');
 
 module.exports = merge(common, {
     mode: 'production',
-    plugins: [
-        new MiniCssExtractPlugin({ filename: '../css/[name].css' })
-    ],
     module: {
         rules: [
             {
@@ -23,8 +20,9 @@ module.exports = merge(common, {
                 test: /\.html$/,
                 use: [
                     {
-                        loader: 'file-loader?name=[name].[ext]',
+                        loader: 'file-loader',
                         options: {
+                            name: '[name].[ext]',
                             outputPath: '../'
                         }
                     },
@@ -40,5 +38,10 @@ module.exports = merge(common, {
                 ]
             }
         ]
-    }
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '../css/[name]-[hash].css'
+        })
+    ]
 });
