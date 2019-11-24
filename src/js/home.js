@@ -1,4 +1,9 @@
+import '../html/home.html';
 import '../scss/home.scss';
+
+// import '../icons/arrow-left.png';
+// import '../icons/upload.png';
+// import '../icons/logout.png';
 
 function $id(id) {
     return document.getElementById(id);
