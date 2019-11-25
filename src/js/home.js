@@ -1,4 +1,5 @@
 import '../scss/home.scss';
+import '../html/home.html';
 
 function $id(id) {
     return document.getElementById(id);

@@ -1,4 +1,4 @@
-import '../html/index.html';
+import '../html/register.html';
 import '../scss/login.scss';
 
 import './config';
