@@ -1,0 +1,44 @@
+#import-content {
+        width: calc(100% - 12px - 40px);
+        max-width: 500px;
+        margin: 0 auto;
+        height:300px;
+
+        > input {
+            display: none;
+        }
+
+        > label {
+            width: calc(100% - 80px);
+            height:calc(100% - 80px);
+            padding: 40px;
+            border: dashed 6px #39557C;
+            text-align:center;
+            display: block;
+
+            > img {
+                width: 128px;
+                margin:0 auto;
+                display: block;
+            }
+
+            > div {
+                padding: 8px 25px;
+                border-radius: 20px;
+                background: #39557C;
+                color: #fff;
+                display: inline-block;
+                margin-top: 20px;
+                font-size: 0.9em;
+                font-family: 'Open Sans', sans-serif;
+            }
+
+            > p {
+                font-size: 1.1em;
+                line-height: 30px;
+                margin-top: 6px;
+                color: #39557C;
+                font-family: 'Open Sans', sans-serif;
+            }
+        }
+    }

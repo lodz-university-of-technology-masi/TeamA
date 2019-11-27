@@ -18,7 +18,7 @@
     "rules": {
         "indent": ["error", 4],
         "no-plusplus": 0,
-        "curly": ["error", "multi-or-nest", "consistent"],
+        "curly": 0,
         "nonblock-statement-body-position": ["error", "any"],
         "no-restricted-syntax": 0,
         "comma-dangle": ["error", "never"],
