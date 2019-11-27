@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --config webpack.dev.js --watch",
     "build": "webpack --config webpack.prod.js",
-    "srv": "cd dist && startserver -p 8080",
+    "srv": "http-server ./dist/ -p 8080 -o",
     "live": "webpack-dev-server --inline --hot --content-base --config webpack.dev.js dist/"
   },
   "author": "Team A",
@@ -27,6 +27,7 @@
     "file-loader": "^4.3.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "http-server": "^0.12.0",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
     "null-loader": "^3.0.0",
