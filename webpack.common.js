@@ -17,7 +17,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /js\/.*\.m?js$/,
+                test: /js(\/|\\).*\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: 'babel-loader',
@@ -27,7 +27,7 @@ module.exports = {
                 }
             },
             {
-                test: /vendor\/.*\.m?js$/,
+                test: /vendor(\/|\\).*\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: 'file-loader',
@@ -38,7 +38,7 @@ module.exports = {
                 }
             },
             {
-                test: /\/icons\/.*\.(svg|png|jpg|gif|jpeg)$/,
+                test: /icons(\/|\\).*\.(svg|png|jpg|gif|jpeg)$/,
                 use: {
                     loader: 'file-loader',
                     options: {
