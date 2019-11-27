@@ -1,0 +1,52 @@
+.section {
+    width:100%;
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+
+    transition: opacity 0.4s;
+
+    > h2 {
+        font-size: 1.8em;
+        color: #39557C;
+        font-family: 'Open Sans', sans-serif;
+        text-align: center;
+        margin: 20px 0;
+    }
+}
+    .sectionBack {
+        width:calc(100% - 40px);
+        margin: 10px 0px;
+
+        > div {
+            margin-left: 15px;
+            padding: 5px 20px 5px 15px;
+            display: inline-block;
+            user-select: none;
+            cursor: pointer;
+
+            &:hover {
+                background: #eee;
+            }
+
+            &:active {
+                background: #ccc;
+            }
+        }
+    }
+            .sectionBack-content {
+                display: flex;
+                align-items: center;
+
+                > img {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 5px;
+                }
+
+                > span {
+                    font-size: 1.1em;
+                    color: #39557C;
+                    font-family: 'Open Sans', sans-serif;
+                }
+            }

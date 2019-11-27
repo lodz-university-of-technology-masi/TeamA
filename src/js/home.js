@@ -55,6 +55,21 @@ const AddUserToForm = {
         this.chooseSection(0);
     },
 
+    open() {
+        if (!this.initialized)
+            this.init();
+
+        this.chooseSection(0);
+
+        const users = $id('addUserToForm-users').children;
+        for (const el of users)
+            el.querySelectorAll('input')[0].checked = false;
+
+        const forms = $id('addUserToForm-forms').children;
+        for (const el of forms)
+            el.querySelectorAll('input')[0].checked = false;
+    },
+
     chooseSection(no) {
         if (this.chosen === no)
             return;
@@ -101,7 +116,7 @@ const AddUserToForm = {
             if (typeof form !== 'undefined') {
                 form = form.dataset.form;
                 $id('addUserToForm-summary-text').innerHTML =
-                    `Czy na pewno chcesz dodać ${users.length} użytkownik ${users.length === 1 ? 'a' : 'ów'} do formluarza ${form}?`;
+                    `Czy na pewno chcesz dodać ${users.length} użytkownik${users.length === 1 ? 'a' : 'ów'} do formluarza ${form}?`;
                 $id('addUserToForm-acceptBtn').setAttribute('name', '');
             } else {
                 $id('addUserToForm-summary-text').innerHTML = 'Nie wybrano żadnego formularza!';
@@ -134,6 +149,11 @@ const AddUserToForm = {
 };
 
 const AddForm = {
+    open() {
+        $id('addForm-formName').value = '';
+        $id('addForm-questionList').innerHTML = '';
+    },
+
     addNewOpenQuestion() {
         const main = $id('addForm-questionList');
         const openQuestion = document.createElement('div');
@@ -217,18 +237,24 @@ const AddForm = {
 };
 
 window.onload = () => {
+    const username = 'Wiginiusz Pomyloński';
+
+    $id('header-user-letter').innerHTML = username.substr(0, 1);
+    $id('header-user-label').innerHTML = username;
+
     AddForm.assignEventListeners();
     AddUserToForm.assignEventListeners();
 
     $id('panel-btn-1-1')
         .addEventListener('click', () => {
+            AddForm.open();
             SectionManager.choose('addForm');
         });
 
     $id('panel-btn-2-1')
         .addEventListener('click', () => {
             SectionManager.choose('addUserToForm');
-            AddUserToForm.init();
+            AddUserToForm.open();
         });
 
     $id('panel-btn-3-1')
