@@ -180,28 +180,30 @@ const AddForm = {
         formToBase.push({title: document.getElementById('addForm-formName').value});
         for (let i = 0; i < doc.length; i++) {
             if (doc[i].children[0].className === 'openQuestion') {
-                const question = [{number: i},
-                    {type: 'O'},
-                    {language: 'EN'},
-                    {content: doc[i].children[0].value},
-                    {numberOfAnswers: '|'},
-                    {answers: []}];
+                const question = {
+                    number: i,
+                    type: 'O',
+                    language: 'EN',
+                    content: doc[i].children[0].value,
+                    numberOfAnswers: '|',
+                    answers: []
+                };
                 questions.push(question);
             } else {
-                const question = [
-                    {number: i},
-                    {type: 'W'},
-                    {language: 'EN'},
-                    {content: doc[i].children[0].value},
-                    {numberOfAnswers: doc[i].children.length - 1},
-                    {answers: [doc[i].children[1].value, doc[i].children[2].value, doc[i].children[3].value]}
-                ];
+                const question = {
+                    number: i,
+                    type: 'W',
+                    language: 'EN',
+                    content: doc[i].children[0].value,
+                    numberOfAnswers: doc[i].children.length - 1,
+                    answers: [doc[i].children[1].value, doc[i].children[2].value, doc[i].children[3].value]
+                };
                 questions.push(question);
             }
         }
         formToBase.push({questions: questions});
         formToBase = JSON.stringify(formToBase);
-        console.log(JSON.parse(formToBase));
+        // console.log(JSON.parse(formToBase));
         // TODO sending to backend
     },
 
