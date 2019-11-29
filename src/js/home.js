@@ -175,23 +175,33 @@ const AddForm = {
 
     saveFormToDataBase() {
         let formToBase = [];
+        const questions = [];
         const doc = document.getElementById('addForm-questionList').children;
-        formToBase.push({ formName: document.getElementById('addForm-formName').value });
+        formToBase.push({title: document.getElementById('addForm-formName').value});
         for (let i = 0; i < doc.length; i++) {
             if (doc[i].children[0].className === 'openQuestion') {
-                formToBase.push({ openQuestion: doc[i].children[0].value });
+                const question = [{number: i},
+                    {type: 'O'},
+                    {language: 'EN'},
+                    {content: doc[i].children[0].value},
+                    {numberOfAnswers: '|'},
+                    {answers: []}];
+                questions.push(question);
             } else {
-                const question = {
-                    question: doc[i].children[0].value,
-                    answer1: doc[i].children[1].value,
-                    answer2: doc[i].children[2].value,
-                    answer3: doc[i].children[3].value
-                };
-                formToBase.push({ closedQuestion: question });
+                const question = [
+                    {number: i},
+                    {type: 'W'},
+                    {language: 'EN'},
+                    {content: doc[i].children[0].value},
+                    {numberOfAnswers: doc[i].children.length - 1},
+                    {answers: [doc[i].children[1].value, doc[i].children[2].value, doc[i].children[3].value]}
+                ];
+                questions.push(question);
             }
         }
+        formToBase.push({forma: questions});
         formToBase = JSON.stringify(formToBase);
-        // console.log(JSON.parse(formToBase));
+        console.log(JSON.parse(formToBase));
         // TODO sending to backend
     },
 
