@@ -68,11 +68,10 @@ const ShowForms = {
     },
 
     open() {
-        if (this.init)
+        if (this.initialized)
             this.init();
-        else {
-            //
-        }
+        else
+            this.showAll();
     },
 
     showAll() {
