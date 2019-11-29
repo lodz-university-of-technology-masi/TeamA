@@ -194,15 +194,15 @@ const AddForm = {
                     language: 'EN',
                     content: doc[i].children[0].value,
                     numberOfAnswers: doc[i].children.length - 1,
-                    answers: [doc[i].children[1].value, doc[i].children[2].value, doc[i].children[3].value]
+                    answers: [doc[i].children[1].value, doc[i].children[2].value,
+                        doc[i].children[3].value]
                 };
                 questions.push(question);
             }
         }
-        const formToBase = {title: document.getElementById('addForm-formName').value, questions};
-        const data = JSON.stringify(formToBase)
-        console.log(JSON.parse(data))
-        // console.log(JSON.parse(formToBase));
+        const formToBase = { title: document.getElementById('addForm-formName').value, questions };
+        const dataToBase = JSON.stringify(formToBase);
+        console.log(JSON.parse(dataToBase));
         // TODO sending to backend
     },
 
