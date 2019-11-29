@@ -158,7 +158,7 @@ const AddForm = {
         const main = $id('addForm-questionList');
         const openQuestion = document.createElement('div');
         openQuestion.classList.add('input');
-        openQuestion.appendChild(this.addNewQuestion('open question', true));
+        openQuestion.appendChild(this.addNewQuestion('openQuestion', true));
         main.appendChild(openQuestion);
     },
 
@@ -166,7 +166,7 @@ const AddForm = {
         const main = $id('addForm-questionList');
         const closedQuestion = document.createElement('div');
         closedQuestion.classList.add('input');
-        closedQuestion.appendChild(this.addNewQuestion('closed question', false));
+        closedQuestion.appendChild(this.addNewQuestion('closedQuestion', false));
 
         ['1.', '2.', '3.'].forEach(no => {
             closedQuestion.appendChild(this.addNewAnswer(no));
@@ -175,10 +175,10 @@ const AddForm = {
         main.appendChild(closedQuestion);
     },
 
-    addNewQuestion(id, isOpen) {
+    addNewQuestion(className, isOpen) {
         const question = document.createElement('input');
         question.classList.add('question');
-        question.id = id;
+        question.className = className;
         if (isOpen)
             question.placeholder = 'Enter your open question';
         else
@@ -194,28 +194,36 @@ const AddForm = {
     },
 
     saveFormToDataBase() {
-        const doc = document.getElementsByClassName('question');
-        let questionList = { name: $id('name').value };
-
-        let number = 1;
+        const questions = [];
+        const doc = document.getElementById('addForm-questionList').children;
         for (let i = 0; i < doc.length; i++) {
-            if (doc[i].id === 'open question') {
-                questionList[`question${number}`] = doc[i].value;
+            if (doc[i].children[0].className === 'openQuestion') {
+                const question = {
+                    number: i,
+                    type: 'O',
+                    language: 'EN',
+                    content: doc[i].children[0].value,
+                    numberOfAnswers: '|',
+                    answers: []
+                };
+                questions.push(question);
             } else {
-                const question = { question: doc[i].value };
-
-                for (let j = i + 1; j < i + 4; j++)
-                    question[`answer${j - 1}`] = doc[j].value;
-
-                i += 3;
-                questionList[`question${number}`] = question;
+                const question = {
+                    number: i,
+                    type: 'W',
+                    language: 'EN',
+                    content: doc[i].children[0].value,
+                    numberOfAnswers: doc[i].children.length - 1,
+                    answers: [doc[i].children[1].value, doc[i].children[2].value,
+                        doc[i].children[3].value]
+                };
+                questions.push(question);
             }
-
-            number++;
         }
-
-        questionList = JSON.stringify(questionList);
-        /* todo */
+        const formToBase = { title: document.getElementById('addForm-formName').value, questions };
+        const dataToBase = JSON.stringify(formToBase);
+        console.log(JSON.parse(dataToBase));
+        // TODO sending to backend
     },
 
     assignEventListeners() {
