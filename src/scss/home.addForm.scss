@@ -47,29 +47,6 @@
             cursor: pointer;
         }
     }
-        .input {
-            width:calc(100% - 40px);
-            padding: 15px 20px;
-
-            > h3 {
-                font-size: 1.2em;
-                font-family: 'Open Sans', sans-serif;
-                margin-bottom: 5px;
-            }
-
-            > input {
-                width: 100%;
-                padding: 5px 0;
-                font-size: 1em;
-                font-family: 'Open Sans', sans-serif;
-                border:none;
-                border-bottom: solid 2px #ccc;
-
-                &:focus {
-                    border-bottom-color: #39557C;
-                }
-            }
-        }
             #addForm-final {
                 width:100%;
                 text-align: center;
