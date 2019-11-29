@@ -1,13 +1,10 @@
 import '../scss/home.scss';
 import '../html/home.html';
 
-function $id(id) {
-    return document.getElementById(id);
-}
-
-function $(selector) {
-    return document.querySelectorAll(selector);
-}
+const { $id } = require('./utils');
+const { AddForm } = require('./HRModules/addForm');
+const { AddUserToForm } = require('./HRModules/addUserToForm');
+const { ShowForms } = require('./HRModules/showForms');
 
 const SectionManager = {
     currentElement: null,
@@ -42,208 +39,6 @@ const SectionManager = {
         button.addEventListener('click', () => SectionManager.goBack());
 })();
 
-const AddUserToForm = {
-    initialized: false,
-    chosen: null,
-
-    init() {
-        if (this.initialized)
-            return;
-
-        this.initialized = true;
-
-        this.chooseSection(0);
-    },
-
-    open() {
-        if (!this.initialized)
-            this.init();
-
-        this.chooseSection(0);
-
-        const users = $id('addUserToForm-users').children;
-        for (const el of users)
-            el.querySelectorAll('input')[0].checked = false;
-
-        const forms = $id('addUserToForm-forms').children;
-        for (const el of forms)
-            el.querySelectorAll('input')[0].checked = false;
-    },
-
-    chooseSection(no) {
-        if (this.chosen === no)
-            return;
-
-        if (no === 2)
-            this.validate();
-
-        const els = $('.addUserToForm-headerPost');
-
-        if (this.chosen !== null)
-            els[this.chosen].setAttribute('name', '');
-
-        $id('addUserToForm-headerLine').style.left =
-            `${els[no].offsetLeft}px`;
-
-        $id('addUserToForm-headerLine').style.width =
-            `${els[no].offsetWidth}px`;
-
-        els[no].setAttribute('name', 'chosen');
-        this.chosen = no;
-
-        for (let i = 0; i < 3; i++) {
-            if (i === no)
-                $id('addUserToForm-main').children[i].style.display = 'block';
-            else
-                $id('addUserToForm-main').children[i].style.display = 'none';
-        }
-    },
-
-    validate() {
-        const users = [];
-        $('.addUserToForm-userInput').forEach(el => {
-            if (el.checked)
-                users.push(el.dataset.user);
-        });
-
-        if (users.length !== 0) {
-            let form = Array.from($('.addUserToForm-formInput')).find(el => {
-                if (el.checked)
-                    return true;
-                return false;
-            });
-
-            if (typeof form !== 'undefined') {
-                form = form.dataset.form;
-                $id('addUserToForm-summary-text').innerHTML =
-                    `Czy na pewno chcesz dodać ${users.length} użytkownik${users.length === 1 ? 'a' : 'ów'} do formluarza ${form}?`;
-                $id('addUserToForm-acceptBtn').setAttribute('name', '');
-            } else {
-                $id('addUserToForm-summary-text').innerHTML = 'Nie wybrano żadnego formularza!';
-                $id('addUserToForm-acceptBtn').setAttribute('name', 'inactive');
-            }
-        } else {
-            $id('addUserToForm-summary-text').innerHTML = 'Nie wybrano żadnego użytkownika!';
-            $id('addUserToForm-acceptBtn').setAttribute('name', 'inactive');
-        }
-    },
-
-    assignEventListeners() {
-        for (let i = 0; i < 3; i++) {
-            $('.addUserToForm-headerPost')[i]
-                .addEventListener('click', () => {
-                    AddUserToForm.chooseSection(i);
-                });
-        }
-
-        $id('addUserToForm-users-button')
-            .addEventListener('click', () => {
-                AddUserToForm.chooseSection(1);
-            });
-
-        $id('addUserToForm-form-button')
-            .addEventListener('click', () => {
-                AddUserToForm.chooseSection(2);
-            });
-    }
-};
-
-const AddForm = {
-    open() {
-        $id('addForm-formName').value = '';
-        $id('addForm-questionList').innerHTML = '';
-    },
-
-    addNewOpenQuestion() {
-        const main = $id('addForm-questionList');
-        const openQuestion = document.createElement('div');
-        openQuestion.classList.add('input');
-        openQuestion.appendChild(this.addNewQuestion('openQuestion', true));
-        main.appendChild(openQuestion);
-    },
-
-    addNewClosedQuestion() {
-        const main = $id('addForm-questionList');
-        const closedQuestion = document.createElement('div');
-        closedQuestion.classList.add('input');
-        closedQuestion.appendChild(this.addNewQuestion('closedQuestion', false));
-
-        ['1.', '2.', '3.'].forEach(no => {
-            closedQuestion.appendChild(this.addNewAnswer(no));
-        });
-
-        main.appendChild(closedQuestion);
-    },
-
-    addNewQuestion(className, isOpen) {
-        const question = document.createElement('input');
-        question.classList.add('question');
-        question.className = className;
-        if (isOpen)
-            question.placeholder = 'Enter your open question';
-        else
-            question.placeholder = 'Enter your closed question';
-        return question;
-    },
-
-    addNewAnswer(placeholder) {
-        const answer = document.createElement('input');
-        answer.classList.add('question');
-        answer.placeholder = placeholder;
-        return answer;
-    },
-
-    saveFormToDataBase() {
-        const questions = [];
-        const doc = document.getElementById('addForm-questionList').children;
-        for (let i = 0; i < doc.length; i++) {
-            if (doc[i].children[0].className === 'openQuestion') {
-                const question = {
-                    number: i,
-                    type: 'O',
-                    language: 'EN',
-                    content: doc[i].children[0].value,
-                    numberOfAnswers: '|',
-                    answers: []
-                };
-                questions.push(question);
-            } else {
-                const question = {
-                    number: i,
-                    type: 'W',
-                    language: 'EN',
-                    content: doc[i].children[0].value,
-                    numberOfAnswers: doc[i].children.length - 1,
-                    answers: [doc[i].children[1].value, doc[i].children[2].value,
-                        doc[i].children[3].value]
-                };
-                questions.push(question);
-            }
-        }
-        const formToBase = { title: document.getElementById('addForm-formName').value, questions };
-        const dataToBase = JSON.stringify(formToBase);
-        console.log(JSON.parse(dataToBase));
-        // TODO sending to backend
-    },
-
-    assignEventListeners() {
-        $id('addForm-addQuestions-openButton')
-            .addEventListener('click', () => {
-                this.addNewOpenQuestion();
-            });
-
-        $id('addForm-addQuestions-closedButton')
-            .addEventListener('click', () => {
-                this.addNewClosedQuestion();
-            });
-
-        $id('addForm-final-button')
-            .addEventListener('click', () => {
-                this.saveFormToDataBase();
-            });
-    }
-};
-
 window.onload = () => {
     const username = 'Wiginiusz Pomyloński';
 
@@ -252,6 +47,13 @@ window.onload = () => {
 
     AddForm.assignEventListeners();
     AddUserToForm.assignEventListeners();
+    ShowForms.assignEventListeners();
+
+    $id('panel-btn-1-2')
+        .addEventListener('click', () => {
+            ShowForms.open();
+            SectionManager.choose('showForms');
+        });
 
     $id('panel-btn-1-1')
         .addEventListener('click', () => {
