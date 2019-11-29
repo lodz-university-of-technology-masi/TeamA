@@ -138,7 +138,7 @@ const AddForm = {
         const main = $id('addForm-questionList');
         const openQuestion = document.createElement('div');
         openQuestion.classList.add('input');
-        openQuestion.appendChild(this.addNewQuestion('open question', true));
+        openQuestion.appendChild(this.addNewQuestion('openQuestion', true));
         main.appendChild(openQuestion);
     },
 
@@ -146,7 +146,7 @@ const AddForm = {
         const main = $id('addForm-questionList');
         const closedQuestion = document.createElement('div');
         closedQuestion.classList.add('input');
-        closedQuestion.appendChild(this.addNewQuestion('closed question', false));
+        closedQuestion.appendChild(this.addNewQuestion('closedQuestion', false));
 
         ['1.', '2.', '3.'].forEach(no => {
             closedQuestion.appendChild(this.addNewAnswer(no));
@@ -155,10 +155,10 @@ const AddForm = {
         main.appendChild(closedQuestion);
     },
 
-    addNewQuestion(id, isOpen) {
+    addNewQuestion(className, isOpen) {
         const question = document.createElement('input');
         question.classList.add('question');
-        question.id = id;
+        question.className = className;
         if (isOpen)
             question.placeholder = 'Enter your open question';
         else
@@ -175,26 +175,24 @@ const AddForm = {
 
     saveFormToDataBase() {
         let formToBase = [];
-        const doc = document.getElementById("addForm-questionList").children;
-        formToBase.push({formName: document.getElementById("addForm-formName").value})
+        const doc = document.getElementById('addForm-questionList').children;
+        formToBase.push({formName: document.getElementById('addForm-formName').value});
         for (let i = 0; i < doc.length; i++) {
-            if (doc[i].children[0].id === 'open question')
+            if (doc[i].children[0].className === 'openQuestion') {
                 formToBase.push({openQuestion: doc[i].children[0].value});
-            else {
-                let question = {
+            } else {
+                const question = {
                     question: doc[i].children[0].value,
                     answer1: doc[i].children[1].value,
                     answer2: doc[i].children[2].value,
                     answer3: doc[i].children[3].value
                 };
-                formToBase.push({closedQuestion: question})
+                formToBase.push({closedQuestion: question});
             }
         }
         formToBase = JSON.stringify(formToBase);
-        //console.log(JSON.parse(formToBase))
-
+        // console.log(JSON.parse(formToBase));
         // TODO sending to backend
-
     },
 
     assignEventListeners() {
