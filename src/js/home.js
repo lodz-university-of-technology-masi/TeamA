@@ -1,6 +1,8 @@
 import '../scss/home.scss';
 import '../html/home.html';
 
+
+
 function $id(id) {
     return document.getElementById(id);
 }
@@ -8,6 +10,8 @@ function $id(id) {
 function $(selector) {
     return document.querySelectorAll(selector);
 }
+
+const csvManager = require('./csvManager');
 
 const SectionManager = {
     currentElement: null,
@@ -35,6 +39,9 @@ const SectionManager = {
         $id('panel').style.display = 'block';
     }
 };
+
+
+
 
 (() => {
     const backButtons = document.querySelectorAll('.sectionBack > div');
@@ -261,4 +268,6 @@ window.onload = () => {
         .addEventListener('click', () => {
             SectionManager.choose('import');
         });
+
+    $id('import-input').addEventListener('change', csvManager.read);
 };
