@@ -9,15 +9,3 @@ window.cognitoConfig = {
         invokeUrl: '' // e.g. https://rc7nyt4tql.execute-api.us-west-2.amazonaws.com/prod,
     }
 };
-
-
-/*
-AWS keys
-Cognito_ARN
-User_Pool_ID                      User_Pool_App_ID
-AKIAXHL3HMQ2PQNTNAPS          1YcjstSc1MyPIDhXaZwBw8UsHE0SfDMygJAsy8oN
-arn:aws:cognito-idp:us-east-1:496864027700:userpool/us-east-1_lS2tMePyI
-us-east-1_lS2tMePyI            4k3to3pjtidq5qvnglpdvmtvfc
---
-Luke
-*/

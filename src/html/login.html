@@ -35,56 +35,57 @@
 
                     <div class="additions">
                         <button id="button-signin">Sign in</button>
-                        <p>Forgot password?</p>
                     </div>
                 </div>
             </section>
             <section id="form-signup" style="left: 100%;">
-                <div>
-                    <div>
-                        <div class="input">
+                <div id="form-signup-inputs">
+                    <div class="input">
                         <h3>Email</h3>
-                        <input type="email" id="emailInputVerify" placeholder="Email" required>
+                        <input type="email" id="signup-email" placeholder="E-mail">
                     </div>
 
                     <div class="input">
                         <h3>Password</h3>
-                        <input type="password" id="passwordInputRegister" placeholder="Password" pattern=".*" required>
+                        <input type="password" id="signup-password" placeholder="Password">
                     </div>
 
                     <div class="input">
                         <h3>Confirm Password</h3>
-                        <input type="password" id="password2InputRegister" placeholder="Confirm Password" pattern=".*" required>
+                        <input type="password" id="signup-password2" placeholder="Confirm Password">
                     </div>
 
                     <div class="additions">
                         <button id="button-signup">Sign Up</button>
+                        <p id="button-signup-verify">Already signed? Validate!</p>
                     </div>
                 </div>
+
+                <div id="form-signup-verify" style="display: none;">
+                    <div>
+                        <div class="input">
+                        <h3>Email</h3>
+                        <input type="email" id="verify-email" placeholder="E-mail">
+                    </div>
+
                     <div class="input">
                         <h3>Verification Code</h3>
-                        <input type="text" id="codeInputVerify" placeholder="Verification Code" pattern=".*" required>
+                        <input type="text" id="verify-code" placeholder="Verification Code" pattern=".*" required>
                     </div>
             
-                    <div id="additions">
+                    <div class="additions">
                         <button id="button-verify">Verify</button>
+                        <p id="button-signup-back">Back to sign up</p>
                     </div>
                 </div>
             </section>
         </div>
-        <!-- <section id="form-forgot">
-
-        </section> -->
     </main>
     <footer>
         <p>Powered by Team A</p>
     </footer>
 </section>
 
-
-    <!-- <script src="vendor/jquery-3.1.0.js"></script>
-    <script src="vendor/aws-cognito-sdk.min.js"></script>
-    <script src="vendor/amazon-cognito-identity.min.js"></script> -->
     <script src="js/login.js"></script>
 </body>
 </html>

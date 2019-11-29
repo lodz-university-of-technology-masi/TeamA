@@ -2,12 +2,6 @@ import '../html/login.html';
 import '../scss/login.scss';
 
 import './cognitoConfig';
-import './script';
-import './vendor';
-
-// import '../vendor/jquery-3.1.0';
-// import '../vendor/aws-cognito-sdk.min';
-// import '../vendor/amazon-cognito-identity.min';
 
 global.fetch = require('node-fetch');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
@@ -71,6 +65,18 @@ const FormManager = {
         $id('button-signup').addEventListener('click', () => {
             SignUp.validate();
         });
+
+        $id('button-verify').addEventListener('click', () => {
+            Verify.validate();
+        });
+
+        $id('button-signup-verify').addEventListener('click', () => {
+            Verify.show();
+        });
+
+        $id('button-signup-back').addEventListener('click', () => {
+            Verify.back();
+        });
     }
 };
 
@@ -114,10 +120,13 @@ const SignIn = {
 
     failure() {
         SignIn.stopQueue('Wrong credentials');
+        $id('button-signin').style.background = '#ff0000';
     },
 
     startQueue() {
+        SignIn.queue = true;
         $id('button-signin').innerHTML = 'Please wait...';
+        $id('button-signin').style.background = '#39557C';
         $id('signin-email').disabled = true;
         $id('signin-password').disabled = true;
     },
@@ -131,8 +140,142 @@ const SignIn = {
 };
 
 const SignUp = {
-    validate() {
+    email: null,
 
+    validate() {
+        this.email = $id('signup-email').value;
+        const password = $id('signup-password').value;
+        const password2 = $id('signup-password2').value;
+
+        if (password === password2) {
+            this.startQueue();
+            this.signUp(password);
+        } else {
+            $id('button-signup').innerHTML = 'Passwords do not match';
+            $id('button-signup').style.background = '#ff0000';
+        }
+    },
+
+    signUp(password) {
+        const dataEmail = {
+            Name: 'email',
+            Value: this.email
+        };
+        const attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
+
+        userPool.signUp(
+            this.email,
+            password,
+            [attributeEmail],
+            null,
+            (err, result) => {
+                if (!err)
+                    SignUp.success(result);
+                else
+                    SignUp.failure(err);
+            }
+        );
+    },
+
+    success() {
+        this.stopQueue('Success');
+        $id('verify-email').value = this.email;
+        Verify.show();
+
+        $id('signup-email').value = '';
+        $id('signup-password').value = '';
+        $id('signup-password2').value = '';
+    },
+
+    failure(err) {
+        if (err.message.indexOf('length greater than or equal to 6') > -1)
+            this.stopQueue('Too short password! (6 characters min)');
+        else if (err.message.indexOf('Invalid email address format') > -1)
+            this.stopQueue('Invalid email address format!');
+        else if (err.code === 'UsernameExistsException')
+            this.stopQueue('An account with the given email already exists.');
+        else
+            this.stopQueue('Something went wrong');
+
+        $id('button-signup').style.background = '#ff0000';
+    },
+
+    startQueue() {
+        SignUp.queue = true;
+        $id('button-signup').innerHTML = 'Please wait...';
+        $id('button-signup').style.background = '#39557C';
+        $id('signup-email').disabled = true;
+        $id('signup-password').disabled = true;
+        $id('signup-password2').disabled = true;
+    },
+
+    stopQueue(buttonText) {
+        SignUp.queue = false;
+        $id('button-signup').innerHTML = buttonText;
+        $id('signup-email').disabled = false;
+        $id('signup-password').disabled = false;
+        $id('signup-password2').disabled = false;
+    }
+};
+
+const Verify = {
+    queue: false,
+
+    show() {
+        $id('form-signup-inputs').style.display = 'none';
+        $id('form-signup-verify').style.display = 'block';
+    },
+
+    back() {
+        $id('form-signup-inputs').style.display = 'block';
+        $id('form-signup-verify').style.display = 'none';
+
+        $id('verify-email').value = '';
+        $id('verify-code').value = '';
+    },
+
+    validate() {
+        const email = $id('verify-email').value;
+        const code = $id('verify-code').value;
+
+        this.verify(email, code);
+    },
+
+    verify(email, code) {
+        createCognitoUser(email).confirmRegistration(code, true, (err, result) => {
+            if (!err)
+                Verify.success(result);
+            else
+                Verify.failure(err);
+        });
+    },
+
+    success() {
+        this.stopQueue('Success');
+        this.back();
+        FormManager.chooseSection('signin');
+    },
+
+    failure() {
+        this.stopQueue('Cannot verify code!');
+        $id('button-verify').style.background = '#ff0000';
+    },
+
+    startQueue() {
+        SignUp.queue = true;
+        $id('button-verify').innerHTML = 'Please wait...';
+        $id('button-verify').style.background = '#39557C';
+        $id('signup-email').disabled = true;
+        $id('signup-password').disabled = true;
+        $id('signup-password2').disabled = true;
+    },
+
+    stopQueue(buttonText) {
+        SignUp.queue = false;
+        $id('button-verify').innerHTML = buttonText;
+        $id('signup-email').disabled = false;
+        $id('signup-password').disabled = false;
+        $id('signup-password2').disabled = false;
     }
 };
 
