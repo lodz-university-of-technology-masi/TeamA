@@ -124,8 +124,8 @@
                     margin-bottom: 10px;
                 }
             }
-            .showForms-form-oQuestion,
-            .showForms-form-lQuestion {
+            .showForms-form-openQuestion,
+            .showForms-form-numericalQuestion {
                 > input {
                     width: calc(100% - 20px);
                     padding: 5px 10px;
@@ -139,7 +139,7 @@
                     }
                 }
             }
-            .showForms-form-wQuestion {
+            .showForms-form-closedQuestion {
                 > label {
                     width:100%;
                     height:32px;
