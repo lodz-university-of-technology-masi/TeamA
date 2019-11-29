@@ -1,6 +1,8 @@
 import '../scss/home.scss';
 import '../html/home.html';
 
+import './cognitoConfig';
+
 const { $id } = require('./utils');
 const { AddForm } = require('./HRModules/addForm');
 const { AddUserToForm } = require('./HRModules/addUserToForm');
@@ -40,6 +42,18 @@ const SectionManager = {
 })();
 
 window.onload = () => {
+    const authToken;
+    window.authToken.then(function setAuthToken(token) {
+        if (token) {
+            authToken = token;
+        } else {
+            window.location.href = '/index.html';
+        }
+    }).catch(function handleTokenError(error) {
+        alert(error);
+        window.location.href = '/index.html';
+    });
+
     const username = 'Wiginiusz Pomyloński';
 
     $id('header-user-letter').innerHTML = username.substr(0, 1);
