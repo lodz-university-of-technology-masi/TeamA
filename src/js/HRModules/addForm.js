@@ -10,7 +10,7 @@ const AddForm = {
     addNewOpenQuestion() {
         const main = $id('addForm-questionList');
         const openQuestion = document.createElement('div');
-        openQuestion.classList.add('input');
+        openQuestion.classList.add('inputGroup');
         openQuestion.appendChild(this.addNewQuestion('openQuestion', true));
         main.appendChild(openQuestion);
     },
@@ -18,7 +18,7 @@ const AddForm = {
     addNewClosedQuestion() {
         const main = $id('addForm-questionList');
         const closedQuestion = document.createElement('div');
-        closedQuestion.classList.add('input');
+        closedQuestion.classList.add('inputGroup');
         closedQuestion.appendChild(this.addNewQuestion('closedQuestion', false));
 
         ['1.', '2.', '3.'].forEach(no => {
@@ -29,7 +29,7 @@ const AddForm = {
     },
 
     addNewQuestion(className, isOpen) {
-        const question = document.createElement('input');
+        const question = document.createElement('inputGroup');
         question.classList.add('question');
         question.className = className;
         if (isOpen)
@@ -40,7 +40,7 @@ const AddForm = {
     },
 
     addNewAnswer(placeholder) {
-        const answer = document.createElement('input');
+        const answer = document.createElement('inputGroup');
         answer.classList.add('question');
         answer.placeholder = placeholder;
         return answer;
