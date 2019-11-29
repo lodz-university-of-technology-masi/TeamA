@@ -112,16 +112,16 @@ body {
         }
     }
 
-        .input {
+        .inputGroup {
             width:calc(100% - 40px);
             padding: 15px 20px;
         }
-            .input > h3 {
+            .inputGroup > h3 {
                 font-size: 1.2em;
                 font-family: 'Open Sans', sans-serif;
                 margin-bottom: 5px;
             }
-            .input > input {
+            .inputGroup > input {
                 width: 100%;
                 padding: 5px 0;
                 font-size: 1em;
@@ -129,7 +129,7 @@ body {
                 border:none;
                 border-bottom: solid 2px #ccc;
             }
-            .input > input:focus {
+            .inputGroup > input:focus {
                 border-bottom-color: #39557C;
             }
 
