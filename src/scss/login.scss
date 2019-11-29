@@ -1,0 +1,163 @@
+/*#39557C*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width:100vw;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#form {
+    width: 100%;
+    max-width: 330px;
+    height:100%;
+    max-height: 550px;
+    background: #fff;
+    box-shadow: 0 0 5px 1px #ccc;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    > header {
+        width:100%;
+        text-align:center;
+        background: #39557C;
+        padding: 14px 0;
+        display: block;
+
+        > h1 {
+            font-size: 1.4em;
+            font-family: 'Open Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fff;
+            display: block;
+        }
+    }
+
+    > main {
+        position: relative;
+        flex: 1 1;
+        overflow: hidden;
+    }
+    
+    > footer {
+        width:100%;
+        background: #eee;
+
+        > p {
+            width: 100%;
+            padding: 3px 0;
+            font-size: 0.8em;
+            font-family: 'Open Sans', sans-serif;
+            text-align:center;
+            color: #999;
+        }
+    }
+}
+    $form-tabs-width: 48px;
+    #form-tabs {
+        position: relative;
+        width:100%;
+        height: $form-tabs-width;
+    }
+        .form-tab {
+            width:50%;
+            height:$form-tabs-width;
+            text-align:center;
+            font-size: 1em;
+            line-height: $form-tabs-width;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            float: left;
+            color: #666;
+            cursor: pointer;
+            border-bottom: solid 1px #ccc;
+
+            &[name='chosen'] {
+                color: #39557C;
+            }
+        }
+        #form-tab-line {
+            position: absolute;
+            bottom: -1px;
+            left:0;
+            width:50%;
+            height:3px;
+            background: #39557C;
+            transition: left 0.3s;
+        }
+
+    #form-sections {
+        position: relative;
+        width:100%;
+        height: calc(100% - 50px);
+        overflow: hidden;
+
+        > section {
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            overflow: auto;
+            background: #fff;
+            transition: left 0.3s;
+        }
+    }
+
+        .inputGroup {
+            width:calc(100% - 40px);
+            padding: 15px 20px;
+        }
+            .inputGroup > h3 {
+                font-size: 1.2em;
+                font-family: 'Open Sans', sans-serif;
+                margin-bottom: 5px;
+            }
+            .inputGroup > input {
+                width: 100%;
+                padding: 5px 0;
+                font-size: 1em;
+                font-family: 'Open Sans', sans-serif;
+                border:none;
+                border-bottom: solid 2px #ccc;
+            }
+            .inputGroup > input:focus {
+                border-bottom-color: #39557C;
+            }
+
+            .additions {
+                width:100%;
+                text-align: center;
+                margin-top: 15px;
+                margin-bottom: 10px;
+
+                > button {
+                    font-size: 1em;
+                    font-family: 'Open Sans', sans-serif;
+                    padding: 7px 30px;
+                    background: #39557C;
+                    border:none;
+                    border-radius: 20px;
+                    color: #fff;
+                }
+
+                > p {
+                    width: 100%;
+                    padding: 3px 0;
+                    margin-top: 5px;
+                    text-decoration: underline;
+                    font-size: 0.8em;
+                    font-family: 'Open Sans', sans-serif;
+                    text-align:center;
+                    color: #999;
+                    cursor: pointer;
+                }
+            }
