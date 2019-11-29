@@ -176,10 +176,10 @@ const AddForm = {
     saveFormToDataBase() {
         let formToBase = [];
         const doc = document.getElementById('addForm-questionList').children;
-        formToBase.push({formName: document.getElementById('addForm-formName').value});
+        formToBase.push({ formName: document.getElementById('addForm-formName').value });
         for (let i = 0; i < doc.length; i++) {
             if (doc[i].children[0].className === 'openQuestion') {
-                formToBase.push({openQuestion: doc[i].children[0].value});
+                formToBase.push({ openQuestion: doc[i].children[0].value });
             } else {
                 const question = {
                     question: doc[i].children[0].value,
@@ -187,7 +187,7 @@ const AddForm = {
                     answer2: doc[i].children[2].value,
                     answer3: doc[i].children[3].value
                 };
-                formToBase.push({closedQuestion: question});
+                formToBase.push({ closedQuestion: question });
             }
         }
         formToBase = JSON.stringify(formToBase);
