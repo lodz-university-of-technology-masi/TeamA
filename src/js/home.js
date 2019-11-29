@@ -174,28 +174,27 @@ const AddForm = {
     },
 
     saveFormToDataBase() {
-        const doc = document.getElementsByClassName('question');
-        let questionList = { name: $id('name').value };
-
-        let number = 1;
+        let formToBase = [];
+        const doc = document.getElementById("addForm-questionList").children;
+        formToBase.push({formName: document.getElementById("addForm-formName").value})
         for (let i = 0; i < doc.length; i++) {
-            if (doc[i].id === 'open question') {
-                questionList[`question${number}`] = doc[i].value;
-            } else {
-                const question = { question: doc[i].value };
-
-                for (let j = i + 1; j < i + 4; j++)
-                    question[`answer${j - 1}`] = doc[j].value;
-
-                i += 3;
-                questionList[`question${number}`] = question;
+            if (doc[i].children[0].id === 'open question')
+                formToBase.push({openQuestion: doc[i].children[0].value});
+            else {
+                let question = {
+                    question: doc[i].children[0].value,
+                    answer1: doc[i].children[1].value,
+                    answer2: doc[i].children[2].value,
+                    answer3: doc[i].children[3].value
+                };
+                formToBase.push({closedQuestion: question})
             }
-
-            number++;
         }
+        formToBase = JSON.stringify(formToBase);
+        //console.log(JSON.parse(formToBase))
 
-        questionList = JSON.stringify(questionList);
-        /* todo */
+        // TODO sending to backend
+
     },
 
     assignEventListeners() {
