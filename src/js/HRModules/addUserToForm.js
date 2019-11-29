@@ -21,12 +21,12 @@ const AddUserToForm = {
         this.chooseSection(0);
 
         const users = $id('addUserToForm-users').children;
-        for (const el of users)
-            el.querySelectorAll('input')[0].checked = false;
+        for (const user of users)
+            user.querySelectorAll('input')[0].checked = false;
 
         const forms = $id('addUserToForm-forms').children;
-        for (const el of forms)
-            el.querySelectorAll('input')[0].checked = false;
+        for (const form of forms)
+            form.querySelectorAll('input')[0].checked = false;
     },
 
     chooseSection(no) {

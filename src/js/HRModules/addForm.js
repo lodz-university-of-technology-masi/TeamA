@@ -21,8 +21,8 @@ const AddForm = {
         closedQuestion.classList.add('inputGroup');
         closedQuestion.appendChild(this.addNewQuestion('closedQuestion', false));
 
-        ['1.', '2.', '3.'].forEach(no => {
-            closedQuestion.appendChild(this.addNewAnswer(no));
+        ['1.', '2.', '3.'].forEach(inputPlaceholder => {
+            closedQuestion.appendChild(this.addNewAnswer(inputPlaceholder));
         });
 
         main.appendChild(closedQuestion);
