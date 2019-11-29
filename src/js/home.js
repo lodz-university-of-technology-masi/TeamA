@@ -199,7 +199,7 @@ const AddForm = {
                 questions.push(question);
             }
         }
-        formToBase.push({forma: questions});
+        formToBase.push({questions: questions});
         formToBase = JSON.stringify(formToBase);
         console.log(JSON.parse(formToBase));
         // TODO sending to backend
