@@ -8,9 +8,6 @@ const ShowForms = {
     initialized: false,
 
     init() {
-        if (this.initialized)
-            return;
-
         this.initialized = true;
 
         // tutaj ładowanko z bazki
@@ -68,7 +65,7 @@ const ShowForms = {
     },
 
     open() {
-        if (this.initialized)
+        if (!this.initialized)
             this.init();
         else
             this.showAll();
