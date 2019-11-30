@@ -29,7 +29,7 @@ const AddForm = {
     },
 
     addNewQuestion(className, isOpen) {
-        const question = document.createElement('inputGroup');
+        const question = document.createElement('input');
         question.classList.add('question');
         question.className = className;
         if (isOpen)
@@ -40,7 +40,7 @@ const AddForm = {
     },
 
     addNewAnswer(placeholder) {
-        const answer = document.createElement('inputGroup');
+        const answer = document.createElement('input');
         answer.classList.add('question');
         answer.placeholder = placeholder;
         return answer;
