@@ -1,12 +1,12 @@
 import '../scss/home.scss';
 import '../html/home.html';
 
-import './cognitoConfig';
-
 const { $id } = require('./utils');
 const { AddForm } = require('./HRModules/addForm');
 const { AddUserToForm } = require('./HRModules/addUserToForm');
 const { ShowForms } = require('./HRModules/showForms');
+const { signOut, getToken } = require('./cognitoConfig');
+const Cookies = require('./cookies');
 
 const SectionManager = {
     currentElement: null,
@@ -43,7 +43,7 @@ const SectionManager = {
 
 window.onload = () => {
     const authToken;
-    window.authToken.then(function setAuthToken(token) {
+    getToken().then(function setAuthToken(token) {
         if (token) {
             authToken = token;
         } else {
@@ -54,7 +54,7 @@ window.onload = () => {
         window.location.href = '/index.html';
     });
 
-    const username = 'Wiginiusz Pomyloński';
+    const username = Cookies.get('user');
 
     $id('header-user-letter').innerHTML = username.substr(0, 1);
     $id('header-user-label').innerHTML = username;

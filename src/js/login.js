@@ -112,8 +112,8 @@ const SignIn = {
 
     success(result) {
         SignIn.stopQueue('Success');
-        Cookies.set('user', createCognitoUser(SignIn.email).getUsername().split('@')[0], 365);
-        Cookies.set('token', result.getAccessToken().getJwtToken(), 365);
+        Cookies.set('user', email.split('@')[0], 365);
+        //Cookies.set('token', result.getAccessToken().getJwtToken(), 365);
 
         window.location.href = 'home.html';
     },

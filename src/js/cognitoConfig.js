@@ -17,13 +17,14 @@ const poolData = {
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
-window.signOut = function signOut() {
+exports.signOut = () => {
     console.log("Logging out...");
     userPool.getCurrentUser().signOut();
+    window.location.href = '/index.html';
     console.log("Logged out");
 };
 
- window.authToken = new Promise(function fetchCurrentAuthToken(resolve, reject) {
+exports.getToken = () => new Promise(function fetchCurrentAuthToken(resolve, reject) {
     const cognitoUser = userPool.getCurrentUser();
 
     if (cognitoUser) {
