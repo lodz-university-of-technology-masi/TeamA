@@ -1,10 +1,8 @@
-import '../scss/home.scss';
-import '../html/home.html';
+import '../scss/guest.scss';
+import '../html/guest.html';
 
+const { FillForm } = require('./guestModules/fillForm');
 const { $id } = require('./utils');
-const { AddForm } = require('./HRModules/addForm');
-const { AddUserToForm } = require('./HRModules/addUserToForm');
-const { ShowForms } = require('./HRModules/showForms');
 
 const SectionManager = {
     currentElement: null,
@@ -39,31 +37,12 @@ window.onload = () => {
     $id('header-user-letter').innerHTML = username.substr(0, 1);
     $id('header-user-label').innerHTML = username;
 
-    AddForm.assignEventListeners();
-    AddUserToForm.assignEventListeners();
-    ShowForms.assignEventListeners();
+    FillForm.assignEventListeners();
 
-    $id('panel-btn-1-2')
+    $id('pane-tile-1')
         .addEventListener('click', () => {
-            ShowForms.open();
-            SectionManager.choose('showForms');
-        });
-
-    $id('panel-btn-1-1')
-        .addEventListener('click', () => {
-            AddForm.open();
-            SectionManager.choose('addForm');
-        });
-
-    $id('panel-btn-2-1')
-        .addEventListener('click', () => {
-            SectionManager.choose('addUserToForm');
-            AddUserToForm.open();
-        });
-
-    $id('panel-btn-3-1')
-        .addEventListener('click', () => {
-            SectionManager.choose('import');
+            SectionManager.choose('fillForm');
+            FillForm.open();
         });
 
     const backButtons = document.querySelectorAll('.sectionBack > div');

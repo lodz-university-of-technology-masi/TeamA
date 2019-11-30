@@ -1,10 +1,11 @@
+
 const eyePng = require('../../icons/eye.png');
 const pencilPng = require('../../icons/pencil.png');
 const deletePng = require('../../icons/delete.png');
 
 const { $id } = require('../utils');
 
-const ShowForms = {
+const FillForm = {
     initialized: false,
 
     init() {
@@ -31,7 +32,7 @@ const ShowForms = {
 
             child = document.createElement('div');
 
-            let img = new Image();
+            const img = new Image();
             img.src = eyePng;
             img.onclick = () => {
                 this.show(form);
@@ -39,72 +40,57 @@ const ShowForms = {
             child.appendChild(img);
 
             div.appendChild(child);
-
-            child = document.createElement('div');
-
-            img = new Image();
-            img.src = pencilPng;
-            child.appendChild(img);
-
-            div.appendChild(child);
-
-            child = document.createElement('div');
-
-            img = new Image();
-            img.src = deletePng;
-            child.appendChild(img);
-
-            div.appendChild(child);
-
-            $id('showForms-list-table').appendChild(div);
+            $id('fillForm-list-table').appendChild(div);
         }
 
         this.showAll();
 
-        $id('showForms-content-loading').remove();
+        $id('fillForm-content-loading').remove();
     },
 
     open() {
         if (!this.initialized)
             this.init();
-        else
-            this.showAll();
     },
 
     showAll() {
-        $id('showForms-list').style.display = 'block';
-        $id('showForms-form').style.display = 'none';
+        $id('fillForm-list').style.display = 'block';
+        $id('fillForm-fill').style.display = 'none';
     },
 
     show(which) {
-        $id('showForms-list').style.display = 'none';
-        $id('showForms-form').style.display = 'block';
+        $id('fillForm-list').style.display = 'none';
+        $id('fillForm-fill').style.display = 'block';
 
-        $id('showForms-form-title').innerHTML = which.title;
-        $id('showForms-form-content').innerHTML = '';
+        $id('fillForm-form-title').innerHTML = which.title;
+        $id('fillForm-form-content').innerHTML = '';
 
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
-                $id('showForms-form-content')
+                $id('fillForm-form-content')
                     .appendChild(this.createOpenQuestion(question.number, question.content));
             } else if (question.type.toLowerCase() === 'w') {
-                $id('showForms-form-content')
+                $id('fillForm-form-content')
                     .appendChild(
                         this.createClosedQuestion(question.number,
                             question.content,
                             question.answers)
                     );
             } else if (question.type.toLowerCase() === 'l') {
-                $id('showForms-form-content')
+                $id('fillForm-form-content')
                     .appendChild(this.createNumberQuestion(question.number, question.content));
             }
         }
+
+        $id('fillForm-form-buttons-finish').onclick = () => {
+            this.finish(which);
+        };
     },
 
     createOpenQuestion(number, question) {
         const div = document.createElement('div');
-        div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-openQuestion');
+        div.classList.add('fillForm-form-question');
+        div.classList.add('fillForm-form-openQuestion');
 
         const p = document.createElement('p');
         p.innerHTML = `${number}. ${question}`;
@@ -119,20 +105,20 @@ const ShowForms = {
 
     createClosedQuestion(number, question, answers) {
         const div = document.createElement('div');
-        div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-closedQuestion');
+        div.classList.add('fillForm-form-question');
+        div.classList.add('fillForm-form-closedQuestion');
 
         const p = document.createElement('p');
         p.innerHTML = `${number}. ${question}`;
         div.appendChild(p);
 
-        const commonName = `showForms-form-question-${number}`;
+        const commonName = `fillForm-form-question-${number}`;
         for (const [it, answer] of answers.entries()) {
             const label = document.createElement('label');
-            label.for = `showForms-form-question-${it}`;
+            label.for = `fillForm-form-question-${it}`;
 
             const input = document.createElement('input');
-            input.id = `showForms-form-question-${it}`;
+            input.id = `fillForm-form-question-${it}`;
             input.name = commonName;
             input.type = 'radio';
             label.appendChild(input);
@@ -154,8 +140,8 @@ const ShowForms = {
 
     createNumberQuestion(number, question) {
         const div = document.createElement('div');
-        div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-numericalQuestion');
+        div.classList.add('fillForm-form-question');
+        div.classList.add('fillForm-form-numericalQuestion');
 
         const p = document.createElement('p');
         p.innerHTML = `${number}. ${question}`;
@@ -169,12 +155,13 @@ const ShowForms = {
         return div;
     },
 
-    assignEventListeners() {
-        $id('showForms-form-back-button')
-            .addEventListener('click', () => {
-                this.showAll();
-            });
-    }
+    finish(form) {
+        // TODO: tutaj przetwarzanie formy
+        console.log(form);
+        this.showAll();
+    },
+
+    assignEventListeners() {}
 };
 
-exports.ShowForms = ShowForms;
+exports.FillForm = FillForm;
