@@ -1,0 +1,26 @@
+#export-content {
+  width: calc(100%);
+  max-width: 500px;
+  margin: 0 auto;
+  height: 300px;
+
+  > div {
+    padding: 8px 25px;
+    border-radius: 20px;
+    background: #39557c;
+    color: #fff;
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 0.9em;
+    font-family: "Open Sans", sans-serif;
+  }
+  button {
+    background-color: #39557c;
+    border: 1px solid navy;
+    color: white;
+    padding: 10px 24px;
+    cursor: pointer;
+    width: 50%;
+    display: block;
+  }
+}

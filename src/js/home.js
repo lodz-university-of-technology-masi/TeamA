@@ -270,4 +270,8 @@ window.onload = () => {
         });
 
     $id('import-input').addEventListener('change', csvManager.read);
+
+    $id("panel-btn-3-2").addEventListener("click", () => {
+      SectionManager.choose("export");
+    });
 };
