@@ -8,9 +8,6 @@ const ShowForms = {
     initialized: false,
 
     init() {
-        if (this.initialized)
-            return;
-
         this.initialized = true;
 
         // tutaj ładowanko z bazki
@@ -68,11 +65,10 @@ const ShowForms = {
     },
 
     open() {
-        if (this.init)
+        if (!this.initialized)
             this.init();
-        else {
-            //
-        }
+        else
+            this.showAll();
     },
 
     showAll() {
@@ -108,7 +104,7 @@ const ShowForms = {
     createOpenQuestion(number, question) {
         const div = document.createElement('div');
         div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-oQuestion');
+        div.classList.add('showForms-form-openQuestion');
 
         const p = document.createElement('p');
         p.innerHTML = `${number}. ${question}`;
@@ -124,7 +120,7 @@ const ShowForms = {
     createClosedQuestion(number, question, answers) {
         const div = document.createElement('div');
         div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-wQuestion');
+        div.classList.add('showForms-form-closedQuestion');
 
         const p = document.createElement('p');
         p.innerHTML = `${number}. ${question}`;
@@ -159,7 +155,7 @@ const ShowForms = {
     createNumberQuestion(number, question) {
         const div = document.createElement('div');
         div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-lQuestion');
+        div.classList.add('showForms-form-numericalQuestion');
 
         const p = document.createElement('p');
         p.innerHTML = `${number}. ${question}`;
