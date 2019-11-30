@@ -1,7 +1,5 @@
 
 const eyePng = require('../../icons/eye.png');
-const pencilPng = require('../../icons/pencil.png');
-const deletePng = require('../../icons/delete.png');
 
 const { $id } = require('../utils');
 
