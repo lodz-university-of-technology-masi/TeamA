@@ -42,16 +42,12 @@ const SectionManager = {
 })();
 
 window.onload = () => {
-    const authToken;
-    getToken().then(function setAuthToken(token) {
-        if (token) {
-            authToken = token;
-        } else {
-            window.location.href = '/index.html';
-        }
-    }).catch(function handleTokenError(error) {
+    getToken().then(token => {
+        if (!token) 
+            window.location.href = '/login.html';
+    }).catch(error => {
         alert(error);
-        window.location.href = '/index.html';
+        window.location.href = '/login.html';
     });
 
     const username = Cookies.get('user');
@@ -62,6 +58,11 @@ window.onload = () => {
     AddForm.assignEventListeners();
     AddUserToForm.assignEventListeners();
     ShowForms.assignEventListeners();
+
+    $id('header-userActions-logout')
+        .addEventListener('click', () => {
+            signOut();
+        });
 
     $id('panel-btn-1-2')
         .addEventListener('click', () => {
@@ -85,4 +86,5 @@ window.onload = () => {
         .addEventListener('click', () => {
             SectionManager.choose('import');
         });
+
 };

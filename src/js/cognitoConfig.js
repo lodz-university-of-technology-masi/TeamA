@@ -1,4 +1,7 @@
 
+global.fetch = require('node-fetch');
+const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+
 window.cognitoConfig = {
     cognito: {
         userPoolId: 'us-east-1_lS2tMePyI', // e.g. us-east-2_uXboG5pAb
@@ -16,11 +19,12 @@ const poolData = {
 };
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+exports.userPool = userPool;
 
 exports.signOut = () => {
     console.log("Logging out...");
     userPool.getCurrentUser().signOut();
-    window.location.href = '/index.html';
+    window.location.href = '/login.html';
     console.log("Logged out");
 };
 
