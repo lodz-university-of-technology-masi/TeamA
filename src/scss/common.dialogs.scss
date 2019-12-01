@@ -1,0 +1,67 @@
+
+#dialogs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width:0;
+    height:0;
+
+    > div {
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.75);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+        .dialog {
+            max-width: 340px;
+            border-radius: 5px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+            .dialog-content {
+                padding: 20px;
+
+                > h5 {
+                    font-size: 1.5em;
+                    font-family: $fontfamily;
+                    margin-bottom: 10px;
+                }
+
+                > p {
+                    font-size: 0.9em;
+                    font-family: $fontfamily;
+                    text-align: justify;
+                    text-align-last: left;
+                }
+            }
+
+            .dialog-buttons {
+                width: calc(100% - 10px);
+                padding: 0 5px;
+                height: 48px;
+                background: #eee;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+
+                > button {
+                    padding: 8px 15px;
+                    font-size:0.9em;
+                    font-family: $fontfamily;
+                    border:none;
+                    border-radius: 5px;
+                }
+            }
+                .dialog-cancel {
+                    background: transparent;
+                    color: #666;
+                }
+                .dialog-apply {
+                    background: $basecolor;
+                    color: #fff;
+                }
