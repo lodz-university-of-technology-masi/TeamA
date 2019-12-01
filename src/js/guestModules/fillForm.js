@@ -1,10 +1,11 @@
-
-const eyePng = require('../../icons/eye.png');
+const startPng = require('../../icons/play.png');
 
 const { $id } = require('../utils');
+const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
 
 const FillForm = {
     initialized: false,
+    active: false,
 
     init() {
         this.initialized = true;
@@ -31,7 +32,7 @@ const FillForm = {
             child = document.createElement('div');
 
             const img = new Image();
-            img.src = eyePng;
+            img.src = startPng;
             img.onclick = () => {
                 this.show(form);
             };
@@ -57,6 +58,9 @@ const FillForm = {
     },
 
     show(which) {
+        this.active = true;
+        $id('fillForm-back').style.visibility = 'hidden';
+
         $id('fillForm-list').style.display = 'none';
         $id('fillForm-fill').style.display = 'block';
 
@@ -66,17 +70,17 @@ const FillForm = {
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
                 $id('fillForm-form-content')
-                    .appendChild(this.createOpenQuestion(question.number, question.content));
+                    .appendChild(createOpenQuestion(question.number, question.content));
             } else if (question.type.toLowerCase() === 'w') {
                 $id('fillForm-form-content')
                     .appendChild(
-                        this.createClosedQuestion(question.number,
+                        createClosedQuestion(question.number,
                             question.content,
                             question.answers)
                     );
             } else if (question.type.toLowerCase() === 'l') {
                 $id('fillForm-form-content')
-                    .appendChild(this.createNumberQuestion(question.number, question.content));
+                    .appendChild(createNumberQuestion(question.number, question.content));
             }
         }
 
@@ -85,75 +89,9 @@ const FillForm = {
         };
     },
 
-    createOpenQuestion(number, question) {
-        const div = document.createElement('div');
-        div.classList.add('fillForm-form-question');
-        div.classList.add('fillForm-form-openQuestion');
-
-        const p = document.createElement('p');
-        p.innerHTML = `${number}. ${question}`;
-        div.appendChild(p);
-
-        const input = document.createElement('input');
-        input.placeholder = 'Your answer';
-        div.appendChild(input);
-
-        return div;
-    },
-
-    createClosedQuestion(number, question, answers) {
-        const div = document.createElement('div');
-        div.classList.add('fillForm-form-question');
-        div.classList.add('fillForm-form-closedQuestion');
-
-        const p = document.createElement('p');
-        p.innerHTML = `${number}. ${question}`;
-        div.appendChild(p);
-
-        const commonName = `fillForm-form-question-${number}`;
-        for (const [it, answer] of answers.entries()) {
-            const label = document.createElement('label');
-            label.for = `fillForm-form-question-${it}`;
-
-            const input = document.createElement('input');
-            input.id = `fillForm-form-question-${it}`;
-            input.name = commonName;
-            input.type = 'radio';
-            label.appendChild(input);
-
-            div.appendChild(label);
-
-            const child = document.createElement('div');
-            const dot = document.createElement('div');
-            child.appendChild(dot);
-            label.appendChild(child);
-
-            const span = document.createElement('span');
-            span.innerHTML = answer;
-            label.appendChild(span);
-        }
-
-        return div;
-    },
-
-    createNumberQuestion(number, question) {
-        const div = document.createElement('div');
-        div.classList.add('fillForm-form-question');
-        div.classList.add('fillForm-form-numericalQuestion');
-
-        const p = document.createElement('p');
-        p.innerHTML = `${number}. ${question}`;
-        div.appendChild(p);
-
-        const input = document.createElement('input');
-        input.placeholder = 'Your answer';
-        input.type = 'number';
-        div.appendChild(input);
-
-        return div;
-    },
-
     finish(form) {
+        this.active = false;
+        $id('fillForm-back').style.visibility = 'visible';
         // TODO: tutaj przetwarzanie formy
         console.log(form);
         this.showAll();

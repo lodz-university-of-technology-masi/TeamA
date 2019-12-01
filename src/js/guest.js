@@ -47,5 +47,8 @@ window.onload = () => {
 
     const backButtons = document.querySelectorAll('.sectionBack > div');
     for (const button of backButtons)
-        button.addEventListener('click', () => SectionManager.goBack());
+        button.addEventListener('click', () => {
+            if (!FillForm.active)
+                SectionManager.goBack();
+        });
 };

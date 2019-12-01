@@ -1,3 +1,4 @@
+$basecolor: #39557C;
 
 @import 'common';
 
@@ -6,6 +7,7 @@
 
 // Universal style for every section
 @import 'common.section';
+@import 'common.form';
 
 @import 'home.showForms';
 @import 'home.addUserToForm';

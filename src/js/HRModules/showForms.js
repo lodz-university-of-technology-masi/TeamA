@@ -3,6 +3,7 @@ const pencilPng = require('../../icons/pencil.png');
 const deletePng = require('../../icons/delete.png');
 
 const { $id } = require('../utils');
+const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
 
 const ShowForms = {
     initialized: false,
@@ -86,91 +87,23 @@ const ShowForms = {
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
                 $id('showForms-form-content')
-                    .appendChild(this.createOpenQuestion(question.number, question.content));
+                    .appendChild(createOpenQuestion(question.number, question.content));
             } else if (question.type.toLowerCase() === 'w') {
                 $id('showForms-form-content')
                     .appendChild(
-                        this.createClosedQuestion(question.number,
+                        createClosedQuestion(question.number,
                             question.content,
                             question.answers)
                     );
             } else if (question.type.toLowerCase() === 'l') {
                 $id('showForms-form-content')
-                    .appendChild(this.createNumberQuestion(question.number, question.content));
+                    .appendChild(createNumberQuestion(question.number, question.content));
             }
         }
     },
 
-    createOpenQuestion(number, question) {
-        const div = document.createElement('div');
-        div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-openQuestion');
-
-        const p = document.createElement('p');
-        p.innerHTML = `${number}. ${question}`;
-        div.appendChild(p);
-
-        const input = document.createElement('input');
-        input.placeholder = 'Your answer';
-        div.appendChild(input);
-
-        return div;
-    },
-
-    createClosedQuestion(number, question, answers) {
-        const div = document.createElement('div');
-        div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-closedQuestion');
-
-        const p = document.createElement('p');
-        p.innerHTML = `${number}. ${question}`;
-        div.appendChild(p);
-
-        const commonName = `showForms-form-question-${number}`;
-        for (const [it, answer] of answers.entries()) {
-            const label = document.createElement('label');
-            label.for = `showForms-form-question-${it}`;
-
-            const input = document.createElement('input');
-            input.id = `showForms-form-question-${it}`;
-            input.name = commonName;
-            input.type = 'radio';
-            label.appendChild(input);
-
-            div.appendChild(label);
-
-            const child = document.createElement('div');
-            const dot = document.createElement('div');
-            child.appendChild(dot);
-            label.appendChild(child);
-
-            const span = document.createElement('span');
-            span.innerHTML = answer;
-            label.appendChild(span);
-        }
-
-        return div;
-    },
-
-    createNumberQuestion(number, question) {
-        const div = document.createElement('div');
-        div.classList.add('showForms-form-question');
-        div.classList.add('showForms-form-numericalQuestion');
-
-        const p = document.createElement('p');
-        p.innerHTML = `${number}. ${question}`;
-        div.appendChild(p);
-
-        const input = document.createElement('input');
-        input.placeholder = 'Your answer';
-        input.type = 'number';
-        div.appendChild(input);
-
-        return div;
-    },
-
     assignEventListeners() {
-        $id('showForms-form-back-button')
+        $id('showForms-form-buttons-back')
             .addEventListener('click', () => {
                 this.showAll();
             });

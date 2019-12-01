@@ -1,0 +1,95 @@
+.form-oQuestion {
+    width:100%;
+
+    > p {
+        font-size: 1.2em;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    > input {
+        width: calc(100% - 20px);
+        padding: 5px 10px;
+        font-size: 1em;
+        font-family: 'Open Sans', sans-serif;
+        border: none;
+        border-bottom: solid 2px #ccc;
+
+        &:focus {
+            border-bottom-color: #39557C;
+        }
+    }
+}
+
+.form-question  {
+    width:100%;
+    margin-bottom: 20px;
+
+    > p {
+        font-size: 1.2em;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+}
+.form-openQuestion,
+.form-numericalQuestion {
+    > input {
+        width: calc(100% - 20px);
+        padding: 5px 10px;
+        font-size: 1em;
+        font-family: 'Open Sans', sans-serif;
+        border: none;
+        border-bottom: solid 2px #ccc;
+
+        &:focus {
+            border-bottom-color: #39557C;
+        }
+    }
+}
+.form-closedQuestion {
+    > label {
+        width:100%;
+        height:32px;
+        display: block;
+
+        > input {
+            display: none;
+        }
+
+        > div {
+            width:16px;
+            height:16px;
+            border:solid 2px #000;
+            margin: 6px 0;
+            border-radius: 50%;
+            display: block;
+            float: left;
+
+            > div {
+                width:10px;
+                height:10px;
+                margin:3px;
+                background: #000;
+                border-radius: 50%;
+                transform: scale(0);
+                transition: transform 0.3s;
+            }
+        }
+
+        > input:checked ~ div > div {
+            transform: scale(1);
+        }
+
+        > span {
+            width:calc(100% - 20px - 20px);
+            font-size: 1em;
+            line-height: 32px;
+            margin-left: 20px;
+            font-family: 'Open Sans', sans-serif;
+            display: block;
+            float: left;
+        }
+    }
+}

@@ -13,7 +13,7 @@
 
 <header id="header">
     <div>
-        <h1>HR Control Panel</h1>
+        <h1>Panel pracownika HR</h1>
     </div>
     <div>
         <div id="header-user">
@@ -23,9 +23,9 @@
             </div>
 
             <div id="header-userActions">
-                <div class="header-userActions-action" title="Logout">
-                    <img src="../icons/logout.png" alt="Logout" />
-                    <span>Logout</span>
+                <div class="header-userActions-action" title="Wyloguj">
+                    <img src="../icons/logout.png" alt="Wyloguj" />
+                    <span>Wyloguj</span>
                 </div>
             </div>
         </div>
@@ -38,16 +38,17 @@
             <h3>Formularze</h3>
             <div>
                 <div class="panel-btn">
-                    <button id="panel-btn-1-2">Zobacz formularze</button>
+                    <button id="panel-btn-1-3">
+                        Zobacz wypełnione formularze
+                    </button>
+                </div>
+                <div class="panel-btn">
+                    <button id="panel-btn-1-2">
+                        Zobacz szablony formularzy
+                    </button>
                 </div>
                 <div class="panel-btn">
                     <button id="panel-btn-1-1">Dodaj formularz</button>
-                </div>
-                <div class="panel-btn">
-                    <button>Edytuj formularz</button>
-                </div>
-                <div class="panel-btn">
-                    <button>Usuń formularz</button>
                 </div>
             </div>
         </div>
@@ -55,13 +56,12 @@
             <h3>Użytkownicy</h3>
             <div>
                 <div class="panel-btn">
-                    <button id="panel-btn-2-1">Dodaj użytkownika</button>
+                    <button id="panel-btn-2-1">
+                        Dodaj użytkownika do formularza
+                    </button>
                 </div>
                 <div class="panel-btn">
-                    <button>Edytuj użytkownika</button>
-                </div>
-                <div class="panel-btn">
-                    <button>Usuń użytkownika</button>
+                    <button>Usuń użytkownika z formularza</button>
                 </div>
             </div>
         </div>
@@ -97,9 +97,9 @@
         <div id="showForms-list">
             <div id="showForms-list-table">
                 <div name="title">
-                    <div>No.</div>
-                    <div>Name</div>
-                    <div>Questions</div>
+                    <div>Nr.</div>
+                    <div>Nazwa</div>
+                    <div>Pytania</div>
                     <div></div>
                     <div></div>
                     <div></div>
@@ -108,16 +108,11 @@
         </div>
 
         <div id="showForms-form">
-            <div id="showForms-form-back">
-                <div id="showForms-form-back-button">
-                    <div class="sectionBack-content">
-                        <img src="../icons/arrow-left.png" alt="Back" />
-                        <span>Powrót</span>
-                    </div>
-                </div>
-            </div>
             <h3 id="showForms-form-title"></h3>
             <div id="showForms-form-content"></div>
+            <div id="showForms-form-buttons">
+                <button id="showForms-form-buttons-back">Powrót</button>
+            </div>
         </div>
     </div>
 </section>
