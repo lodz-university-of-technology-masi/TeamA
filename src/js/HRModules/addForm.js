@@ -1,4 +1,4 @@
-
+const { sendFormToDatabase } = require('../databaseConnector');
 const { $id } = require('../utils');
 
 const AddForm = {
@@ -74,27 +74,8 @@ const AddForm = {
             }
         }
         const formToBase = { title: document.getElementById('addForm-formName').value, questions };
-        const dataToBase = JSON.parse(JSON.stringify(formToBase));
-
-        $.ajax({
-            method: 'POST',
-            url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
-            headers: {
-                Authorization: window.authToken
-            },
-            data: JSON.stringify({
-                title: dataToBase.title,
-                questions: JSON.stringify(dataToBase)
-            }),
-            contentType: 'application/json',
-            success: function dziala() {
-                // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
-            },
-            error: function ajaxError(jqXHR, textStatus, errorThrown) {
-                console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-                // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
-            }
-        });
+        const dataToBase = JSON.stringify(formToBase);
+        sendFormToDatabase(dataToBase);
     },
 
     assignEventListeners() {
