@@ -4,6 +4,7 @@ const deletePng = require('../../icons/delete.png');
 
 const { $id } = require('../utils');
 const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
+const Dialogs = require('../common/dialogs');
 
 const ShowForms = {
     initialized: false,
@@ -53,6 +54,15 @@ const ShowForms = {
 
             img = new Image();
             img.src = deletePng;
+            img.onclick = () => {
+                Dialogs.confirm(
+                    'Usuwanie formularza',
+                    'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
+                    () => {
+                        // Tutaj się zgodziliśmy na usunięcie 'form'
+                    }
+                );
+            };
             child.appendChild(img);
 
             div.appendChild(child);

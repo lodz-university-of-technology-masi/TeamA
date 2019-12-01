@@ -3,6 +3,9 @@
     padding: 0;
 }
 
+$basecolor: #39557C;
+$fontfamily: 'Open Sans', sans-serif;
+
 @keyframes rotate {
     0% {
         transform: rotate(0deg);
@@ -48,3 +51,9 @@
 
     animation: rotate 0.8s ease-in-out 0s infinite normal forwards;
 }
+
+@import 'common.header';
+@import 'common.dialogs';
+// Universal style for every section
+@import 'common.section';
+@import 'common.form';
