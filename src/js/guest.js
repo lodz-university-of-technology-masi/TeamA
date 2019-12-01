@@ -3,6 +3,8 @@ import '../html/guest.html';
 
 const { FillForm } = require('./guestModules/fillForm');
 const { $id } = require('./utils');
+const { signOut, getToken } = require('./cognitoConfig');
+const Cookies = require('./cookies');
 
 const SectionManager = {
     currentElement: null,
@@ -32,17 +34,33 @@ const SectionManager = {
 };
 
 window.onload = () => {
-    const username = 'Wiginiusz Pomyloński';
+    getToken().then(token => {
+        if (!token)
+            window.location.href = '/login.html';
+    }).catch(() => {
+        window.location.href = '/login.html';
+    });
 
+    const username = Cookies.get('user');
     $id('header-user-letter').innerHTML = username.substr(0, 1);
     $id('header-user-label').innerHTML = username;
 
     FillForm.assignEventListeners();
 
+    $id('header-userActions-logout')
+        .addEventListener('click', () => {
+            signOut();
+        });
+
     $id('pane-tile-1')
         .addEventListener('click', () => {
             SectionManager.choose('fillForm');
             FillForm.open();
+        });
+
+    $id('pane-tile-3')
+        .addEventListener('click', () => {
+            signOut();
         });
 
     const backButtons = document.querySelectorAll('.sectionBack > div');

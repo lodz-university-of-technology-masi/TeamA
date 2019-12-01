@@ -1,19 +1,13 @@
 import '../html/login.html';
 import '../scss/login.scss';
 
-import './cognitoConfig';
-
 global.fetch = require('node-fetch');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const { $id } = require('./utils');
 const Cookies = require('./cookies');
+const Cognito = require('./cognitoConfig');
 
-const poolData = {
-    UserPoolId: window.cognitoConfig.cognito.userPoolId,
-    ClientId: window.cognitoConfig.cognito.userPoolClientId
-};
-
-const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+const userPool = Cognito.userPool;
 
 function createCognitoUser(email) {
     return new AmazonCognitoIdentity.CognitoUser({
@@ -112,14 +106,15 @@ const SignIn = {
 
     success(result) {
         SignIn.stopQueue('Success');
-        Cookies.set('user', createCognitoUser(SignIn.email).getUsername().split('@')[0], 365);
-        Cookies.set('token', result.getAccessToken().getJwtToken(), 365);
+        Cookies.set('user', SignIn.email.split('@')[0], 365);
+        //Cookies.set('token', result.getAccessToken().getJwtToken(), 365);
 
         window.location.href = 'home.html';
     },
 
-    failure() {
+    failure(err) {
         SignIn.stopQueue('Wrong credentials');
+        console.log(err);
         $id('button-signin').style.background = '#ff0000';
     },
 

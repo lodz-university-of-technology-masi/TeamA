@@ -5,6 +5,8 @@ const { $id } = require('./utils');
 const { AddForm } = require('./HRModules/addForm');
 const { AddUserToForm } = require('./HRModules/addUserToForm');
 const { ShowForms } = require('./HRModules/showForms');
+const { signOut, getToken } = require('./cognitoConfig');
+const Cookies = require('./cookies');
 
 const SectionManager = {
     currentElement: null,
@@ -34,7 +36,14 @@ const SectionManager = {
 };
 
 window.onload = () => {
-    const username = 'Wiginiusz Pomyloński';
+    getToken().then(token => {
+        if (!token)
+            window.location.href = '/login.html';
+    }).catch(() => {
+        window.location.href = '/login.html';
+    });
+
+    const username = Cookies.get('user');
 
     $id('header-user-letter').innerHTML = username.substr(0, 1);
     $id('header-user-label').innerHTML = username;
@@ -42,6 +51,11 @@ window.onload = () => {
     AddForm.assignEventListeners();
     AddUserToForm.assignEventListeners();
     ShowForms.assignEventListeners();
+
+    $id('header-userActions-logout')
+        .addEventListener('click', () => {
+            signOut();
+        });
 
     $id('panel-btn-1-2')
         .addEventListener('click', () => {
