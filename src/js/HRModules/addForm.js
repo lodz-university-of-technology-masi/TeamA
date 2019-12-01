@@ -1,4 +1,4 @@
-const { sendFormToDataBase } = require('../databaseConnector');
+const { sendFormToDatabase } = require('../databaseConnector');
 const { $id } = require('../utils');
 
 const AddForm = {
@@ -75,7 +75,7 @@ const AddForm = {
         }
         const formToBase = { title: document.getElementById('addForm-formName').value, questions };
         const dataToBase = JSON.stringify(formToBase);
-        sendFormToDataBase(dataToBase);
+        sendFormToDatabase(dataToBase);
     },
 
     assignEventListeners() {

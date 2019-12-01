@@ -2,7 +2,7 @@ const $ = require('jquery');
 const Cognito = require('./cognitoConfig');
 
 
-export function sendFormToDataBase(dataToBase) {
+exports.sendFormToDatabase = dataToBase => {
     $.ajax({
         method: 'POST',
         url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
@@ -14,17 +14,17 @@ export function sendFormToDataBase(dataToBase) {
             questions: JSON.stringify(dataToBase)
         }),
         contentType: 'application/json',
-        success: function dziala() {
+        success: () => {
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         },
-        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+        error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         }
     });
-}
+};
 
-export function getFormsFromDataBase() {
+exports.getFormsFromDatabase = () => {
     $.ajax({
         method: 'GET',
         url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
@@ -32,17 +32,17 @@ export function getFormsFromDataBase() {
             Authorization: Cognito.getToken()
         },
         contentType: 'application/json',
-        success: function dziala() {
+        success: () => {
             // TODO wykorzystac
         },
-        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+        error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         }
     });
-}
+};
 
-export function sendFilledFormToDataBase(filledForm) {
+exports.sendFilledFormToDatabase = filledForm => {
     $.ajax({
         method: 'POST',
         url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
@@ -55,17 +55,17 @@ export function sendFilledFormToDataBase(filledForm) {
             questions: JSON.stringify(filledForm)
         }),
         contentType: 'application/json',
-        success: function dziala() {
+        success: () => {
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         },
-        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+        error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         }
     });
-}
+};
 
-export function getFilledFormFromDatabBase() {
+exports.getFilledFormFromDatabase = () => {
     $.ajax({
         method: 'GET',
         url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
@@ -76,12 +76,12 @@ export function getFilledFormFromDatabBase() {
             // TODO
         ),
         contentType: 'application/json',
-        success: function dziala() {
+        success: () => {
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         },
-        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+        error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         }
     });
-}
+};
