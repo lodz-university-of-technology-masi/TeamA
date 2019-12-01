@@ -62,7 +62,7 @@ exports.alert = (title, text) => {
     dialogSection.classList.add('dialog-buttons');
 
     const button = document.createElement('button');
-    button.classList.add('dialog-cancel');
+    button.classList.add('dialog-apply');
     button.innerHTML = 'Ok';
     button.onclick = () => {
         parent.remove();
