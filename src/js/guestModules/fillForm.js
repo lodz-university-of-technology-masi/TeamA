@@ -1,12 +1,11 @@
-const eyePng = require('../../icons/eye.png');
-const pencilPng = require('../../icons/pencil.png');
-const deletePng = require('../../icons/delete.png');
+const startPng = require('../../icons/play.png');
 
 const { $id } = require('../utils');
 const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
 
-const ShowForms = {
+const FillForm = {
     initialized: false,
+    active: false,
 
     init() {
         this.initialized = true;
@@ -32,82 +31,73 @@ const ShowForms = {
 
             child = document.createElement('div');
 
-            let img = new Image();
-            img.src = eyePng;
+            const img = new Image();
+            img.src = startPng;
             img.onclick = () => {
                 this.show(form);
             };
             child.appendChild(img);
 
             div.appendChild(child);
-
-            child = document.createElement('div');
-
-            img = new Image();
-            img.src = pencilPng;
-            child.appendChild(img);
-
-            div.appendChild(child);
-
-            child = document.createElement('div');
-
-            img = new Image();
-            img.src = deletePng;
-            child.appendChild(img);
-
-            div.appendChild(child);
-
-            $id('showForms-list-table').appendChild(div);
+            $id('fillForm-list-table').appendChild(div);
         }
 
         this.showAll();
 
-        $id('showForms-content-loading').remove();
+        $id('fillForm-content-loading').remove();
     },
 
     open() {
         if (!this.initialized)
             this.init();
-        else
-            this.showAll();
     },
 
     showAll() {
-        $id('showForms-list').style.display = 'block';
-        $id('showForms-form').style.display = 'none';
+        $id('fillForm-list').style.display = 'block';
+        $id('fillForm-fill').style.display = 'none';
     },
 
     show(which) {
-        $id('showForms-list').style.display = 'none';
-        $id('showForms-form').style.display = 'block';
+        this.active = true;
+        $id('fillForm-back').style.visibility = 'hidden';
 
-        $id('showForms-form-title').innerHTML = which.title;
-        $id('showForms-form-content').innerHTML = '';
+        $id('fillForm-list').style.display = 'none';
+        $id('fillForm-fill').style.display = 'block';
+
+        $id('fillForm-form-title').innerHTML = which.title;
+        $id('fillForm-form-content').innerHTML = '';
 
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
-                $id('showForms-form-content')
+                $id('fillForm-form-content')
                     .appendChild(createOpenQuestion(question.number, question.content));
             } else if (question.type.toLowerCase() === 'w') {
-                $id('showForms-form-content')
+                $id('fillForm-form-content')
                     .appendChild(
                         createClosedQuestion(question.number,
                             question.content,
                             question.answers)
                     );
             } else if (question.type.toLowerCase() === 'l') {
-                $id('showForms-form-content')
+                $id('fillForm-form-content')
                     .appendChild(createNumberQuestion(question.number, question.content));
             }
         }
+
+        $id('fillForm-form-buttons-finish').onclick = () => {
+            this.finish(which);
+        };
     },
 
-    assignEventListeners() {
-        $id('showForms-form-buttons-back')
-            .addEventListener('click', () => {
-                this.showAll();
-            });
-    }
+    finish(form) {
+        this.active = false;
+        $id('fillForm-back').style.visibility = 'visible';
+        // TODO: tutaj przetwarzanie formy
+        console.log(form);
+        this.showAll();
+    },
+
+    assignEventListeners() {}
 };
 
-exports.ShowForms = ShowForms;
+exports.FillForm = FillForm;

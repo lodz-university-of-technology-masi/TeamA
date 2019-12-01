@@ -1,6 +1,7 @@
 
 global.fetch = require('node-fetch');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+const Cookies = require('./cookies');
 
 window.cognitoConfig = {
     cognito: {
@@ -22,17 +23,16 @@ const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 exports.userPool = userPool;
 
 exports.signOut = () => {
-    console.log("Logging out...");
     userPool.getCurrentUser().signOut();
+    Cookies.set('user', '', -1);
     window.location.href = '/login.html';
-    console.log("Logged out");
 };
 
-exports.getToken = () => new Promise(function fetchCurrentAuthToken(resolve, reject) {
+exports.getToken = () => new Promise((resolve, reject) => {
     const cognitoUser = userPool.getCurrentUser();
 
     if (cognitoUser) {
-        cognitoUser.getSession(function sessionCallback(err, session) {
+        cognitoUser.getSession((err, session) => {
             if (err) {
                 reject(err);
             } else if (!session.isValid()) {
