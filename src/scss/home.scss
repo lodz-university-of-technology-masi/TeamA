@@ -1,16 +1,9 @@
-/*#39557C*/
 
-* {
-    margin: 0;
-    padding: 0;
-}
+@import 'common';
 
-@import 'home.header';
 @import 'home.panel';
 
-// Universal style for every section
-@import 'home.section';
-
+@import 'home.showForms';
 @import 'home.addUserToForm';
 
 @import 'home.addForm';

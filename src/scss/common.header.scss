@@ -9,7 +9,7 @@
 
         > h1 {
             font-size: 1.2em;
-            color: #fff;;
+            color: #fff;
             font-family: 'Open Sans', sans-serif;
             text-indent: 15px;
             line-height: 46px;
@@ -44,6 +44,7 @@
                     font-size: 1em;
                     color: #fff;
                     font-family: 'Open Sans', sans-serif;
+                    text-transform: capitalize;
                     text-align:center;
                     border-radius: 50%;
                     border:solid 2px #304869;
@@ -62,7 +63,7 @@
                     white-space: nowrap;
                     display: inline-block;
                 }
-            
+
             #header-userActions {
                 position: absolute;
                 top:46px;

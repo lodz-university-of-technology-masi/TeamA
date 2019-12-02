@@ -4,8 +4,7 @@ module.exports = {
     entry: {
         home: './src/js/home.js',
         login: './src/js/login.js',
-        register: './src/js/register.js',
-        verify: './src/js/verify.js'
+        guest: './src/js/guest.js'
     },
     output: {
         filename: '[name].js',

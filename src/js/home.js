@@ -1,13 +1,19 @@
 import "../scss/home.scss";
 import "../html/home.html";
 
-function $id(id) {
-  return document.getElementById(id);
-}
+// function $id(id) {
+//   return document.getElementById(id);
+// }
 
 function $(selector) {
   return document.querySelectorAll(selector);
 }
+const { $id } = require('./utils');
+const { AddForm } = require('./HRModules/addForm');
+const { AddUserToForm } = require('./HRModules/addUserToForm');
+const { ShowForms } = require('./HRModules/showForms');
+const { signOut, getToken } = require('./cognitoConfig');
+const Cookies = require('./cookies');
 
 const csvManager = require("./csvManager");
 
@@ -37,6 +43,7 @@ const SectionManager = {
     $id("panel").style.display = "block";
   },
 };
+
 
 (() => {
   const backButtons = document.querySelectorAll(".sectionBack > div");
@@ -223,32 +230,87 @@ const AddForm = {
   },
 };
 
-window.onload = () => {
-  const username = "Wiginiusz Pomyloński";
+// window.onload = () => {
+//   const username = "Wiginiusz Pomyloński";
 
-  $id("header-user-letter").innerHTML = username.substr(0, 1);
-  $id("header-user-label").innerHTML = username;
+//   $id("header-user-letter").innerHTML = username.substr(0, 1);
+//   $id("header-user-label").innerHTML = username;
 
-  AddForm.assignEventListeners();
-  AddUserToForm.assignEventListeners();
+//   AddForm.assignEventListeners();
+//   AddUserToForm.assignEventListeners();
 
-  $id("panel-btn-1-1").addEventListener("click", () => {
-    AddForm.open();
-    SectionManager.choose("addForm");
-  });
+//   $id("panel-btn-1-1").addEventListener("click", () => {
+//     AddForm.open();
+//     SectionManager.choose("addForm");
+//   });
 
-  $id("panel-btn-2-1").addEventListener("click", () => {
-    SectionManager.choose("addUserToForm");
-    AddUserToForm.open();
-  });
+//   $id("panel-btn-2-1").addEventListener("click", () => {
+//     SectionManager.choose("addUserToForm");
+//     AddUserToForm.open();
+//   });
 
-  $id("panel-btn-3-1").addEventListener("click", () => {
-    SectionManager.choose("import");
-  });
+//   $id("panel-btn-3-1").addEventListener("click", () => {
+//     SectionManager.choose("import");
+//   });
     
+//   $id("panel-btn-3-2").addEventListener("click", () => {
+//     SectionManager.choose("export");
+//   });
+    
+//   $id("import-input").addEventListener("change", csvManager.read);
+
+window.onload = () => {
+    getToken().then(token => {
+        if (!token)
+            window.location.href = '/login.html';
+    }).catch(() => {
+        window.location.href = '/login.html';
+    });
+
+    const username = Cookies.get('user');
+
+    $id('header-user-letter').innerHTML = username.substr(0, 1);
+    $id('header-user-label').innerHTML = username;
+
+    AddForm.assignEventListeners();
+    AddUserToForm.assignEventListeners();
+    ShowForms.assignEventListeners();
+
+    $id('header-userActions-logout')
+        .addEventListener('click', () => {
+            signOut();
+        });
+
+    $id('panel-btn-1-2')
+        .addEventListener('click', () => {
+            ShowForms.open();
+            SectionManager.choose('showForms');
+        });
+
+    $id('panel-btn-1-1')
+        .addEventListener('click', () => {
+            AddForm.open();
+            SectionManager.choose('addForm');
+        });
+
+    $id('panel-btn-2-1')
+        .addEventListener('click', () => {
+            SectionManager.choose('addUserToForm');
+            AddUserToForm.open();
+        });
+
+    $id('panel-btn-3-1')
+        .addEventListener('click', () => {
+            SectionManager.choose('import');
+        });
+
+  
   $id("panel-btn-3-2").addEventListener("click", () => {
     SectionManager.choose("export");
   });
     
   $id("import-input").addEventListener("change", csvManager.read);
+    const backButtons = document.querySelectorAll('.sectionBack > div');
+    for (const button of backButtons)
+        button.addEventListener('click', () => SectionManager.goBack());
 };
