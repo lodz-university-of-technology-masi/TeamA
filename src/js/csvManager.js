@@ -1,16 +1,13 @@
-const DatabaseConnector = require("./databaseConnector");
+const { sendFormToDatabase } = require("./databaseConnector");
+const { getFormsFromDatabase } = require("./databaseConnector");
+const { $id } = require("./utils");
+const Dialogs = require("./common/dialogs");
 
-function $id(id) {
-  return document.getElementById(id);
-}
-
-function saveCsv(data) {
-  let answer = [];
+exports.saveCsv = function(data) {
   let readForm = [];
   let readAnswers = [];
   let csvOutput = "";
-  answer = JSON.parse(data);
-  readForm = answer.form;
+  readForm = data.questions;
   for (let i = 0; i < readForm.length; i++) {
     let csvStringOneLine = "";
     csvStringOneLine =
@@ -40,67 +37,92 @@ function saveCsv(data) {
   link.setAttribute("href", encodedUri);
   link.setAttribute("download", answer.title + ".csv");
   document.body.appendChild(link);
-  // link.click(); #todo na razie zapisuje sie od razu to co sie zaimportowalo
+  link.click();
+};
+
+function checkFormTitle(title) {
+  getFormsFromDatabase().then(str => {
+    const forms = JSON.parse(str);
+    forms.forEach(function (form) {
+      if (form.title == title) {
+        console.log("duplicated titles");
+        return true;
+      }
+    });
+    return false;
+  });
+  //#todo sprawdzenie czy nie ma juz takiego tytuulu w bazie danych
 }
 
-exports.read = function() {
+exports.read = function () {
   let reader = new FileReader();
   let csv;
   let file = $id("import-input");
   let filename = $id("import-input")
     .value.split(/(\\|\/)/g)
-    .pop()
-    .substring();
+    .pop();
+filename = filename.substring(0, filename.length - 4);
+console.log(checkFormTitle(filename));
+  if (checkFormTitle(filename)) {
+    
+    console.log("jestem ale zle ze jestem");
+    let output = {
+      title: filename,
+      questions: [],
+    };
 
-  let output = {
-    title: filename.substring(0, filename.length - 4),
-    form: [],
-  };
-
-  reader.onload = function() {
-    csv = reader.result;
-    let headers = [
-      "number",
-      "type",
-      "language",
-      "content",
-      "numberOfAnswers",
-      "answers",
-    ];
-    let lines = csv.split("\n");
-    let result = [];
-    for (let line of lines) {
-      let obj = {};
-      let currentLine = line.split(";");
-      if (currentLine[0].trim().length === 0) continue;
-      let tab = [];
-      for (let j = 0; j < currentLine.length; j++) {
-        if (j < headers.length - 1) {
-          let value =
-            currentLine[j][0] === '"'
-              ? currentLine[j].slice(1)
-              : currentLine[j];
-          obj[headers[j]] = value;
-        } else {
-          if (currentLine[j].trim().length !== 0 && currentLine[j][0] !== '"') {
-            tab.push(currentLine[j]);
+    reader.onload = function() {
+      csv = reader.result;
+      let headers = [
+        "number",
+        "type",
+        "language",
+        "content",
+        "numberOfAnswers",
+        "answers",
+      ];
+      let lines = csv.split("\n");
+      let result = [];
+      for (let line of lines) {
+        let obj = {};
+        let currentLine = line.split(";");
+        if (currentLine[0].trim().length === 0) continue;
+        let tab = [];
+        for (let j = 0; j < currentLine.length; j++) {
+          if (j < headers.length - 1) {
+            let value =
+              currentLine[j][0] === '"'
+                ? currentLine[j].slice(1)
+                : currentLine[j];
+            obj[headers[j]] = value;
+          } else {
+            if (
+              currentLine[j].trim().length !== 0 &&
+              currentLine[j][0] !== '"'
+            ) {
+              tab.push(currentLine[j]);
+            }
+          }
+          if (j === currentLine.length - 1) {
+            obj.answers = tab;
           }
         }
-        if (j === currentLine.length - 1) {
-          obj.answers = tab;
-        }
+        result.push(obj);
       }
-      result.push(obj);
-    }
-    output["form"] = result;
-    console.log(JSON.stringify(output));
-    //#TODO send output to lambda
-    DatabaseConnector.sendFormToDatabase(JSON.stringify(output));
-    console.log(DatabaseConnector.getFormsFromDatabase);
-    //----------------------------
-    saveCsv(JSON.stringify(output));
-  };
-  reader.readAsBinaryString(file.files[0]);
+      output["questions"] = result;
+      // console.log(JSON.stringify(output));
+      //send output to lambda
+      // sendFormToDatabase(output);
+    };
+    reader.readAsBinaryString(file.files[0]);
+  }
+  else {
+    Dialogs.confirm(
+      "Błąd",
+      "Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.",
+      () => {
+        // Tutaj się zgodziliśmy
+      }
+    );
+  }
 };
-
-exports.save = function() {};
