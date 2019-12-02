@@ -1,5 +1,4 @@
 const $ = require('jquery');
-const dynamo = require('aws-sdk');
 const Cognito = require('./cognitoConfig');
 
 
@@ -26,24 +25,22 @@ exports.sendFormToDatabase = dataToBase => {
     });
 };
 
-exports.getFormsFromDatabase = () => {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            method: 'GET',
-            url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
-            headers: {
-                Authorization: Cognito.getToken()
-            },
-            contentType: 'application/json',
-            success: resp => { resolve(resp.body); },
-            error: (jqXHR, textStatus, errorThrown) => {
-                reject()
-                console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-                // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
-            }
-        });
+exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
+    $.ajax({
+        method: 'GET',
+        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        headers: {
+            Authorization: Cognito.getToken()
+        },
+        contentType: 'application/json',
+        success: resp => resolve(resp.body),
+        error: (jqXHR, textStatus, errorThrown) => {
+            reject();
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        }
     });
-}
+});
 
 exports.sendFilledFormToDatabase = filledForm => {
     $.ajax({
