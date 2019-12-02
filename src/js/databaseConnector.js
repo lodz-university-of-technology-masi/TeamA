@@ -3,18 +3,20 @@ const Cognito = require('./cognitoConfig');
 
 
 exports.sendFormToDatabase = dataToBase => {
+
     $.ajax({
         method: 'POST',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        url: window.cognitoConfig.api.invokeUrl + '/-test',
         headers: {
             Authorization: Cognito.getToken()
         },
         data: JSON.stringify({
             title: dataToBase.title,
-            questions: JSON.stringify(dataToBase)
+            questions: JSON.stringify(dataToBase.questions)
         }),
         contentType: 'application/json',
-        success: () => {
+        success: (resp) => {
+            console.log(resp);
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         },
         error: (jqXHR, textStatus, errorThrown) => {
@@ -27,12 +29,15 @@ exports.sendFormToDatabase = dataToBase => {
 exports.getFormsFromDatabase = () => {
     $.ajax({
         method: 'GET',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        url: window.cognitoConfig.api.invokeUrl + '/-test',
         headers: {
             Authorization: Cognito.getToken()
         },
         contentType: 'application/json',
-        success: () => {
+        success: (resp) => {
+            json = JSON.parse(resp.body);
+            console.log(json);
+            return json;
             // TODO wykorzystac
         },
         error: (jqXHR, textStatus, errorThrown) => {
@@ -45,14 +50,14 @@ exports.getFormsFromDatabase = () => {
 exports.sendFilledFormToDatabase = filledForm => {
     $.ajax({
         method: 'POST',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
+        url: window.cognitoConfig.api.invokeUrl + '/filledform',
         headers: {
             Authorization: Cognito.getToken()
         },
         data: JSON.stringify({
             title: filledForm.title,
             owner: filledForm.owner,
-            questions: JSON.stringify(filledForm)
+            questions: JSON.stringify(filledForm.questions)
         }),
         contentType: 'application/json',
         success: () => {
@@ -68,7 +73,7 @@ exports.sendFilledFormToDatabase = filledForm => {
 exports.getFilledFormFromDatabase = () => {
     $.ajax({
         method: 'GET',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
+        url: window.cognitoConfig.api.invokeUrl + '/filledform',
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -76,7 +81,10 @@ exports.getFilledFormFromDatabase = () => {
             // TODO
         ),
         contentType: 'application/json',
-        success: () => {
+        success: (resp) => {
+            json = JSON.parse(resp.body);
+            console.log(json);
+            return json;
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         },
         error: (jqXHR, textStatus, errorThrown) => {

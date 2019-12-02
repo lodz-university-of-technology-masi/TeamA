@@ -45,3 +45,75 @@ exports.getToken = () => new Promise((resolve, reject) => {
         resolve(null);
     }
 });
+
+/*
+ * Nad poniższą sekcją jeszcze pracuje
+ */
+exports.getUser = () => {
+    console.log(userPool.getCurrentUser());
+    return userPool.getCurrentUser();
+};
+
+exports.deleteUser = () => {
+    userPool.getCurrentUser().deleteUser();
+};
+
+exports.changePassword = (oldPassword, newPassword) => {
+    this.getUser().changePassword(oldPassword, newPassword, (err, result) => {
+        if (err) {
+            alert(err.message || JSON.stringify(err));
+            return;
+        }
+        //TODO: wyświetlenie potwierdzenia jakiegoś
+        console.log('call result: ' + result);
+    });
+}
+
+exports.getUserAttributes = () => {
+    this.getUser().getUserAttributes( (err, result) => {
+        if (err) {
+            alert(err.message || JSON.stringify(err));
+            return;
+        }
+        for (i = 0; i < result.length; i++) {
+            console.log(
+                'attribute ' + result[i].getName() + ' has value ' + result[i].getValue()
+            );
+        }
+        return (result);
+    });
+}
+
+/*
+var attributeList = [];
+var attribute = {
+    Name: 'nickname',
+    Value: 'joe',
+};
+var attribute = new AmazonCognitoIdentity.CognitoUserAttribute(attribute);
+attributeList.push(attribute);
+ */
+
+exports.addUserAttribute = (attributeName, attributeValue) => {
+    const attributeList = this.getUserAttributes();
+    const attribute = {
+        Name: attributeName,
+        Value: attributeValue,
+    };
+    attribute = new AmazonCognitoIdentity.CognitoUserAttribute(attribute);
+    attributeList.push(attribute);
+    console.log(attributeList);
+}
+
+exports.updateUserAttributes = attributeList => {
+    this.getUser().updateAttributes(attributeList, (err, result) => {
+        if (err) {
+            alert(err.message || JSON.stringify(err));
+            return;
+        }
+        console.log('call result: ' + result);
+    });
+}
+
+
+
