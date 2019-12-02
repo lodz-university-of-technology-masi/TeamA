@@ -74,8 +74,7 @@ const AddForm = {
             }
         }
         const formToBase = { title: document.getElementById('addForm-formName').value, questions };
-        const dataToBase = JSON.stringify(formToBase);
-        sendFormToDatabase(dataToBase);
+        sendFormToDatabase(formToBase);
     },
 
     assignEventListeners() {
