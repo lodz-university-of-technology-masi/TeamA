@@ -5,6 +5,7 @@ const deletePng = require('../../icons/delete.png');
 const { $id } = require('../utils');
 const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
 const Dialogs = require('../common/dialogs');
+const { getFormsFromDatabase } = require('../databaseConnector');
 
 const ShowForms = {
     initialized: false,
@@ -12,67 +13,68 @@ const ShowForms = {
     init() {
         this.initialized = true;
 
-        // tutaj ładowanko z bazki
-        const str = '[{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"l","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]}]';
-        const forms = JSON.parse(str);
+        Promise.resolve(getFormsFromDatabase())
+            .then(str => {
+                const forms = JSON.parse(str);
 
-        for (const [it, form] of forms.entries()) {
-            const div = document.createElement('div');
+                for (const [it, form] of forms.entries()) {
+                    const div = document.createElement('div');
 
-            let child = document.createElement('div');
-            child.innerHTML = (it + 1);
-            div.appendChild(child);
+                    let child = document.createElement('div');
+                    child.innerHTML = (it + 1);
+                    div.appendChild(child);
 
-            child = document.createElement('div');
-            child.innerHTML = form.title;
-            div.appendChild(child);
+                    child = document.createElement('div');
+                    child.innerHTML = form.title;
+                    div.appendChild(child);
 
-            child = document.createElement('div');
-            child.innerHTML = form.questions.length;
-            div.appendChild(child);
+                    child = document.createElement('div');
+                    child.innerHTML = form.questions.length;
+                    div.appendChild(child);
 
-            child = document.createElement('div');
+                    child = document.createElement('div');
 
-            let img = new Image();
-            img.src = eyePng;
-            img.onclick = () => {
-                this.show(form);
-            };
-            child.appendChild(img);
+                    let img = new Image();
+                    img.src = eyePng;
+                    img.onclick = () => {
+                        this.show(form);
+                    };
+                    child.appendChild(img);
 
-            div.appendChild(child);
+                    div.appendChild(child);
 
-            child = document.createElement('div');
+                    child = document.createElement('div');
 
-            img = new Image();
-            img.src = pencilPng;
-            child.appendChild(img);
+                    img = new Image();
+                    img.src = pencilPng;
+                    child.appendChild(img);
 
-            div.appendChild(child);
+                    div.appendChild(child);
 
-            child = document.createElement('div');
+                    child = document.createElement('div');
 
-            img = new Image();
-            img.src = deletePng;
-            img.onclick = () => {
-                Dialogs.confirm(
-                    'Usuwanie formularza',
-                    'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
-                    () => {
-                        // Tutaj się zgodziliśmy na usunięcie 'form'
-                    }
-                );
-            };
-            child.appendChild(img);
+                    img = new Image();
+                    img.src = deletePng;
+                    img.onclick = () => {
+                        Dialogs.confirm(
+                            'Usuwanie formularza',
+                            'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
+                            () => {
+                            // Tutaj się zgodziliśmy na usunięcie 'form'
+                            }
+                        );
+                    };
+                    child.appendChild(img);
 
-            div.appendChild(child);
+                    div.appendChild(child);
 
-            $id('showForms-list-table').appendChild(div);
-        }
+                    $id('showForms-list-table').appendChild(div);
+                }
 
-        this.showAll();
+                this.showAll();
 
-        $id('showForms-content-loading').remove();
+                $id('showForms-content-loading').remove();
+            });
     },
 
     open() {
