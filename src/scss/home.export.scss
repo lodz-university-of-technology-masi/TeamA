@@ -5,9 +5,10 @@
   height: 300px;
 
   > div {
-    padding: 8px 25px;
-    border-radius: 20px;
-    background: #39557c;
+    width: calc(100%);
+    padding: 8px 8px;
+    border-radius: 15px;
+    background: none;
     color: #fff;
     display: inline-block;
     margin-top: 20px;
@@ -17,10 +18,16 @@
   button {
     background-color: #39557c;
     border: 1px solid navy;
+    border-radius: 15px;
     color: white;
-    padding: 10px 24px;
+    width:calc(100%);
+    margin-top : 5px;
     cursor: pointer;
-    width: 50%;
     display: block;
+    font-size: 1.1em;
+    font-family: "Open Sans", sans-serif;
+  }
+  button:hover{
+    background-color: navy;
   }
 }
