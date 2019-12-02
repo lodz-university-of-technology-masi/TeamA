@@ -1,3 +1,5 @@
+const DatabaseConnector = require("./databaseConnector");
+
 function $id(id) {
   return document.getElementById(id);
 }
@@ -6,22 +8,28 @@ function saveCsv(data) {
   let answer = [];
   let readForm = [];
   let readAnswers = [];
-  let csvOutput = '';
+  let csvOutput = "";
   answer = JSON.parse(data);
   readForm = answer.form;
   for (let i = 0; i < readForm.length; i++) {
-    let csvStringOneLine = '';
-    csvStringOneLine = '\"'
-      + readForm[i].number + ";"
-      + readForm[i].type + ";"
-      + readForm[i].language + ";"
-      + readForm[i].content + ';'
-      + readForm[i].numberOfAnswers + ';';
+    let csvStringOneLine = "";
+    csvStringOneLine =
+      '"' +
+      readForm[i].number +
+      ";" +
+      readForm[i].type +
+      ";" +
+      readForm[i].language +
+      ";" +
+      readForm[i].content +
+      ";" +
+      readForm[i].numberOfAnswers +
+      ";";
     readAnswers = readForm[i].answers;
     for (let j = 0; j < readAnswers.length; j++) {
       csvStringOneLine += readAnswers[j] + ";";
     }
-    csvOutput += csvStringOneLine +  '";;;;;;' + '\r\n';
+    csvOutput += csvStringOneLine + '";;;;;;' + "\r\n";
   }
   console.log(csvOutput);
 
@@ -30,19 +38,22 @@ function saveCsv(data) {
   let encodedUri = encodeURI(csvContent);
   let link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", answer.title + '.csv');
+  link.setAttribute("download", answer.title + ".csv");
   document.body.appendChild(link);
-  // link.click();
+  // link.click(); #todo na razie zapisuje sie od razu to co sie zaimportowalo
 }
 
 exports.read = function() {
   let reader = new FileReader();
   let csv;
   let file = $id("import-input");
-  let filename = $id("import-input").value.split(/(\\|\/)/g).pop().substring();
+  let filename = $id("import-input")
+    .value.split(/(\\|\/)/g)
+    .pop()
+    .substring();
 
   let output = {
-    title:filename.substring(0, filename.length - 4),
+    title: filename.substring(0, filename.length - 4),
     form: [],
   };
 
@@ -83,10 +94,13 @@ exports.read = function() {
     }
     output["form"] = result;
     console.log(JSON.stringify(output));
+    //#TODO send output to lambda
+    DatabaseConnector.sendFormToDatabase(JSON.stringify(output));
+    console.log(DatabaseConnector.getFormsFromDatabase);
+    //----------------------------
     saveCsv(JSON.stringify(output));
   };
   reader.readAsBinaryString(file.files[0]);
-  //#TODO send output to lambda
 };
 
 exports.save = function() {};
