@@ -54,9 +54,10 @@ function checkFormTitle(filename) {
           "Błąd",
           "Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.",
           () => {
-            return;
+           
           }
         );
+         return;
       }
     }
     
