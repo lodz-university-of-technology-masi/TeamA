@@ -79,10 +79,16 @@ window.onload = () => {
   });
 
   $id("panel-btn-3-2").addEventListener("click", () => {
-    SectionManager.choose("export");
+    ShowForms.open();
+    SectionManager.choose("showForms");
   });
 
   $id("import-input").addEventListener("change", csvManager.read);
+
+  $id("showForms-import-file-button").addEventListener("click", () => {
+    SectionManager.goBack();
+    SectionManager.choose("import");
+  });
 
   const backButtons = document.querySelectorAll(".sectionBack > div");
   for (const button of backButtons)

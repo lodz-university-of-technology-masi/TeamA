@@ -35,37 +35,31 @@ exports.saveCsv = function(data) {
   let encodedUri = encodeURI(csvContent);
   let link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", answer.title + ".csv");
+  link.setAttribute("download", readForm.title + ".csv");
   document.body.appendChild(link);
   link.click();
 };
 
-function checkFormTitle(title) {
-  getFormsFromDatabase().then(str => {
-    const forms = JSON.parse(str);
-    forms.forEach(function (form) {
-      if (form.title == title) {
-        console.log("duplicated titles");
-        return true;
-      }
-    });
-    return false;
-  });
-  //#todo sprawdzenie czy nie ma juz takiego tytuulu w bazie danych
-}
-
-exports.read = function () {
+function checkFormTitle(filename) {
   let reader = new FileReader();
   let csv;
   let file = $id("import-input");
-  let filename = $id("import-input")
-    .value.split(/(\\|\/)/g)
-    .pop();
-filename = filename.substring(0, filename.length - 4);
-console.log(checkFormTitle(filename));
-  if (checkFormTitle(filename)) {
+  Promise.resolve(getFormsFromDatabase()).then(str => {
+
+    const forms = JSON.parse(str);
+
+    for (const [it, form] of forms.entries()) {
+      if (form.title == filename) {
+        Dialogs.confirm(
+          "Błąd",
+          "Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.",
+          () => {
+            return;
+          }
+        );
+      }
+    }
     
-    console.log("jestem ale zle ze jestem");
     let output = {
       title: filename,
       questions: [],
@@ -110,19 +104,22 @@ console.log(checkFormTitle(filename));
         result.push(obj);
       }
       output["questions"] = result;
-      // console.log(JSON.stringify(output));
-      //send output to lambda
-      // sendFormToDatabase(output);
+      sendFormToDatabase(output);
+      Dialogs.alert(
+        "Dodano do bazy danych",
+        'Twój formularz został dodany do bazy danych, możesz go teraz zobaczyć w oknie: "Zobacz szablony formularzy".',
+        () => {
+        }
+      );
     };
     reader.readAsBinaryString(file.files[0]);
-  }
-  else {
-    Dialogs.confirm(
-      "Błąd",
-      "Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.",
-      () => {
-        // Tutaj się zgodziliśmy
-      }
-    );
-  }
+  });
+}
+
+exports.read = function() {
+  let filename = $id("import-input")
+    .value.split(/(\\|\/)/g)
+    .pop();
+  filename = filename.substring(0, filename.length - 4);
+  checkFormTitle(filename);
 };
