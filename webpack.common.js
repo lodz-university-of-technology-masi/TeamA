@@ -2,6 +2,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: {
+        index: './src/js/index.js',
         home: './src/js/home.js',
         login: './src/js/login.js',
         guest: './src/js/guest.js'
@@ -49,4 +50,4 @@ module.exports = {
             }
         ]
     }
-}
+};
