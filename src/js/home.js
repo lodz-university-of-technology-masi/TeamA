@@ -5,6 +5,7 @@ const { $id } = require('./utils');
 const { AddForm } = require('./HRModules/addForm');
 const { AddUserToForm } = require('./HRModules/addUserToForm');
 const { ShowForms } = require('./HRModules/showForms');
+const { ShowFilledForms } = require('./HRModules/showFilledForms');
 const { signOut, getToken } = require('./cognitoConfig');
 const Cookies = require('./cookies');
 
@@ -61,6 +62,12 @@ window.onload = () => {
         .addEventListener('click', () => {
             ShowForms.open();
             SectionManager.choose('showForms');
+        });
+
+    $id('panel-btn-1-3')
+        .addEventListener('click', () => {
+            ShowFilledForms.open();
+            SectionManager.choose('showFilledForms');
         });
 
     $id('panel-btn-1-1')
