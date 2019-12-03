@@ -52,7 +52,7 @@ exports.sendFilledFormToDatabase = filledForm => {
         data: JSON.stringify({
             title: filledForm.title,
             owner: filledForm.owner,
-            questions: JSON.stringify(filledForm)
+            questions: JSON.stringify(filledForm.questions)
         }),
         contentType: 'application/json',
         success: () => {

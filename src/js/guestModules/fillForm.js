@@ -2,7 +2,7 @@ const startPng = require('../../icons/play.png');
 
 const { $id } = require('../utils');
 const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
-const { getFormsFromDatabase } = require('../databaseConnector');
+const { getFormsFromDatabase, sendFilledFormToDatabase } = require('../databaseConnector');
 
 const FillForm = {
     initialized: false,
@@ -90,12 +90,41 @@ const FillForm = {
             this.finish(which);
         };
     },
-
     finish(form) {
         this.active = false;
         $id('fillForm-back').style.visibility = 'visible';
-        // TODO: tutaj przetwarzanie formy
-        console.log(form);
+        const listOfQuestions = document.getElementById('fillForm-form-content').children;
+        const questions = [];
+        for (let i = 0; i < listOfQuestions.length; i++) {
+            if (listOfQuestions[i].className === 'form-question form-openQuestion' || listOfQuestions[i].className === 'form-question form-numericalQuestion') {
+                const question = {
+                    number: i + 1,
+                    type: 'O',
+                    language: 'EN',
+                    content: listOfQuestions[i].children[0].textContent,
+                    numberOfAnswers: '|',
+                    answers: [],
+                    userAnswer: listOfQuestions[i].children[1].value
+                };
+                questions.push(question);
+            } else {
+                const questionAnswers = [];
+                for (let j = 1; j < listOfQuestions[i].children.length; j++)
+                    questionAnswers.push(listOfQuestions[i].children[j].textContent);
+                const question = {
+                    number: i + 1,
+                    type: 'W',
+                    language: 'EN',
+                    content: listOfQuestions[i].children[0].textContent,
+                    numberOfAnswers: listOfQuestions[i].children.length - 1,
+                    answers: questionAnswers,
+                    userAnswer: document.querySelector(`input[name=showForms-form-question-${i + 1}]:checked`).labels[0].textContent
+                };
+                questions.push(question);
+            }
+        }
+        const formToBase = { title: form.title, questions, owner: document.getElementById('header-user-label').textContent };
+        sendFilledFormToDatabase(formToBase);
         this.showAll();
     },
 
