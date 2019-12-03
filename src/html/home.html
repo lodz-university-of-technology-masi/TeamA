@@ -39,12 +39,12 @@
             <div>
                 <div class="panel-btn">
                     <button id="panel-btn-1-3">
-                        Zobacz wypełnione formularze
+                        Sprawdź formularz
                     </button>
                 </div>
                 <div class="panel-btn">
                     <button id="panel-btn-1-2">
-                        Zobacz szablony formularzy
+                        Szablony formularzy
                     </button>
                 </div>
                 <div class="panel-btn">
@@ -112,6 +112,44 @@
             <div id="showForms-form-content"></div>
             <div id="showForms-form-buttons">
                 <button id="showForms-form-buttons-back">Powrót</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="showFilledForms">
+    <div class="sectionBack">
+        <div>
+            <div class="sectionBack-content">
+                <img src="../icons/arrow-left.png" alt="Back" />
+                <span>Powrót</span>
+            </div>
+        </div>
+    </div>
+
+    <h2>Lista wypełnionych formularzy</h2>
+
+    <div id="showFilledForms-content">
+        <div id="showFilledForms-content-loading" class="loading"></div>
+
+        <div id="showFilledForms-list">
+            <div id="showFilledForms-list-table">
+                <div name="title">
+                    <div>Nr.</div>
+                    <div>Nazwa</div>
+                    <div>Wykonawca</div>
+                    <div>Pytania</div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="showFilledForms-form">
+            <h3 id="showFilledForms-form-title"></h3>
+            <div id="showFilledForms-form-content"></div>
+            <div id="showFilledForms-form-buttons">
+                <button name="back" id="showFilledForms-form-buttons-back">Powrót</button>
+                <button name="apply" id="showFilledForms-form-buttons-apply">Zatwierdź</button>
             </div>
         </div>
     </div>
