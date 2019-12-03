@@ -52,7 +52,7 @@ const AddForm = {
         for (let i = 0; i < doc.length; i++) {
             if (doc[i].children[0].className === 'openQuestion') {
                 const question = {
-                    number: i,
+                    number: i + 1,
                     type: 'O',
                     language: 'EN',
                     content: doc[i].children[0].value,
@@ -62,7 +62,7 @@ const AddForm = {
                 questions.push(question);
             } else {
                 const question = {
-                    number: i,
+                    number: i + 1,
                     type: 'W',
                     language: 'EN',
                     content: doc[i].children[0].value,
