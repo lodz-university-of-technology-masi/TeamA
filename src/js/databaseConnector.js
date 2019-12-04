@@ -65,7 +65,7 @@ exports.sendFilledFormToDatabase = filledForm => {
     });
 };
 
-exports.getFilledFormFromDatabase = () => {
+exports.getFilledFormFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
         url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
@@ -76,12 +76,10 @@ exports.getFilledFormFromDatabase = () => {
             // TODO
         ),
         contentType: 'application/json',
-        success: () => {
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
-        },
+        success: resp => resolve(resp.body),
         error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         }
     });
-};
+});
