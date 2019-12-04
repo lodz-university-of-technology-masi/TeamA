@@ -6,6 +6,8 @@ const {
     createOpenQuestion, createClosedQuestion, createNumberQuestion, createEvaluationButtons
 } = require('../common/form');
 
+const { getFilledFormFromDatabase } = require('../databaseConnector');
+
 const ShowFilledForms = {
     points: [],
     initialized: false,
@@ -14,46 +16,49 @@ const ShowFilledForms = {
         this.initialized = true;
         this.assignEventListeners();
 
-        // TODO bazka...
-        const str = '[{"title":"Nowy Form","questions":[{"number":1,"type":"O","language":"EN","content":"1. Open Question","numberOfAnswers":"|","answers":[],"userAnswer":"Form"},{"number":2,"type":"W","language":"EN","content":"2. Closed","numberOfAnswers":3,"answers":["1","2","3"],"userAnswer":"2"}],"owner":"metin90.1998"},{"title":"Nowy Form","questions":[{"number":1,"type":"l","language":"EN","content":"1. Numerical Question","numberOfAnswers":"|","answers":[],"userAnswer":"56"},{"number":2,"type":"W","language":"EN","content":"2. Closed","numberOfAnswers":3,"answers":["1","2","3"],"userAnswer":"2"}],"owner":"metin90.1998"}]';
-        const forms = JSON.parse(str);
 
-        for (const [it, form] of forms.entries()) {
-            const div = document.createElement('div');
+        getFilledFormFromDatabase().then(str => {
+            console.log(str);
+            const forms = JSON.parse(str);
+            console.log(forms);
 
-            let child = document.createElement('div');
-            child.innerHTML = (it + 1);
-            div.appendChild(child);
+            for (const [it, form] of forms.entries()) {
+                const div = document.createElement('div');
 
-            child = document.createElement('div');
-            child.innerHTML = form.title;
-            div.appendChild(child);
+                let child = document.createElement('div');
+                child.innerHTML = (it + 1);
+                div.appendChild(child);
 
-            child = document.createElement('div');
-            child.innerHTML = form.owner;
-            div.appendChild(child);
+                child = document.createElement('div');
+                child.innerHTML = form.title;
+                div.appendChild(child);
 
-            child = document.createElement('div');
-            child.innerHTML = form.questions.length;
-            div.appendChild(child);
+                child = document.createElement('div');
+                child.innerHTML = form.owner;
+                div.appendChild(child);
 
-            child = document.createElement('div');
+                child = document.createElement('div');
+                child.innerHTML = form.questions.length;
+                div.appendChild(child);
 
-            const img = new Image();
-            img.src = pencilPng;
-            img.onclick = () => {
-                this.show(form);
-            };
-            child.appendChild(img);
+                child = document.createElement('div');
 
-            div.appendChild(child);
+                const img = new Image();
+                img.src = pencilPng;
+                img.onclick = () => {
+                    this.show(form);
+                };
+                child.appendChild(img);
 
-            $id('showFilledForms-list-table').appendChild(div);
-        }
+                div.appendChild(child);
 
-        this.showAll();
+                $id('showFilledForms-list-table').appendChild(div);
+            }
 
-        $id('showFilledForms-content-loading').remove();
+            this.showAll();
+
+            $id('showFilledForms-content-loading').remove();
+        });
     },
 
     open() {
@@ -90,8 +95,12 @@ const ShowFilledForms = {
                     .appendChild(questionDOM);
 
                 const evaluateButtons = createEvaluationButtons(
-                    () => { this.points[it] = true; },
-                    () => { this.points[it] = false; }
+                    () => {
+                        this.points[it] = true;
+                    },
+                    () => {
+                        this.points[it] = false;
+                    }
                 );
 
                 $id('showFilledForms-form-content')
@@ -115,8 +124,12 @@ const ShowFilledForms = {
                     .appendChild(questionDOM);
 
                 const evaluateButtons = createEvaluationButtons(
-                    () => { this.points[it] = true; },
-                    () => { this.points[it] = false; }
+                    () => {
+                        this.points[it] = true;
+                    },
+                    () => {
+                        this.points[it] = false;
+                    }
                 );
 
                 $id('showFilledForms-form-content')
@@ -132,8 +145,12 @@ const ShowFilledForms = {
                     .appendChild(questionDOM);
 
                 const evaluateButtons = createEvaluationButtons(
-                    () => { this.points[it] = true; },
-                    () => { this.points[it] = false; }
+                    () => {
+                        this.points[it] = true;
+                    },
+                    () => {
+                        this.points[it] = false;
+                    }
                 );
 
                 $id('showFilledForms-form-content')
