@@ -15,7 +15,7 @@ const SectionManager = {
             this.currentElement = newElement;
             $id('panel').style.display = 'none';
 
-            newElement.style.display = 'block';
+            newElement.style.display = 'flex';
             setTimeout(() => {
                 newElement.style.visibility = 'visible';
                 newElement.style.opacity = '1';
