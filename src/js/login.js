@@ -7,7 +7,7 @@ const { $id } = require('./utils');
 const Cookies = require('./cookies');
 const Cognito = require('./cognitoConfig');
 
-const userPool = Cognito.userPool;
+const { userPool } = Cognito;
 
 function createCognitoUser(email) {
     return new AmazonCognitoIdentity.CognitoUser({
@@ -107,7 +107,7 @@ const SignIn = {
     success(result) {
         SignIn.stopQueue('Success');
         Cookies.set('user', SignIn.email.split('@')[0], 365);
-        //Cookies.set('token', result.getAccessToken().getJwtToken(), 365);
+        // Cookies.set('token', result.getAccessToken().getJwtToken(), 365);
 
         window.location.href = 'home.html';
     },

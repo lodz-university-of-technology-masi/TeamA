@@ -3,31 +3,31 @@ const Cognito = require('./cognitoConfig');
 
 
 exports.sendFormToDatabase = dataToBase => {
-  $.ajax({
-    method: "POST",
-    url: "https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test",
-    headers: {
-      Authorization: Cognito.getToken(),
-    },
-    data: JSON.stringify({
-      title: dataToBase.title,
-      questions: JSON.stringify(dataToBase.questions),
-    }),
-    contentType: "application/json",
-    success: resp => {
-      console.log(resp.body);
-      // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
-    },
-    error: (jqXHR, textStatus, errorThrown) => {
-      console.error(
-        "Error requesting ride: ",
-        textStatus,
-        ", Details: ",
-        errorThrown
-      );
-      // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
-    },
-  });
+    $.ajax({
+        method: 'POST',
+        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        headers: {
+            Authorization: Cognito.getToken()
+        },
+        data: JSON.stringify({
+            title: dataToBase.title,
+            questions: JSON.stringify(dataToBase.questions)
+        }),
+        contentType: 'application/json',
+        success: resp => {
+            console.log(resp.body);
+            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error(
+                'Error requesting ride: ',
+                textStatus,
+                ', Details: ',
+                errorThrown
+            );
+            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        }
+    });
 };
 
 exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
@@ -71,29 +71,27 @@ exports.sendFilledFormToDatabase = filledForm => {
 };
 
 exports.getFilledFormFromDatabase = () => {
-  $.ajax({
-    method: "GET",
-    url:
-      "https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform",
-    headers: {
-      Authorization: Cognito.getToken(),
-    },
-    data: JSON
-      .stringify
-      // TODO
-      (),
-    contentType: "application/json",
-    success: () => {
-      // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
-    },
-    error: (jqXHR, textStatus, errorThrown) => {
-      console.error(
-        "Error requesting ride: ",
-        textStatus,
-        ", Details: ",
-        errorThrown
-      );
-      // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
-    },
-  });
+    $.ajax({
+        method: 'GET',
+        url:
+      'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
+        headers: {
+            Authorization: Cognito.getToken()
+        },
+        data: JSON
+            .stringify(),
+        contentType: 'application/json',
+        success: () => {
+            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error(
+                'Error requesting ride: ',
+                textStatus,
+                ', Details: ',
+                errorThrown
+            );
+            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        }
+    });
 };
