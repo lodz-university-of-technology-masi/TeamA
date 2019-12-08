@@ -6,19 +6,20 @@ const {
     createOpenQuestion, createClosedQuestion, createNumberQuestion, createEvaluationButtons
 } = require('../common/form');
 
-const { getFilledFormFromDatabase } = require('../databaseConnector');
+const { getFilledFormFromDatabase, sendResultToDatabase } = require('../databaseConnector');
 
 const ShowFilledForms = {
     points: [],
     initialized: false,
+    owner: '',
+    hrEmployer: '',
+    formTitle: '',
 
     init() {
         this.initialized = true;
+        this.hrEmployer = $id('header-user-label').innerText;
         this.assignEventListeners();
-
-
         getFilledFormFromDatabase().then(str => {
-            console.log(str);
             const forms = JSON.parse(str);
             console.log(forms);
 
@@ -75,6 +76,8 @@ const ShowFilledForms = {
 
     show(which) {
         this.points = [];
+        this.owner = which.owner;
+        this.formTitle = which.title;
         $id('showFilledForms-list').style.display = 'none';
         $id('showFilledForms-form').style.display = 'block';
 
@@ -166,8 +169,14 @@ const ShowFilledForms = {
             Dialogs.confirm('Zakończenie',
                 'Czy na pewno zakończyć sprawdzanie?',
                 () => {
-                    // TODO statystyki pytań są w zmiennej points, teraz tylko wysłać do backendu!
-                    console.log(this.points);
+                    const dataToBackend =
+                        {
+                            formTitle: this.formTitle,
+                            owner: this.owner,
+                            hrEmployer: this.hrEmployer,
+                            points: this.points
+                        };
+                    sendResultToDatabase(dataToBackend);
                     this.showAll();
                 });
         } else {
