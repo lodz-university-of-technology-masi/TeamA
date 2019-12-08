@@ -17,7 +17,7 @@ const ShowFilledForms = {
 
     init() {
         this.initialized = true;
-        this.hrEmployer = document.getElementById('header-user-label').innerText;
+        this.hrEmployer = $id('header-user-label').innerText;
         this.assignEventListeners();
         getFilledFormFromDatabase().then(str => {
             const forms = JSON.parse(str);
