@@ -8,6 +8,7 @@ const { ShowForms } = require('./HRModules/showForms');
 const { ShowFilledForms } = require('./HRModules/showFilledForms');
 const { signOut, getToken } = require('./cognitoConfig');
 const Cookies = require('./cookies');
+const CsvManager = require('./csvManager');
 
 const SectionManager = {
     currentElement: null,
@@ -91,6 +92,8 @@ window.onload = () => {
         ShowForms.open();
         SectionManager.choose('showForms');
     });
+
+    $id('import-input').addEventListener('change', CsvManager.read);
 
     $id('showForms-import-file-button').addEventListener('click', () => {
         SectionManager.goBack();

@@ -3,7 +3,7 @@ const { getFormsFromDatabase } = require('./databaseConnector');
 const { $id } = require('./utils');
 const Dialogs = require('./common/dialogs');
 
-exports.saveCsv = function (data) {
+exports.saveCsv = data => {
     let readForm = [];
     let readAnswers = [];
     let csvOutput = '';
@@ -26,9 +26,8 @@ exports.saveCsv = function (data) {
         for (let j = 0; j < readAnswers.length; j++) {
             csvStringOneLine += `${readAnswers[j]};`;
         }
-        csvOutput += `${csvStringOneLine}";;;;;;` + '\r\n';
+        csvOutput += `${csvStringOneLine}" \r\n`;
     }
-    console.log(csvOutput);
 
     let csvContent = 'data:text/csv;charset=utf-8,';
     csvContent += csvOutput;
@@ -38,18 +37,16 @@ exports.saveCsv = function (data) {
     link.setAttribute('download', `${readForm.title}.csv`);
     document.body.appendChild(link);
     link.click();
-};
-
+}
 function checkFormTitle(filename) {
     const reader = new FileReader();
     let csv;
     const file = $id('import-input');
     Promise.resolve(getFormsFromDatabase()).then(str => {
         const forms = JSON.parse(str);
-
-        for (const [it, form] of forms.entries()) {
+        for (const [_, form] of forms.entries()) {
             if (form.title == filename) {
-                Dialogs.confirm(
+                Dialogs.alert(
                     'Błąd',
                     'Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.',
                     () => {
@@ -65,7 +62,7 @@ function checkFormTitle(filename) {
             questions: []
         };
 
-        reader.onload = function () {
+        reader.onload = () => {
             csv = reader.result;
             const headers = [
                 'number',
@@ -114,7 +111,7 @@ function checkFormTitle(filename) {
     });
 }
 
-exports.read = function () {
+exports.read = () => {
     let filename = $id('import-input')
         .value.split(/(\\|\/)/g)
         .pop();
