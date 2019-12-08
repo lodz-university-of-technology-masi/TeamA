@@ -1,12 +1,13 @@
 const $ = require('jquery');
 const Cognito = require('./cognitoConfig');
 
+const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage'
 
 exports.sendFormToDatabase = dataToBase => {
 
     $.ajax({
         method: 'POST',
-        url: window.cognitoConfig.api.invokeUrl + '/-test',
+        url: invokeUrl + '/-test',
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -29,7 +30,7 @@ exports.sendFormToDatabase = dataToBase => {
 exports.getFormsFromDatabase = () => {
     $.ajax({
         method: 'GET',
-        url: window.cognitoConfig.api.invokeUrl + '/-test',
+        url: invokeUrl + '/-test',
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -50,7 +51,7 @@ exports.getFormsFromDatabase = () => {
 exports.sendFilledFormToDatabase = filledForm => {
     $.ajax({
         method: 'POST',
-        url: window.cognitoConfig.api.invokeUrl + '/filledform',
+        url: invokeUrl + '/filledform',
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -73,7 +74,7 @@ exports.sendFilledFormToDatabase = filledForm => {
 exports.getFilledFormFromDatabase = () => {
     $.ajax({
         method: 'GET',
-        url: window.cognitoConfig.api.invokeUrl + '/filledform',
+        url: invokeUrl + '/filledform',
         headers: {
             Authorization: Cognito.getToken()
         },
