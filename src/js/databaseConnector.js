@@ -83,3 +83,46 @@ exports.getFilledFormFromDatabase = () => new Promise(resolve => {
         }
     });
 });
+
+exports.sendResultToDatabase = result => {
+    $.ajax({
+        method: 'POST',
+        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/results',
+        headers: {
+            Authorization: Cognito.getToken()
+        },
+        data: JSON.stringify({
+            formTitle: result.formTitle,
+            owner: result.owner,
+            hrEmployer: result.hrEmployer,
+            points: result.points
+        }),
+        contentType: 'application/json',
+        success: () => {
+            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        }
+    });
+};
+
+exports.getResultFromDatabase = () => new Promise(resolve => {
+    $.ajax({
+        method: 'GET',
+        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/results',
+        headers: {
+            Authorization: Cognito.getToken()
+        },
+        data: JSON.stringify(
+            // TODO
+        ),
+        contentType: 'application/json',
+        success: resp => resolve(resp.body),
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        }
+    });
+});
