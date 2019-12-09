@@ -21,7 +21,6 @@ const ShowForms = {
 
         Promise.resolve(getFormsFromDatabase()).then(str => {
             const forms = JSON.parse(str);
-            console.log(forms);
 
             for (const [it, form] of forms.entries()) {
                 const div = document.createElement('div');
