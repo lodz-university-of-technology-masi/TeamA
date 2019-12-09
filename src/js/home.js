@@ -8,6 +8,7 @@ const { ShowForms } = require('./HRModules/showForms');
 const { ShowFilledForms } = require('./HRModules/showFilledForms');
 const { signOut, getToken } = require('./cognitoConfig');
 const Cookies = require('./cookies');
+const CsvManager = require('./csvManager');
 
 const SectionManager = {
     currentElement: null,
@@ -37,12 +38,13 @@ const SectionManager = {
 };
 
 window.onload = () => {
-    getToken().then(token => {
-        if (!token)
+    getToken()
+        .then(token => {
+            if (!token) window.location.href = '/login.html';
+        })
+        .catch(() => {
             window.location.href = '/login.html';
-    }).catch(() => {
-        window.location.href = '/login.html';
-    });
+        });
 
     const username = Cookies.get('user');
 
@@ -86,7 +88,17 @@ window.onload = () => {
         .addEventListener('click', () => {
             SectionManager.choose('import');
         });
+    $id('panel-btn-3-2').addEventListener('click', () => {
+        ShowForms.open();
+        SectionManager.choose('showForms');
+    });
 
+    $id('import-input').addEventListener('change', CsvManager.read);
+
+    $id('showForms-import-file-button').addEventListener('click', () => {
+        SectionManager.goBack();
+        SectionManager.choose('import');
+    });
     const backButtons = document.querySelectorAll('.sectionBack > div');
     for (const button of backButtons)
         button.addEventListener('click', () => SectionManager.goBack());

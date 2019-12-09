@@ -19,7 +19,12 @@ exports.sendFormToDatabase = dataToBase => {
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         },
         error: (jqXHR, textStatus, errorThrown) => {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            console.error(
+                'Error requesting ride: ',
+                textStatus,
+                ', Details: ',
+                errorThrown
+            );
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         }
     });
@@ -68,13 +73,13 @@ exports.sendFilledFormToDatabase = filledForm => {
 exports.getFilledFormFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
+        url:
+      'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
         headers: {
             Authorization: Cognito.getToken()
         },
-        data: JSON.stringify(
-            // TODO
-        ),
+        data: JSON
+            .stringify(),
         contentType: 'application/json',
         success: resp => resolve(resp.body),
         error: (jqXHR, textStatus, errorThrown) => {
@@ -102,7 +107,12 @@ exports.sendResultToDatabase = result => {
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         },
         error: (jqXHR, textStatus, errorThrown) => {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            console.error(
+                'Error requesting ride: ',
+                textStatus,
+                ', Details: ',
+                errorThrown
+            );
             // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
         }
     });
