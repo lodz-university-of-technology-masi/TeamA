@@ -37,15 +37,15 @@ exports.saveCsv = data => {
     link.setAttribute('download', `${readForm.title}.csv`);
     document.body.appendChild(link);
     link.click();
-}
+};
 function checkFormTitle(filename) {
     const reader = new FileReader();
     let csv;
     const file = $id('import-input');
     Promise.resolve(getFormsFromDatabase()).then(str => {
         const forms = JSON.parse(str);
-        for (const [_, form] of forms.entries()) {
-            if (form.title == filename) {
+        for (const form of forms) {
+            if (form.title === filename) {
                 Dialogs.alert(
                     'Błąd',
                     'Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.',
