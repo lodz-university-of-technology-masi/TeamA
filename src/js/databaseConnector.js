@@ -55,6 +55,38 @@ exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
     });
 });
 
+exports.removeFormFromDatabase = formId => {
+    $.ajax({
+        method: 'DELETE',
+        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        headers: {
+            Authorization: Cognito.getToken()
+        },
+        data: JSON.stringify({
+            id: formId
+        }),
+        contentType: 'application/json',
+        success: () => {
+            Dialogs.alert(
+                'Usunięto formularz z bazy',
+                'Twój formularz został pomyślnie usunięty z bazy danych.'
+            );
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error(
+                'Error requesting ride: ',
+                textStatus,
+                ', Details: ',
+                errorThrown
+            );
+            Dialogs.alert(
+                'Nie usunięto formularza z bazy danych',
+                'Podczas usuwania wystąpił nieoczekiwany błąd.'
+            );
+        }
+    });
+};
+
 exports.sendFilledFormToDatabase = filledForm => {
     $.ajax({
         method: 'POST',
@@ -103,6 +135,25 @@ exports.getFilledFormFromDatabase = () => new Promise(resolve => {
         }
     });
 });
+
+exports.removeFilledFormFromDatabase = filledFormId => {
+    $.ajax({
+        method: 'DELETE',
+        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
+        headers: {
+            Authorization: Cognito.getToken()
+        },
+        data: JSON.stringify({
+            id: filledFormId
+        }),
+        contentType: 'application/json',
+        success: () => {},
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+        }
+    });
+};
+
 
 exports.sendResultToDatabase = result => {
     $.ajax({
@@ -157,3 +208,26 @@ exports.getResultFromDatabase = () => new Promise(resolve => {
         }
     });
 });
+
+exports.removeResultFromDatabase = resultId => {
+    $.ajax({
+        method: 'DELETE',
+        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/results',
+        headers: {
+            Authorization: Cognito.getToken()
+        },
+        data: JSON.stringify({
+            id: resultId
+        }),
+        contentType: 'application/json',
+        success: () => {},
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error(
+                'Error requesting ride: ',
+                textStatus,
+                ', Details: ',
+                errorThrown
+            );
+        }
+    });
+};
