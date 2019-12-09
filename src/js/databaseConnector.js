@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const Cognito = require('./cognitoConfig');
-
+const Dialogs = require('./common/dialogs');
 
 exports.sendFormToDatabase = dataToBase => {
     $.ajax({
@@ -14,9 +14,13 @@ exports.sendFormToDatabase = dataToBase => {
             questions: JSON.stringify(dataToBase.questions)
         }),
         contentType: 'application/json',
-        success: resp => {
-            console.log(resp.body);
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+        success: () => {
+            Dialogs.alert(
+                'Dodano do bazy danych',
+                'Twój formularz został dodany do bazy danych, możesz go teraz zobaczyć w oknie: "Zobacz szablony formularzy".',
+                () => {
+                }
+            );
         },
         error: (jqXHR, textStatus, errorThrown) => {
             console.error(
@@ -25,7 +29,12 @@ exports.sendFormToDatabase = dataToBase => {
                 ', Details: ',
                 errorThrown
             );
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+            Dialogs.alert(
+                'Nie dodano do bazy danych',
+                'Podczas dodawania wystąpił nieoczekiwany błąd.".',
+                () => {
+                }
+            );
         }
     });
 };
@@ -42,7 +51,12 @@ exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
         error: (jqXHR, textStatus, errorThrown) => {
             reject();
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+            Dialogs.alert(
+                'Nie pobrano z bazy danych',
+                'Podczas pobierania listy formularzy wystąpił nieoczekiwany błąd.',
+                () => {
+                }
+            );
         }
     });
 });
@@ -61,11 +75,21 @@ exports.sendFilledFormToDatabase = filledForm => {
         }),
         contentType: 'application/json',
         success: () => {
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+            Dialogs.alert(
+                'Dodano do bazy danych',
+                'Twój wypełniony formularz został dodany do bazy danych.',
+                () => {
+                }
+            );
         },
         error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+            Dialogs.alert(
+                'Nie dodano do bazy danych',
+                'Podczas dodawania formularza wystąpił nieoczekiwany błąd.',
+                () => {
+                }
+            );
         }
     });
 };
@@ -84,7 +108,12 @@ exports.getFilledFormFromDatabase = () => new Promise(resolve => {
         success: resp => resolve(resp.body),
         error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+            Dialogs.alert(
+                'Nie pobrano listy z bazy danych',
+                'Podczas pobierania formularzy wystąpił nieoczekiwany błąd.".',
+                () => {
+                }
+            );
         }
     });
 });
@@ -104,7 +133,12 @@ exports.sendResultToDatabase = result => {
         }),
         contentType: 'application/json',
         success: () => {
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+            Dialogs.alert(
+                'Dodano do bazy danych',
+                'Twój wynik został pomyślnie dodany do bazy danych.',
+                () => {
+                }
+            );
         },
         error: (jqXHR, textStatus, errorThrown) => {
             console.error(
@@ -113,7 +147,12 @@ exports.sendResultToDatabase = result => {
                 ', Details: ',
                 errorThrown
             );
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+            Dialogs.alert(
+                'Nie dodano do bazy danych',
+                'Podczas dodawania do bazy danych wystąpił nieoczekiwany błąd.',
+                () => {
+                }
+            );
         }
     });
 };
@@ -132,7 +171,12 @@ exports.getResultFromDatabase = () => new Promise(resolve => {
         success: resp => resolve(resp.body),
         error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            // TODO ZROBIC WYSWIETLAJACE SIE OKIENKO
+            Dialogs.alert(
+                'Nie pobrano z bazy danych',
+                'Podczas pobierania danych z bazy danych wystąpił nieoczekiwany błąd.',
+                () => {
+                }
+            );
         }
     });
 });
