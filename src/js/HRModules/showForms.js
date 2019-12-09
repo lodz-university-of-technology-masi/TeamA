@@ -10,7 +10,7 @@ const {
     createNumberQuestion
 } = require('../common/form');
 const Dialogs = require('../common/dialogs');
-const { getFormsFromDatabase } = require('../databaseConnector');
+const { getFormsFromDatabase, removeFormFromDatabase } = require('../databaseConnector');
 const csvManager = require('../csvManager');
 
 const ShowForms = {
@@ -21,6 +21,7 @@ const ShowForms = {
 
         Promise.resolve(getFormsFromDatabase()).then(str => {
             const forms = JSON.parse(str);
+            console.log(forms);
 
             for (const [it, form] of forms.entries()) {
                 const div = document.createElement('div');
@@ -69,8 +70,7 @@ const ShowForms = {
                         'Usuwanie formularza',
                         'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
                         () => {
-                            // Tutaj się zgodziliśmy na usunięcie 'form'
-
+                            removeFormFromDatabase(form.formId);
                         }
                     );
                 };

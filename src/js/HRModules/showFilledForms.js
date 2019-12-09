@@ -21,7 +21,6 @@ const ShowFilledForms = {
         this.assignEventListeners();
         getFilledFormFromDatabase().then(str => {
             const forms = JSON.parse(str);
-            console.log(forms);
 
             for (const [it, form] of forms.entries()) {
                 const div = document.createElement('div');
