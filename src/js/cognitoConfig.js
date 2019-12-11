@@ -3,30 +3,29 @@ global.fetch = require('node-fetch');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const Cookies = require('./cookies');
 
-window.cognitoConfig = {
+const cognitoConfig = {
     cognito: {
-        userPoolId: 'us-east-1_lS2tMePyI', // e.g. us-east-2_uXboG5pAb
-        userPoolClientId: '4k3to3pjtidq5qvnglpdvmtvfc', // e.g. 25ddkmj4v6hfsfvruhpfi7n4hv
-        region: 'us-east-1' // e.g. us-east-2
+        userPoolId: 'us-east-1_lS2tMePyI', 
+        userPoolClientId: '4k3to3pjtidq5qvnglpdvmtvfc',
+        region: 'us-east-1' 
     }
 };
 
 const poolData = {
-    UserPoolId: window.cognitoConfig.cognito.userPoolId,
-    ClientId: window.cognitoConfig.cognito.userPoolClientId
+    UserPoolId: cognitoConfig.cognito.userPoolId,
+    ClientId: cognitoConfig.cognito.userPoolClientId
 };
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-exports.userPool = userPool;
 
 exports.signOut = () => {
-    userPool.getCurrentUser().signOut();
+    userPool.getCurrentUser().globalSignOut();
     Cookies.set('user', '', -1);
     window.location.href = '/login.html';
 };
 
 exports.getToken = () => new Promise((resolve, reject) => {
-    const cognitoUser = userPool.getCurrentUser();
+    const cognitoUser = this.getUser();
 
     if (cognitoUser) {
         cognitoUser.getSession((err, session) => {
@@ -43,11 +42,14 @@ exports.getToken = () => new Promise((resolve, reject) => {
     }
 });
 
-/*
- * Nad poniższą sekcją jeszcze pracuje
- */
+exports.createCognitoUser = email => {
+    return new AmazonCognitoIdentity.CognitoUser({
+        Username: email,
+        Pool: userPool
+    });
+}
+
 exports.getUser = () => {
-    console.log(userPool.getCurrentUser());
     return userPool.getCurrentUser();
 };
 
@@ -62,55 +64,101 @@ exports.changePassword = (oldPassword, newPassword) => {
             return;
         }
         //TODO: wyświetlenie potwierdzenia jakiegoś
-        console.log('call result: ' + result);
     });
 }
 
 exports.getUserAttributes = () => {
-    this.getUser().getUserAttributes( (err, result) => {
-        if (err) {
-            alert(err.message || JSON.stringify(err));
-            return;
-        }
-        for (i = 0; i < result.length; i++) {
-            console.log(
-                'attribute ' + result[i].getName() + ' has value ' + result[i].getValue()
-            );
-        }
-        return (result);
-    });
-}
+    const attributeList = [];
+    const cognitoUser = this.getUser();
 
-/*
-var attributeList = [];
-var attribute = {
-    Name: 'nickname',
-    Value: 'joe',
+    if (cognitoUser != null) {
+        cognitoUser.getSession( (err, session) => {
+
+            if (err) {
+                alert(err.message || JSON.stringify(err));
+                return;
+            }
+
+            cognitoUser.getUserAttributes( (err, result) => {
+                if (err) {
+                    alert(err.message || JSON.stringify(err));
+                    return;
+                }
+                for (i = 0; i < result.length; i++) {
+                    const att = {
+                        Name: result[i].getName(),
+                        Value: result[i].getValue()
+                    };
+        
+                    attributeList.push(att);
+                }
+            });
+        });
+    }
+    return attributeList;
 };
-var attribute = new AmazonCognitoIdentity.CognitoUserAttribute(attribute);
-attributeList.push(attribute);
- */
+
+exports.updateUserAttributes = attributeList => {
+    const cognitoUser = this.getUser();
+
+    if (cognitoUser != null) {
+        cognitoUser.getSession( err => {
+
+            if (err) {
+                alert(err.message || JSON.stringify(err));
+                return;
+            }
+
+            cognitoUser.updateAttributes(attributeList, (err, result) => {
+                if (err) {
+                    alert(err.message || JSON.stringify(err));
+                    return;
+                }
+            });
+        });
+    }
+};
 
 exports.addUserAttribute = (attributeName, attributeValue) => {
     const attributeList = this.getUserAttributes();
-    const attribute = {
+    const attributeData = {
         Name: attributeName,
         Value: attributeValue,
     };
-    attribute = new AmazonCognitoIdentity.CognitoUserAttribute(attribute);
+    const attribute = new AmazonCognitoIdentity.CognitoUserAttribute(attributeData);
     attributeList.push(attribute);
-    console.log(attributeList);
+
+    this.updateUserAttributes(attributeList);
 }
 
-exports.updateUserAttributes = attributeList => {
-    this.getUser().updateAttributes(attributeList, (err, result) => {
-        if (err) {
-            alert(err.message || JSON.stringify(err));
-            return;
-        }
-        console.log('call result: ' + result);
-    });
+exports.addCustomUserAttribute = (attributeName, attributeValue) => {
+    this.addUserAttribute('custom:' + attributeName, attributeValue);
 }
 
+exports.checkUserAttribute = attributeName => {
+    const attributeList = [];
+    const cognitoUser = this.getUser();
 
+    if (cognitoUser != null) {
+        cognitoUser.getSession( (err, session) => {
 
+            if (err) {
+                alert(err.message || JSON.stringify(err));
+                return;
+            }
+
+            cognitoUser.getUserAttributes( (err, result) => {
+                if (err) {
+                    alert(err.message || JSON.stringify(err));
+                    return;
+                }
+                for (i = 0; i < result.length; i++) {
+                    if(result[i].getName() == attributeName) {
+                        attributeList.push(result[i].getValue());
+                    }
+                }
+            });
+        });
+    }
+    return attributeList; //tutaj coś jest nie tak; nie mogę zwrócić wartości
+}

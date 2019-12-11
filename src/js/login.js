@@ -7,15 +7,6 @@ const { $id } = require('./utils');
 const Cookies = require('./cookies');
 const Cognito = require('./cognitoConfig');
 
-const { userPool } = Cognito;
-
-function createCognitoUser(email) {
-    return new AmazonCognitoIdentity.CognitoUser({
-        Username: email,
-        Pool: userPool
-    });
-}
-
 const FormManager = {
     current: null,
 
@@ -97,7 +88,7 @@ const SignIn = {
             Password: SignIn.password
         });
 
-        const cognitoUser = createCognitoUser(SignIn.email);
+        const cognitoUser = Cognito.createCognitoUser(SignIn.email);
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: SignIn.success,
             onFailure: SignIn.failure
@@ -157,12 +148,26 @@ const SignUp = {
             Name: 'email',
             Value: this.email
         };
+        const dataRole = {
+            Name: 'profile',
+            Value: 'guest'
+        };
+        const dataNickname = {
+            Name: 'nickname',
+            Value: this.email.split('@')[0]
+        };
         const attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
+        const attributeRole = new AmazonCognitoIdentity.CognitoUserAttribute(dataRole);
+        const attributeNickname = new AmazonCognitoIdentity.CognitoUserAttribute(dataNickname);
 
-        userPool.signUp(
+        attributeList.push(attributeEmail);
+        attributeList.push(attributeRole);
+        attributeList.push(attributeNickname);
+
+        Cognito.signUp(
             this.email,
             password,
-            [attributeEmail],
+            attributeList,
             null,
             (err, result) => {
                 if (!err)
