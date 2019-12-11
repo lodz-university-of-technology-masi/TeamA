@@ -1,5 +1,6 @@
 
 const { $id, $ } = require('../utils');
+const Dialog = require('../common/dialogs');
 
 const AddUserToForm = {
     initialized: false,
@@ -19,22 +20,11 @@ const AddUserToForm = {
             this.init();
 
         this.chooseSection(0);
-
-        const users = $id('addUserToForm-users').children;
-        for (const user of users)
-            user.querySelectorAll('input')[0].checked = false;
-
-        const forms = $id('addUserToForm-forms').children;
-        for (const form of forms)
-            form.querySelectorAll('input')[0].checked = false;
     },
 
     chooseSection(no) {
         if (this.chosen === no)
             return;
-
-        if (no === 2)
-            this.validate();
 
         const els = $('.addUserToForm-headerPost');
 
@@ -50,7 +40,7 @@ const AddUserToForm = {
         els[no].setAttribute('name', 'chosen');
         this.chosen = no;
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
             if (i === no)
                 $id('addUserToForm-main').children[i].style.display = 'block';
             else
@@ -74,21 +64,41 @@ const AddUserToForm = {
 
             if (typeof form !== 'undefined') {
                 form = form.dataset.form;
-                $id('addUserToForm-summary-text').innerHTML =
-                    `Czy na pewno chcesz dodać ${users.length} użytkownik${users.length === 1 ? 'a' : 'ów'} do formluarza ${form}?`;
-                $id('addUserToForm-acceptBtn').setAttribute('name', '');
+                Dialog.confirm(
+                    'Potwierdzenie',
+                    `Czy na pewno chcesz dodać ${users.length} użytkownik${users.length === 1 ? 'a' : 'ów'} do formluarza ${form}?`,
+                    () => {
+                        this.clear();
+                        this.chooseSection(0);
+                        // Zgoda
+                    }
+                );
             } else {
-                $id('addUserToForm-summary-text').innerHTML = 'Nie wybrano żadnego formularza!';
-                $id('addUserToForm-acceptBtn').setAttribute('name', 'inactive');
+                Dialog.alert(
+                    'Brak formluarza',
+                    'Nie wybrano formularza!'
+                );
             }
         } else {
-            $id('addUserToForm-summary-text').innerHTML = 'Nie wybrano żadnego użytkownika!';
-            $id('addUserToForm-acceptBtn').setAttribute('name', 'inactive');
+            Dialog.alert(
+                'Brak użytkownika',
+                'Nie wybrano żadnego użytkownika!'
+            );
         }
     },
 
+    clear() {
+        const users = $id('addUserToForm-users').children;
+        for (const user of users)
+            user.querySelectorAll('input')[0].checked = false;
+
+        const forms = $id('addUserToForm-forms').children;
+        for (const form of forms)
+            form.querySelectorAll('input')[0].checked = false;
+    },
+
     assignEventListeners() {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
             $('.addUserToForm-headerPost')[i]
                 .addEventListener('click', () => {
                     this.chooseSection(i);
@@ -102,7 +112,7 @@ const AddUserToForm = {
 
         $id('addUserToForm-form-button')
             .addEventListener('click', () => {
-                this.chooseSection(2);
+                this.validate();
             });
     }
 };

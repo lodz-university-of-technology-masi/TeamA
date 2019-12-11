@@ -2,6 +2,7 @@ import '../scss/guest.scss';
 import '../html/guest.html';
 
 const { FillForm } = require('./guestModules/fillForm');
+const { CheckedForm } = require('./guestModules/checkedForm');
 const { $id } = require('./utils');
 const { signOut, getToken } = require('./cognitoConfig');
 const Cookies = require('./cookies');
@@ -15,7 +16,7 @@ const SectionManager = {
             this.currentElement = newElement;
             $id('panel').style.display = 'none';
 
-            newElement.style.display = 'block';
+            newElement.style.display = 'flex';
             setTimeout(() => {
                 newElement.style.visibility = 'visible';
                 newElement.style.opacity = '1';
@@ -56,6 +57,12 @@ window.onload = () => {
         .addEventListener('click', () => {
             SectionManager.choose('fillForm');
             FillForm.open();
+        });
+
+    $id('pane-tile-2')
+        .addEventListener('click', () => {
+            SectionManager.choose('checkedForm');
+            CheckedForm.open();
         });
 
     $id('pane-tile-3')

@@ -7,7 +7,7 @@ const { $id } = require('./utils');
 const Cookies = require('./cookies');
 const Cognito = require('./cognitoConfig');
 
-const userPool = Cognito.userPool;
+const { userPool } = Cognito;
 
 function createCognitoUser(email) {
     return new AmazonCognitoIdentity.CognitoUser({

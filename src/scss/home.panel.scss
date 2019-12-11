@@ -1,6 +1,7 @@
 #panel {
     width:100%;
     height: calc(100% - 46px);
+    overflow: hidden;
     display: block;
 
     > div {
@@ -43,7 +44,7 @@
                 .panel-btn {
                     width:100%;
                     margin-bottom: 10px;
-                    
+
                     & > button {
                         text-align: center;
                         margin:0 auto;
@@ -56,7 +57,7 @@
                         color: #39557C;
                         cursor: pointer;
                         transition: background 0.3s, color 0.3s, transform 0.3s;
-                    
+
                         &:hover {
                             background: #39557C;
                             color: #fff;

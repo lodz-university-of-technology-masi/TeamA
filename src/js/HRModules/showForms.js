@@ -1,10 +1,17 @@
 const eyePng = require('../../icons/eye.png');
 const pencilPng = require('../../icons/pencil.png');
 const deletePng = require('../../icons/delete.png');
+const downloadPng = require('../../icons/download.png');
 
 const { $id } = require('../utils');
-const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
+const {
+    createOpenQuestion,
+    createClosedQuestion,
+    createNumberQuestion
+} = require('../common/form');
 const Dialogs = require('../common/dialogs');
+const { getFormsFromDatabase, removeFormFromDatabase } = require('../databaseConnector');
+const csvManager = require('../csvManager');
 
 const ShowForms = {
     initialized: false,
@@ -12,74 +19,76 @@ const ShowForms = {
     init() {
         this.initialized = true;
 
-        // tutaj ładowanko z bazki
-        const str = '[{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"O","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]},{"title":"Nazwa","questions":[{"number":1,"type":"O","language":"EN","content":"Pytanie otwarte #1","numberOfAnswers":"|","answers":[]},{"number":1,"type":"W","language":"EN","content":"Pytanie zamkniete","numberOfAnswers":3,"answers":["odpA","odpB","odpC"]},{"number":2,"type":"l","language":"EN","content":"Pytanie otwarte #2","numberOfAnswers":"|","answers":[]}]}]';
-        const forms = JSON.parse(str);
+        Promise.resolve(getFormsFromDatabase()).then(str => {
+            const forms = JSON.parse(str);
 
-        for (const [it, form] of forms.entries()) {
-            const div = document.createElement('div');
+            for (const [it, form] of forms.entries()) {
+                const div = document.createElement('div');
 
-            let child = document.createElement('div');
-            child.innerHTML = (it + 1);
-            div.appendChild(child);
+                let child = document.createElement('div');
+                child.innerHTML = it + 1;
+                div.appendChild(child);
 
-            child = document.createElement('div');
-            child.innerHTML = form.title;
-            div.appendChild(child);
+                child = document.createElement('div');
+                child.innerHTML = form.title;
+                div.appendChild(child);
 
-            child = document.createElement('div');
-            child.innerHTML = form.questions.length;
-            div.appendChild(child);
+                child = document.createElement('div');
+                child.innerHTML = form.questions.length;
+                div.appendChild(child);
 
-            child = document.createElement('div');
+                child = document.createElement('div');
+                let img = new Image();
+                img.src = eyePng;
+                img.onclick = () => {
+                    this.show(form);
+                };
+                child.appendChild(img);
+                div.appendChild(child);
 
-            let img = new Image();
-            img.src = eyePng;
-            img.onclick = () => {
-                this.show(form);
-            };
-            child.appendChild(img);
+                child = document.createElement('div');
+                img = new Image();
+                img.src = pencilPng;
+                child.appendChild(img);
+                div.appendChild(child);
 
-            div.appendChild(child);
+                child = document.createElement('div');
+                img = new Image();
+                img.src = downloadPng;
+                img.onclick = () => {
+                    csvManager.saveCsv(form);
+                };
+                child.appendChild(img);
+                div.appendChild(child);
 
-            child = document.createElement('div');
+                child = document.createElement('div');
+                img = new Image();
+                img.src = deletePng;
+                img.onclick = () => {
+                    Dialogs.confirm(
+                        'Usuwanie formularza',
+                        'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
+                        () => {
+                            removeFormFromDatabase(form.formId);
+                        }
+                    );
+                };
+                child.appendChild(img);
 
-            img = new Image();
-            img.src = pencilPng;
-            child.appendChild(img);
+                div.appendChild(child);
 
-            div.appendChild(child);
+                $id('showForms-list-table').appendChild(div);
+            }
 
-            child = document.createElement('div');
+            this.showAll();
 
-            img = new Image();
-            img.src = deletePng;
-            img.onclick = () => {
-                Dialogs.confirm(
-                    'Usuwanie formularza',
-                    'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
-                    () => {
-                        // Tutaj się zgodziliśmy na usunięcie 'form'
-                    }
-                );
-            };
-            child.appendChild(img);
-
-            div.appendChild(child);
-
-            $id('showForms-list-table').appendChild(div);
-        }
-
-        this.showAll();
-
-        $id('showForms-content-loading').remove();
+            $id('showForms-content-loading').remove();
+        });
     },
 
     open() {
-        if (!this.initialized)
-            this.init();
-        else
-            this.showAll();
+        if (!this.initialized) this.init();
+        else this.showAll();
     },
 
     showAll() {
@@ -96,27 +105,29 @@ const ShowForms = {
 
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
-                $id('showForms-form-content')
-                    .appendChild(createOpenQuestion(question.number, question.content));
+                $id('showForms-form-content').appendChild(
+                    createOpenQuestion(question.number, question.content)
+                );
             } else if (question.type.toLowerCase() === 'w') {
-                $id('showForms-form-content')
-                    .appendChild(
-                        createClosedQuestion(question.number,
-                            question.content,
-                            question.answers)
-                    );
+                $id('showForms-form-content').appendChild(
+                    createClosedQuestion(
+                        question.number,
+                        question.content,
+                        question.answers
+                    )
+                );
             } else if (question.type.toLowerCase() === 'l') {
-                $id('showForms-form-content')
-                    .appendChild(createNumberQuestion(question.number, question.content));
+                $id('showForms-form-content').appendChild(
+                    createNumberQuestion(question.number, question.content)
+                );
             }
         }
     },
 
     assignEventListeners() {
-        $id('showForms-form-buttons-back')
-            .addEventListener('click', () => {
-                this.showAll();
-            });
+        $id('showForms-form-buttons-back').addEventListener('click', () => {
+            this.showAll();
+        });
     }
 };
 
