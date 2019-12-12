@@ -19,7 +19,7 @@ const poolData = {
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
 exports.signOut = () => {
-    userPool.getCurrentUser().globalSignOut();
+    userPool.getCurrentUser().signOut();
     Cookies.set('user', '', -1);
     window.location.href = '/login.html';
 };
