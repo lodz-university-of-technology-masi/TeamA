@@ -18,7 +18,6 @@ const AddForm = {
 
             const limit = this.questions.length;
             for (let i = myIndex; i < limit; i++) {
-                this.questions[i].number = i + 1;
                 this.questions[i].dom.querySelectorAll('p')[0]
                     .innerHTML = `${i + 1}. `;
             }
@@ -35,7 +34,7 @@ const AddForm = {
             this.removeQuestion(question);
         });
 
-        question.number = number;
+        question.type = 'o';
         question.dom = dom;
 
         this.questions.push(question);
@@ -51,7 +50,7 @@ const AddForm = {
             this.removeQuestion(question);
         });
 
-        question.number = number;
+        question.type = 'w';
         question.commonName = closedObject.commonName;
         question.dom = closedObject.dom;
         question.answers = closedObject.answers;
@@ -69,7 +68,7 @@ const AddForm = {
             this.removeQuestion(question);
         });
 
-        question.number = number;
+        question.type = 'l';
         question.dom = dom;
 
         this.questions.push(question);
@@ -95,7 +94,55 @@ const AddForm = {
     },
 
     check() {
+        const wrong = [];
 
+        if (this.questions.length === 0) {
+            Dialogs.alert(
+                'Tworzenie formularza',
+                'Nie można stworzyć formularza bez pytań'
+            );
+        } else {
+            for (const [it, question] of this.questions.entries()) {
+                if (question.type === 'o' || question.type === 'l') {
+                    const value = question.dom.querySelectorAll('div > input')[0]
+                        .value.trim();
+
+                    if (value.length < 1) {
+                        wrong.push(it + 1);
+                        continue;
+                    }
+                } else {
+                    const inputValue = question.dom
+                        .querySelectorAll('div > input')[0].value.trim();
+
+                    if (inputValue.length < 1) {
+                        wrong.push(it + 1);
+                        continue;
+                    }
+
+                    const optionInputs = question.dom
+                        .querySelectorAll('label > input[type="text"]');
+
+                    for (const option of optionInputs) {
+                        const optionValue = option.value.trim();
+
+                        if (optionValue.length < 1) {
+                            wrong.push(it + 1);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (wrong.length > 0) {
+                Dialogs.alert(
+                    'Tworzenie formularza',
+                    `Pytani${wrong.length === 1 ? 'e' : 'a'} o numer${wrong.length === 1 ? 'ze' : 'ach'} ${wrong.toString()} nie są poprawne`
+                );
+            } else {
+                // TUTAJ WYWOŁANIE ZAPISANIA DO BAZY
+            }
+        }
     },
 
     saveFormToDataBase() {

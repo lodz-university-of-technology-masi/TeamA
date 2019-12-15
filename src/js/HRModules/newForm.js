@@ -131,7 +131,6 @@ exports.createClosedQuestion = (number, removeCallback) => {
             }
         });
 
-        answer.number = answerNumber;
         answer.dom = dom;
 
         answers.push(answer);
