@@ -1,49 +1,101 @@
 const { sendFormToDatabase } = require('../databaseConnector');
 const { $id } = require('../utils');
+const Dialogs = require('../common/dialogs');
+const {
+    createOpenQuestion,
+    createClosedQuestion,
+    createNumberQuestion
+} = require('../HRModules/newForm');
 
 const AddForm = {
-    open() {
-        $id('addForm-formName').value = '';
-        $id('addForm-questionList').innerHTML = '';
+    questions: [],
+
+    removeQuestion(question) {
+        const myIndex = this.questions.indexOf(question);
+
+        if (myIndex > -1) {
+            this.questions.splice(myIndex, 1);
+
+            const limit = this.questions.length;
+            for (let i = myIndex; i < limit; i++) {
+                this.questions[i].number = i + 1;
+                this.questions[i].dom.querySelectorAll('p')[0]
+                    .innerHTML = `${i + 1}. `;
+            }
+
+            question.dom.remove();
+        }
     },
 
-    addNewOpenQuestion() {
-        const main = $id('addForm-questionList');
-        const openQuestion = document.createElement('div');
-        openQuestion.classList.add('inputGroup');
-        openQuestion.appendChild(this.addNewQuestion('openQuestion', true));
-        main.appendChild(openQuestion);
-    },
+    addOpenQuestion() {
+        const question = {};
 
-    addNewClosedQuestion() {
-        const main = $id('addForm-questionList');
-        const closedQuestion = document.createElement('div');
-        closedQuestion.classList.add('inputGroup');
-        closedQuestion.appendChild(this.addNewQuestion('closedQuestion', false));
-
-        ['1.', '2.', '3.'].forEach(inputPlaceholder => {
-            closedQuestion.appendChild(this.addNewAnswer(inputPlaceholder));
+        const number = this.questions.length + 1;
+        const dom = createOpenQuestion(number, () => {
+            this.removeQuestion(question);
         });
 
-        main.appendChild(closedQuestion);
+        question.number = number;
+        question.dom = dom;
+
+        this.questions.push(question);
+
+        $id('addForm-form-content').appendChild(dom);
     },
 
-    addNewQuestion(className, isOpen) {
-        const question = document.createElement('input');
-        question.classList.add('question');
-        question.className = className;
-        if (isOpen)
-            question.placeholder = 'Enter your open question';
-        else
-            question.placeholder = 'Enter your closed question';
-        return question;
+    addClosedQuestion() {
+        const question = {};
+
+        const number = this.questions.length + 1;
+        const closedObject = createClosedQuestion(number, () => {
+            this.removeQuestion(question);
+        });
+
+        question.number = number;
+        question.commonName = closedObject.commonName;
+        question.dom = closedObject.dom;
+        question.answers = closedObject.answers;
+
+        this.questions.push(question);
+
+        $id('addForm-form-content').appendChild(closedObject.dom);
     },
 
-    addNewAnswer(placeholder) {
-        const answer = document.createElement('input');
-        answer.classList.add('question');
-        answer.placeholder = placeholder;
-        return answer;
+    addNumericalQuestion() {
+        const question = {};
+
+        const number = this.questions.length + 1;
+        const dom = createNumberQuestion(number, () => {
+            this.removeQuestion(question);
+        });
+
+        question.number = number;
+        question.dom = dom;
+
+        this.questions.push(question);
+
+        $id('addForm-form-content').appendChild(dom);
+    },
+
+    checkClear() {
+        if (this.questions.length !== 0) {
+            Dialogs.confirm(
+                'Czyszczenie formy',
+                'Czy na pewno wyczyścić formularz?',
+                () => {
+                    AddForm.clear();
+                }
+            );
+        }
+    },
+
+    clear() {
+        $id('addForm-form-content').innerHTML = '';
+        this.questions = [];
+    },
+
+    check() {
+
     },
 
     saveFormToDataBase() {
@@ -78,19 +130,29 @@ const AddForm = {
     },
 
     assignEventListeners() {
-        $id('addForm-addQuestions-openButton')
+        $id('add-form-openBtn')
             .addEventListener('click', () => {
-                this.addNewOpenQuestion();
+                AddForm.addOpenQuestion();
             });
 
-        $id('addForm-addQuestions-closedButton')
+        $id('add-form-closedBtn')
             .addEventListener('click', () => {
-                this.addNewClosedQuestion();
+                AddForm.addClosedQuestion();
             });
 
-        $id('addForm-final-button')
+        $id('add-form-numberBtn')
             .addEventListener('click', () => {
-                this.saveFormToDataBase();
+                AddForm.addNumericalQuestion();
+            });
+
+        $id('addForm-form-buttons-back')
+            .addEventListener('click', () => {
+                AddForm.checkClear();
+            });
+
+        $id('addForm-form-buttons-apply')
+            .addEventListener('click', () => {
+                AddForm.check();
             });
     }
 };

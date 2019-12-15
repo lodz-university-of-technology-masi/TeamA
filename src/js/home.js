@@ -74,7 +74,7 @@ window.onload = () => {
 
     $id('panel-btn-1-1')
         .addEventListener('click', () => {
-            AddForm.open();
+            // AddForm.open(); Na wszelki zostawiam
             SectionManager.choose('addForm');
         });
 
@@ -102,4 +102,7 @@ window.onload = () => {
     const backButtons = document.querySelectorAll('.sectionBack > div');
     for (const button of backButtons)
         button.addEventListener('click', () => SectionManager.goBack());
+
+
+    SectionManager.choose('addForm');
 };
