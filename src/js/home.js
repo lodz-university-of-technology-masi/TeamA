@@ -102,7 +102,4 @@ window.onload = () => {
     const backButtons = document.querySelectorAll('.sectionBack > div');
     for (const button of backButtons)
         button.addEventListener('click', () => SectionManager.goBack());
-
-
-    SectionManager.choose('addForm');
 };
