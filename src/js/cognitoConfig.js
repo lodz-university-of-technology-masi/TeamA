@@ -2,25 +2,22 @@
 global.fetch = require('node-fetch');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const Cookies = require('./cookies');
+const Dialogs = require('./common/dialogs');
 
-window.cognitoConfig = {
+const cognitoConfig = {
     cognito: {
-        userPoolId: 'us-east-1_lS2tMePyI', // e.g. us-east-2_uXboG5pAb
-        userPoolClientId: '4k3to3pjtidq5qvnglpdvmtvfc', // e.g. 25ddkmj4v6hfsfvruhpfi7n4hv
-        region: 'us-east-1' // e.g. us-east-2
-    },
-    api: {
-        invokeUrl: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage' // e.g. https://rc7nyt4tql.execute-api.us-west-2.amazonaws.com/prod,
+        userPoolId: 'us-east-1_lS2tMePyI',
+        userPoolClientId: '4k3to3pjtidq5qvnglpdvmtvfc',
+        region: 'us-east-1'
     }
 };
 
 const poolData = {
-    UserPoolId: window.cognitoConfig.cognito.userPoolId,
-    ClientId: window.cognitoConfig.cognito.userPoolClientId
+    UserPoolId: cognitoConfig.cognito.userPoolId,
+    ClientId: cognitoConfig.cognito.userPoolClientId
 };
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-exports.userPool = userPool;
 
 exports.signOut = () => {
     userPool.getCurrentUser().signOut();
@@ -29,7 +26,7 @@ exports.signOut = () => {
 };
 
 exports.getToken = () => new Promise((resolve, reject) => {
-    const cognitoUser = userPool.getCurrentUser();
+    const cognitoUser = this.getUser();
 
     if (cognitoUser) {
         cognitoUser.getSession((err, session) => {
@@ -45,3 +42,30 @@ exports.getToken = () => new Promise((resolve, reject) => {
         resolve(null);
     }
 });
+
+exports.createCognitoUser = email => new AmazonCognitoIdentity.CognitoUser({
+    Username: email,
+    Pool: userPool
+});
+
+exports.getUser = () => userPool.getCurrentUser();
+
+exports.deleteUser = () => {
+    userPool.getCurrentUser().deleteUser();
+};
+
+exports.changePassword = (oldPassword, newPassword) => {
+    this.getUser().changePassword(oldPassword, newPassword, err => {
+        if (err) {
+            Dialogs.alert(
+                'Hasło nie zostało zmienione',
+                'Podczas zmiany hasła wystąpił nieoczekiwany błąd'
+            );
+        } else {
+            Dialogs.alert(
+                'Hasło zostało pomyślnie zmienione',
+                'Zmiana hasła została zakończona sukcesem'
+            );
+        }
+    });
+};

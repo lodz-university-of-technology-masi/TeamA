@@ -1,13 +1,16 @@
 const $ = require('jquery');
-const Cognito = require('./cognitoConfig');
+const Cookies = require('./cookies');
 const Dialogs = require('./common/dialogs');
+
+const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage';
+const authMetod = Cookies.get('IdToken');
 
 exports.sendFormToDatabase = dataToBase => {
     $.ajax({
         method: 'POST',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        url: `${invokeUrl}/-test`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             title: dataToBase.title,
@@ -38,9 +41,9 @@ exports.sendFormToDatabase = dataToBase => {
 exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
     $.ajax({
         method: 'GET',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        url: `${invokeUrl}/-test`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         contentType: 'application/json',
         success: resp => resolve(resp.body),
@@ -58,9 +61,9 @@ exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
 exports.removeFormFromDatabase = formId => {
     $.ajax({
         method: 'DELETE',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        url: `${invokeUrl}/-test`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             id: formId
@@ -90,9 +93,9 @@ exports.removeFormFromDatabase = formId => {
 exports.sendFilledFormToDatabase = filledForm => {
     $.ajax({
         method: 'POST',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
+        url: `${invokeUrl}/filledform`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             title: filledForm.title,
@@ -119,10 +122,9 @@ exports.sendFilledFormToDatabase = filledForm => {
 exports.getFilledFormFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url:
-      'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
+        url: `${invokeUrl}/filledform`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         contentType: 'application/json',
         success: resp => resolve(resp.body),
@@ -139,9 +141,9 @@ exports.getFilledFormFromDatabase = () => new Promise(resolve => {
 exports.removeFilledFormFromDatabase = filledFormId => {
     $.ajax({
         method: 'DELETE',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/filledform',
+        url: `${invokeUrl}/filledform`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             id: filledFormId
@@ -158,9 +160,9 @@ exports.removeFilledFormFromDatabase = filledFormId => {
 exports.sendResultToDatabase = result => {
     $.ajax({
         method: 'POST',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/results',
+        url: `${invokeUrl}/results`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             formTitle: result.formTitle,
@@ -193,9 +195,9 @@ exports.sendResultToDatabase = result => {
 exports.getResultFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/results',
+        url: `${invokeUrl}/results`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         contentType: 'application/json',
         success: resp => resolve(resp.body),
@@ -212,9 +214,9 @@ exports.getResultFromDatabase = () => new Promise(resolve => {
 exports.removeResultFromDatabase = resultId => {
     $.ajax({
         method: 'DELETE',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/results',
+        url: `${invokeUrl}/results`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             id: resultId
