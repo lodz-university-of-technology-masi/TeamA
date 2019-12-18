@@ -1,14 +1,13 @@
 const $ = require('jquery');
 const Cognito = require('./cognitoConfig');
 
-const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage'
+const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage';
 const Dialogs = require('./common/dialogs');
 
 exports.sendFormToDatabase = dataToBase => {
-
     $.ajax({
         method: 'POST',
-        url: invokeUrl + '/-test',
+        url: `${invokeUrl}/-test`,
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -41,7 +40,7 @@ exports.sendFormToDatabase = dataToBase => {
 exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
     $.ajax({
         method: 'GET',
-        url: invokeUrl + '/-test',
+        url: `${invokeUrl}/-test`,
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -61,7 +60,7 @@ exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
 exports.removeFormFromDatabase = formId => {
     $.ajax({
         method: 'DELETE',
-        url: 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage/-test',
+        url: `${invokeUrl}/-test`,
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -93,7 +92,7 @@ exports.removeFormFromDatabase = formId => {
 exports.sendFilledFormToDatabase = filledForm => {
     $.ajax({
         method: 'POST',
-        url: invokeUrl + '/filledform',
+        url: `${invokeUrl}/filledform`,
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -122,7 +121,7 @@ exports.sendFilledFormToDatabase = filledForm => {
 exports.getFilledFormFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: invokeUrl + '/filledform',
+        url: `${invokeUrl}/filledform`,
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -141,7 +140,7 @@ exports.getFilledFormFromDatabase = () => new Promise(resolve => {
 exports.removeFilledFormFromDatabase = filledFormId => {
     $.ajax({
         method: 'DELETE',
-        url: invokeUrl + '/filledform',
+        url: `${invokeUrl}/filledform`,
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -160,7 +159,7 @@ exports.removeFilledFormFromDatabase = filledFormId => {
 exports.sendResultToDatabase = result => {
     $.ajax({
         method: 'POST',
-        url: invokeUrl + '/results',
+        url: `${invokeUrl}/results`,
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -195,7 +194,7 @@ exports.sendResultToDatabase = result => {
 exports.getResultFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: invokeUrl + '/results',
+        url: `${invokeUrl}/results`,
         headers: {
             Authorization: Cognito.getToken()
         },
@@ -214,7 +213,7 @@ exports.getResultFromDatabase = () => new Promise(resolve => {
 exports.removeResultFromDatabase = resultId => {
     $.ajax({
         method: 'DELETE',
-        url: invokeUrl + '/results',
+        url: `${invokeUrl}/results`,
         headers: {
             Authorization: Cognito.getToken()
         },

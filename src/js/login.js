@@ -95,11 +95,11 @@ const SignIn = {
         });
     },
 
-    success(result) {
+    success() {
         SignIn.stopQueue('Success');
         Cookies.set('user', SignIn.email.split('@')[0], 365);
-        //Cookies.set('AccessToken', result.getAccessToken().getJwtToken(), 365);
-        //Cookies.set('IdToken', result.getIdToken().getJwtToken(), 365);
+        //  Cookies.set('AccessToken', result.getAccessToken().getJwtToken(), 365);
+        //  Cookies.set('IdToken', result.getIdToken().getJwtToken(), 365);
 
         window.location.href = 'home.html';
     },
@@ -159,7 +159,7 @@ const SignUp = {
         const attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
         const attributeRole = new AmazonCognitoIdentity.CognitoUserAttribute(dataRole);
         const attributeNickname = new AmazonCognitoIdentity.CognitoUserAttribute(dataNickname);
-
+        const attributeList = [];
         attributeList.push(attributeEmail);
         attributeList.push(attributeRole);
         attributeList.push(attributeNickname);
@@ -243,7 +243,7 @@ const Verify = {
     },
 
     verify(email, code) {
-        createCognitoUser(email).confirmRegistration(code, true, (err, result) => {
+        Cognito.createCognitoUser(email).confirmRegistration(code, true, (err, result) => {
             if (!err)
                 Verify.success(result);
             else

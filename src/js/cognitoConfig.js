@@ -5,9 +5,9 @@ const Cookies = require('./cookies');
 
 const cognitoConfig = {
     cognito: {
-        userPoolId: 'us-east-1_lS2tMePyI', 
+        userPoolId: 'us-east-1_lS2tMePyI',
         userPoolClientId: '4k3to3pjtidq5qvnglpdvmtvfc',
-        region: 'us-east-1' 
+        region: 'us-east-1'
     }
 };
 
@@ -42,123 +42,24 @@ exports.getToken = () => new Promise((resolve, reject) => {
     }
 });
 
-exports.createCognitoUser = email => {
-    return new AmazonCognitoIdentity.CognitoUser({
-        Username: email,
-        Pool: userPool
-    });
-}
+exports.createCognitoUser = email => new AmazonCognitoIdentity.CognitoUser({
+    Username: email,
+    Pool: userPool
+});
 
-exports.getUser = () => {
-    return userPool.getCurrentUser();
-};
+exports.getUser = () => userPool.getCurrentUser();
 
 exports.deleteUser = () => {
     userPool.getCurrentUser().deleteUser();
 };
 
 exports.changePassword = (oldPassword, newPassword) => {
-    this.getUser().changePassword(oldPassword, newPassword, (err, result) => {
+    this.getUser().changePassword(oldPassword, newPassword, err => {
         if (err) {
-            alert(err.message || JSON.stringify(err));
-            return;
+            // TODO: wyświetlenie errora jakiegoś
+            //  alert(err.message || JSON.stringify(err));
+        } else {
+            // TODO: wyświetlenie potwierdzenia jakiegoś
         }
-        //TODO: wyświetlenie potwierdzenia jakiegoś
     });
-}
-
-exports.getUserAttributes = () => {
-    const attributeList = [];
-    const cognitoUser = this.getUser();
-
-    if (cognitoUser != null) {
-        cognitoUser.getSession( (err, session) => {
-
-            if (err) {
-                alert(err.message || JSON.stringify(err));
-                return;
-            }
-
-            cognitoUser.getUserAttributes( (err, result) => {
-                if (err) {
-                    alert(err.message || JSON.stringify(err));
-                    return;
-                }
-                for (i = 0; i < result.length; i++) {
-                    const att = {
-                        Name: result[i].getName(),
-                        Value: result[i].getValue()
-                    };
-        
-                    attributeList.push(att);
-                }
-            });
-        });
-    }
-    return attributeList;
 };
-
-exports.updateUserAttributes = attributeList => {
-    const cognitoUser = this.getUser();
-
-    if (cognitoUser != null) {
-        cognitoUser.getSession( err => {
-
-            if (err) {
-                alert(err.message || JSON.stringify(err));
-                return;
-            }
-
-            cognitoUser.updateAttributes(attributeList, (err, result) => {
-                if (err) {
-                    alert(err.message || JSON.stringify(err));
-                    return;
-                }
-            });
-        });
-    }
-};
-
-exports.addUserAttribute = (attributeName, attributeValue) => {
-    const attributeList = this.getUserAttributes();
-    const attributeData = {
-        Name: attributeName,
-        Value: attributeValue,
-    };
-    const attribute = new AmazonCognitoIdentity.CognitoUserAttribute(attributeData);
-    attributeList.push(attribute);
-
-    this.updateUserAttributes(attributeList);
-}
-
-exports.addCustomUserAttribute = (attributeName, attributeValue) => {
-    this.addUserAttribute('custom:' + attributeName, attributeValue);
-}
-
-exports.checkUserAttribute = attributeName => {
-    const attributeList = [];
-    const cognitoUser = this.getUser();
-
-    if (cognitoUser != null) {
-        cognitoUser.getSession( (err, session) => {
-
-            if (err) {
-                alert(err.message || JSON.stringify(err));
-                return;
-            }
-
-            cognitoUser.getUserAttributes( (err, result) => {
-                if (err) {
-                    alert(err.message || JSON.stringify(err));
-                    return;
-                }
-                for (i = 0; i < result.length; i++) {
-                    if(result[i].getName() == attributeName) {
-                        attributeList.push(result[i].getValue());
-                    }
-                }
-            });
-        });
-    }
-    return attributeList; //tutaj coś jest nie tak; nie mogę zwrócić wartości
-}
