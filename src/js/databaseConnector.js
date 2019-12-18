@@ -46,11 +46,7 @@ exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
             Authorization: authMetod
         },
         contentType: 'application/json',
-        success: resp => {
-            console.log(resp);
-            console.log(resp.body);
-            resolve(resp.body);
-        },
+        success: resp => resolve(resp.body),
         error: (jqXHR, textStatus, errorThrown) => {
             reject();
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);

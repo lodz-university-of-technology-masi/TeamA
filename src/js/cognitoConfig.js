@@ -2,6 +2,7 @@
 global.fetch = require('node-fetch');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const Cookies = require('./cookies');
+const Dialogs = require('./common/dialogs');
 
 const cognitoConfig = {
     cognito: {
@@ -56,10 +57,15 @@ exports.deleteUser = () => {
 exports.changePassword = (oldPassword, newPassword) => {
     this.getUser().changePassword(oldPassword, newPassword, err => {
         if (err) {
-            // TODO: wyświetlenie errora jakiegoś
-            //  alert(err.message || JSON.stringify(err));
+            Dialogs.alert(
+                'Hasło nie zostało zmienione',
+                'Podczas zmiany hasła wystąpił nieoczekiwany błąd'
+            );
         } else {
-            // TODO: wyświetlenie potwierdzenia jakiegoś
+            Dialogs.alert(
+                'Hasło zostało pomyślnie zmienione',
+                'Zmiana hasła została zakończona sukcesem'
+            );
         }
     });
 };

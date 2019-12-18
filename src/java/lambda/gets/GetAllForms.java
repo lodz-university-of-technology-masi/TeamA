@@ -51,13 +51,9 @@ public class GetAllForms implements RequestHandler<ServerlessInput<Void>, Server
         	    body += "},";
         	}
             body = body.substring(0, body.length()-1);
-            body += "]";
-            
-            //output.setBody((String)input.getHeaders().get("Authorization"));
+			body += "]";
+			
             output.setBody(body);
-            /*output.setBody(input.toString() + "                " +
-            		context.getIdentity().getIdentityId() + "            "
-            		+ context.getIdentity());*/
             
         } catch (Exception e) {
             output.setStatusCode(500);
