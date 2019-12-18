@@ -95,11 +95,10 @@ const SignIn = {
         });
     },
 
-    success() {
+    success(result) {
         SignIn.stopQueue('Success');
         Cookies.set('user', SignIn.email.split('@')[0], 365);
-        //  Cookies.set('AccessToken', result.getAccessToken().getJwtToken(), 365);
-        //  Cookies.set('IdToken', result.getIdToken().getJwtToken(), 365);
+        Cookies.set('IdToken', result.getIdToken().getJwtToken(), 365);
 
         window.location.href = 'home.html';
     },

@@ -1,15 +1,16 @@
 const $ = require('jquery');
-const Cognito = require('./cognitoConfig');
+const Cookies = require('./cookies');
+const Dialogs = require('./common/dialogs');
 
 const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage';
-const Dialogs = require('./common/dialogs');
+const authMetod = Cookies.get('IdToken');
 
 exports.sendFormToDatabase = dataToBase => {
     $.ajax({
         method: 'POST',
         url: `${invokeUrl}/-test`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             title: dataToBase.title,
@@ -42,10 +43,14 @@ exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
         method: 'GET',
         url: `${invokeUrl}/-test`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         contentType: 'application/json',
-        success: resp => resolve(resp.body),
+        success: resp => {
+            console.log(resp);
+            console.log(resp.body);
+            resolve(resp.body);
+        },
         error: (jqXHR, textStatus, errorThrown) => {
             reject();
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
@@ -62,7 +67,7 @@ exports.removeFormFromDatabase = formId => {
         method: 'DELETE',
         url: `${invokeUrl}/-test`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             id: formId
@@ -94,7 +99,7 @@ exports.sendFilledFormToDatabase = filledForm => {
         method: 'POST',
         url: `${invokeUrl}/filledform`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             title: filledForm.title,
@@ -123,7 +128,7 @@ exports.getFilledFormFromDatabase = () => new Promise(resolve => {
         method: 'GET',
         url: `${invokeUrl}/filledform`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         contentType: 'application/json',
         success: resp => resolve(resp.body),
@@ -142,7 +147,7 @@ exports.removeFilledFormFromDatabase = filledFormId => {
         method: 'DELETE',
         url: `${invokeUrl}/filledform`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             id: filledFormId
@@ -161,7 +166,7 @@ exports.sendResultToDatabase = result => {
         method: 'POST',
         url: `${invokeUrl}/results`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             formTitle: result.formTitle,
@@ -196,7 +201,7 @@ exports.getResultFromDatabase = () => new Promise(resolve => {
         method: 'GET',
         url: `${invokeUrl}/results`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         contentType: 'application/json',
         success: resp => resolve(resp.body),
@@ -215,7 +220,7 @@ exports.removeResultFromDatabase = resultId => {
         method: 'DELETE',
         url: `${invokeUrl}/results`,
         headers: {
-            Authorization: Cognito.getToken()
+            Authorization: authMetod
         },
         data: JSON.stringify({
             id: resultId
