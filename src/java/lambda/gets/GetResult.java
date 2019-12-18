@@ -10,6 +10,6 @@ public class GetResult implements RequestHandler<Result, ServerlessOutput>{
 
 	@Override
 	public ServerlessOutput handleRequest(Result input, Context context) {
-		return new GetById().output(input.getId(), "Forms");
+		return new GetById().output(input.getId(), "Results", "ResultId");
 	}	
 }

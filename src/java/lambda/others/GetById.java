@@ -10,16 +10,15 @@ import lambda.structures.ServerlessOutput;
 
 public class GetById {
 
-	public ServerlessOutput output(String input, String tableName) {
+	public ServerlessOutput output(String id, String tableName, String tableKey) {
         ServerlessOutput output = new ServerlessOutput();
 
         try {
 	        QuerySpec spec = new QuerySpec();
 	        
-	        if(input != null) {
-	        	Mapper mapper = new Mapper();
-		        spec.withKeyConditionExpression(mapper.mapTableToId(tableName) + " = :v_id")
-	        	    .withValueMap(new ValueMap().withString(":v_id", input));
+	        if(id != null) {
+		        spec.withKeyConditionExpression(tableKey + " = :v_id")
+	        	    .withValueMap(new ValueMap().withString(":v_id", id));
 	        } else
 	        	throw new Exception("Id not specified");
 	        

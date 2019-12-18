@@ -24,16 +24,15 @@ public class DeleteById {
 		dynamo = new DynamoDB(dynamoDB);
 	}
 	
-	public ServerlessOutput output(String id, String tableName) {
+	public ServerlessOutput output(String id, String tableName, String tableKey) {
         ServerlessOutput output = new ServerlessOutput();
 
         try {
             DeleteItemSpec spec = new DeleteItemSpec();
             
             if(id != null) {
-            	Mapper mapper = new Mapper();
             	spec = new DeleteItemSpec()
-                		.withPrimaryKey(new PrimaryKey(mapper.mapTableToId(tableName), id));
+                		.withPrimaryKey(new PrimaryKey(tableKey, id));
             } else
             	throw new Exception("Id not specified");
         	

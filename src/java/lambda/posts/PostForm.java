@@ -11,9 +11,10 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import lambda.structures.Form;
+import lambda.structures.ServerlessInput;
 import lambda.structures.ServerlessOutput;
 
-public class PostForm implements RequestHandler<Form, ServerlessOutput>{
+public class PostForm implements RequestHandler<ServerlessInput<Form>, ServerlessOutput>{
 
 	private static AmazonDynamoDB dynamoDB;
 	private static DynamoDB dynamo;
@@ -26,7 +27,7 @@ public class PostForm implements RequestHandler<Form, ServerlessOutput>{
 	}
 	
 	@Override
-	public ServerlessOutput handleRequest(Form input, Context context) {
+	public ServerlessOutput handleRequest(ServerlessInput<Form> input, Context context) {
 		
         ServerlessOutput output = new ServerlessOutput();
         
@@ -36,8 +37,8 @@ public class PostForm implements RequestHandler<Form, ServerlessOutput>{
 
         	Item item = new Item()
         	      .withPrimaryKey("FormId", UUID.randomUUID().toString())
-        	      .withString("Title", input.getTitle())
-        	      .withString("Questions", input.getQuestions());
+        	      .withString("Title", input.getBody().getTitle())
+        	      .withString("Questions", input.getBody().getQuestions());
 
         	table.putItem(item);
 
