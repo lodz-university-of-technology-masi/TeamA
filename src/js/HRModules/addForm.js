@@ -140,39 +140,53 @@ const AddForm = {
                     `Pytani${wrong.length === 1 ? 'e' : 'a'} o numer${wrong.length === 1 ? 'ze' : 'ach'} ${wrong.toString()} nie są poprawne`
                 );
             } else {
-                // TUTAJ WYWOŁANIE ZAPISANIA DO BAZY
+                this.saveFormToDataBase();
             }
         }
     },
 
     saveFormToDataBase() {
         const questions = [];
-        const doc = document.getElementById('addForm-questionList').children;
+        const doc = document.getElementById('addForm-form-content').children;
         for (let i = 0; i < doc.length; i++) {
-            if (doc[i].children[0].className === 'openQuestion') {
+            if (doc[i].className === 'newForm-question newForm-openQuestion') {
                 const question = {
                     number: i + 1,
                     type: 'O',
                     language: 'EN',
-                    content: doc[i].children[0].value,
+                    content: doc[i].children[0].children[1].value,
+                    numberOfAnswers: '|',
+                    answers: []
+                };
+                questions.push(question);
+            } else if (doc[i].className === 'newForm-question newForm-numericalQuestion') {
+                const question = {
+                    number: i + 1,
+                    type: 'L',
+                    language: 'EN',
+                    content: doc[i].children[0].children[1].value,
                     numberOfAnswers: '|',
                     answers: []
                 };
                 questions.push(question);
             } else {
+                const formAnswers = [];
+                const answer = doc[i].children[1].children;
+                for (let p = 0; p < answer.length; p++)
+                    formAnswers.push(answer[p].children[2].value);
                 const question = {
                     number: i + 1,
                     type: 'W',
                     language: 'EN',
-                    content: doc[i].children[0].value,
-                    numberOfAnswers: doc[i].children.length - 1,
-                    answers: [doc[i].children[1].value, doc[i].children[2].value,
-                        doc[i].children[3].value]
+                    content: doc[i].children[0].children[1].value,
+                    numberOfAnswers: doc[i].children[1].children.length,
+                    answers: formAnswers
                 };
                 questions.push(question);
             }
         }
-        const formToBase = { title: document.getElementById('addForm-formName').value, questions };
+        const formToBase = { title: document.getElementById('addForm-form-title').children[0].value, questions };
+        console.log(JSON.stringify(formToBase));
         sendFormToDatabase(formToBase);
     },
 
