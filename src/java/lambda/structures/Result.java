@@ -1,10 +1,15 @@
 package lambda.structures;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-public class Result {
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+
+public class Result extends Header {
 	
-
 	private String id;
 	private String formTitle;
 	private String hrEmployer;
@@ -57,5 +62,33 @@ public class Result {
 	public String toString() {
 		return "Result [id=" + id + ", formTitle=" + formTitle + ", hrEmployer=" + hrEmployer + ", owner=" + owner
 				+ ", points=" + points + "]";
+	}
+
+	@Override
+	public Item toItem() {
+    	Item item = new Item()
+      	      .withPrimaryKey("ResultId", UUID.randomUUID().toString())
+      	      .withString("FormTitle", this.getFormTitle())
+      	      .withString("HrEmployer", this.getHrEmployer())
+      	      .withString("Owner", this.getOwner())
+      	      .withList("Points", this.getPoints());
+		return item;
+	}
+
+	@Override
+	public String fromMapToJson(Map<String, AttributeValue> item) {
+		String body = "{"
+	        	+ "\"resultId\":\"" + item.get("ResultId").getS() + "\","
+	    	    + "\"formTitle\":\"" + item.get("FormTitle").getS() + "\","
+	    	    + "\"hrEmployer\":\"" + item.get("HrEmployer").getS() + "\","
+	    	    + "\"owner\":\"" + item.get("Owner").getS() + "\","
+	    	    + "\"points\": [";
+		
+    	Iterator<AttributeValue> iterator = item.get("Points").getL().iterator();
+    	while (iterator.hasNext()) {
+    	    body += iterator.next().getBOOL() + ",";
+    	}
+    	
+    	return body = body.substring(0, body.length()-1) + "]}";
 	}
 }

@@ -3,7 +3,10 @@ package lambda.structures;
 import java.util.HashMap;
 import java.util.Map;
 
+import lambda.others.ErrorMessage;
+
 public class ServerlessOutput {
+	
     private Integer statusCode;
     private Map<String, String> headers;
     private String body;
@@ -15,33 +18,25 @@ public class ServerlessOutput {
     public void setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
     }
-
+    
     public ServerlessOutput withStatusCode(Integer statusCode) {
         setStatusCode(statusCode);
         return this;
     }
-
+    
     public Map<String, String> getHeaders() {
         return headers;
     }
-
+    
     public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
     
-    public void setStandardHeaders(String acamValue) {
-        Map<String, String> header = new HashMap<String, String>();
-        header.put("Content-Type", "application/json");
-        header.put("Access-Control-Allow-Origin", "*");
-        header.put("Access-Control-Allow-Methods", acamValue);
-        this.setHeaders(header);
-    }
-
     public ServerlessOutput withHeaders(Map<String, String> headers) {
         setHeaders(headers);
         return this;
     }
-
+    
     public String getBody() {
         return body;
     }
@@ -91,6 +86,25 @@ public class ServerlessOutput {
         } else if (!statusCode.equals(other.statusCode))
             return false;
         return true;
+    }
+    
+    public void setStandardHeaders(String acamValue) {
+        Map<String, String> header = new HashMap<String, String>();
+        header.put("Content-Type", "application/json");
+        header.put("Access-Control-Allow-Origin", "*");
+        header.put("Access-Control-Allow-Methods", acamValue);
+        this.setHeaders(header);
+    }
+    
+    public ServerlessOutput withStandardHeaders(String acamValue) {
+    	setStandardHeaders(acamValue);
+    	return this;
+    }
+    
+    public ServerlessOutput requestRejected(ErrorMessage err) {
+    	setStatusCode(err.getStatusCode());
+    	setBody(err.getMessage());
+    	return this;
     }
 
     @Override

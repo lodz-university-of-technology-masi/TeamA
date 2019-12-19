@@ -10,6 +10,6 @@ public class DeleteResult implements RequestHandler<Result, ServerlessOutput>{
 	
 	@Override
 	public ServerlessOutput handleRequest(Result input, Context context) {
-		return new DeleteById().output(input.getId(), "Results", "ResultId");
+		return new DeleteById().output(input, "Results", "ResultId", "HR", "guest");
 	}
 }

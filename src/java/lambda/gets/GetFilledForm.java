@@ -11,6 +11,6 @@ public class GetFilledForm implements RequestHandler<FilledForm, ServerlessOutpu
 
 	@Override
 	public ServerlessOutput handleRequest(FilledForm input, Context context) {
-		return new GetById().output(input.getId(), "FilledForms", "FormId");
+		return new GetById().output(input, "FilledForms", "FormId", "HR", "guest");
 	}	
 }
