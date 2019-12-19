@@ -74,7 +74,7 @@ window.onload = () => {
 
     $id('panel-btn-1-1')
         .addEventListener('click', () => {
-            AddForm.open();
+            // AddForm.open(); Na wszelki zostawiam
             SectionManager.choose('addForm');
         });
 

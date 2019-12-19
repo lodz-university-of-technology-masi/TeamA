@@ -1,75 +1,241 @@
 #addForm-content {
     width: 100%;
     max-width: 1000px;
-    margin:0 auto;
-    padding: 15px 0;
+    height: 100%;
+    margin: 0 auto;
     background: #fff;
     box-shadow: 0 0 5px 1px #ccc;
     overflow: auto;
-}
-    #addForm-formName {
-        width:calc(100% - 40px);
-        margin: 0 20px 10px 20px;
-        font-size: 1.4em;
-        font-family: 'Open Sans', sans-serif;
-        text-align: center;
-        border:none;
-        padding: 3px 0;
-        color: #000;
-        border-bottom: solid 2px #ccc;
-    }
 
-    #addForm-addQuestions {
-        width:100%;
-        text-align: center;
-        margin-top: 15px;
-        margin-bottom: 10px;
+    > h3 {
+        background: $basecolor;
+        width: 100%;
+        height: 53px;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
-        > button {
-            font-size: 1em;
-            font-family: 'Open Sans', sans-serif;
-            padding: 7px 30px;
-            background: #39557C;
-            border:none;
-            border-radius: 20px;
+        > input {
+            width: calc(100% - 40px);
+            height: calc(100% - 21px);
+            padding: 5px 0;
+            margin: 5px 20px;
             color: #fff;
+            font-size: 1.4em;
+            font-family: 'Open Sans', sans-serif;
+            background: transparent;
+            border: none;
+
+            &::placeholder {
+                color: #fff;
+            }
+        }
+    }
+}
+
+#addForm-form-actions {
+    width: 100%;
+    height: 40px;
+    border-bottom: solid 1px $basecolor;
+    display: flex;
+
+    > div {
+        flex: 1 1;
+        height: 40px;
+        font-size: 1em;
+        font-family: 'Open Sans', sans-serif;
+        cursor: pointer;
+        user-select: none;
+
+        &:nth-of-type(2) {
+            border-left: solid 1px $basecolor;
+            border-right: solid 1px $basecolor;
         }
 
         > p {
             width: 100%;
-            padding: 3px 0;
-            text-decoration: underline;
-            font-size: 0.8em;
-            font-family: 'Open Sans', sans-serif;
-            text-align:center;
-            color: #999;
-            cursor: pointer;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        &:hover,
+        &:hover > p {
+            background: $basecolor;
+            color: #fff;
+        }
+
+        &:active > p {
+            transform: scale(0.9);
         }
     }
-            #addForm-final {
-                width:100%;
-                text-align: center;
-                margin-top: 15px;
-                margin-bottom: 10px;
+}
 
-                > button {
-                    font-size: 1em;
-                    font-family: 'Open Sans', sans-serif;
-                    padding: 7px 30px;
-                    background: #39557C;
-                    border:none;
-                    border-radius: 20px;
-                    color: #fff;
-                }
+#addForm-form-content {
+    width: calc(100% - 40px);
+    height: calc(100% - 53px - 41px - 40px - 50px);
+    padding: 20px;
+    overflow: auto;
+}
 
-                > p {
-                    width: 100%;
-                    padding: 3px 0;
-                    text-decoration: underline;
-                    font-size: 0.8em;
-                    font-family: 'Open Sans', sans-serif;
-                    text-align:center;
-                    color: #999;
-                    cursor: pointer;
-                }
+#addForm-form-buttons {
+    width: calc(100% - 40px);
+    height: 50px;
+    padding: 0 20px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    > button {
+        padding: 10px 20px;
+        font-family: $fontfamily;
+        border-radius: 5px;
+        border: none;
+
+        &[name="back"] {
+            background: transparent;
+            color: #666;
+        }
+
+        &[name="apply"] {
+            background: $basecolor;
+            color: #fff;
+            margin-left: 10px;
+        }
+    }
+}
+
+.newForm-question {
+    width: 100%;
+    margin-bottom: 20px;
+
+    > div:first-of-type {
+        display: flex;
+
+        > p {
+            font-size: 1.2em;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        > input {
+            flex: 1 1;
+            margin-left: 10px;
+            height: 27px;
+            font-size: 1.2em;
+            font-weight: 700;
+            font-family: 'Open Sans', sans-serif;
+            border: none;
+            // border-bottom: solid 1px $basecolor;
+        }
+
+        > img {
+            width: 24px;
+            height: 24px;
+            padding: 1px;
+            margin: 2px;
+            border-radius: 50%;
+
+            &:hover {
+                background: #eee;
             }
+
+            &:active {
+                background: #ccc;
+            }
+        }
+    }
+}
+
+.newForm-numericalQuestion,
+.newForm-openQuestion {
+    > input {
+        width: calc(100% - 20px);
+        padding: 5px 10px;
+        font-size: 1em;
+        font-family: 'Open Sans', sans-serif;
+        border: none;
+        border-bottom: solid 2px #ccc;
+
+        &:focus {
+            border-bottom-color: #39557C;
+        }
+    }
+}
+
+.newForm-closedQuestion {
+    > button {
+        padding: 8px 14px;
+        background: $basecolor;
+        font-size: 0.9em;
+        font-family: 'Open Sans', sans-serif;
+        margin-top: 10px;
+        border: none;
+        color: #fff;
+    }
+}
+
+.newForm-closedQuestion-answers {
+    display: block;
+
+    > label {
+        width: 100%;
+        height: 32px;
+        display: flex;
+
+        > input[type="radio"] {
+            display: none;
+        }
+
+        > div {
+            width: 16px;
+            height: 16px;
+            border: solid 2px #000;
+            margin: 6px 0;
+            border-radius: 50%;
+            display: block;
+            float: left;
+        }
+
+        > input[type="text"] {
+            flex: 1 1;
+            margin-left: 10px;
+            margin-right: 10px;
+            height: 32px;
+            font-size: 1em;
+            font-family: 'Open Sans', sans-serif;
+            border: none;
+        }
+
+        > img {
+            width: 24px;
+            height: 24px;
+            padding: 3px;
+            margin: 1px;
+            border-radius: 50%;
+
+            &:hover {
+                background: #eee;
+            }
+
+            &:active {
+                background: #ccc;
+            }
+        }
+
+        > span {
+            width: calc(100% - 20px - 20px);
+            font-size: 1em;
+            line-height: 32px;
+            margin-left: 20px;
+            font-family: 'Open Sans', sans-serif;
+            display: block;
+            float: left;
+        }
+    }
+}

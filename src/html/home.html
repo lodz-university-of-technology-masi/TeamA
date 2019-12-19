@@ -89,7 +89,7 @@
         </div>
     </div>
     <!--tu jestem todo wywalic inline style-->
-<div class = "panel-btn"><button style = "margin-top: 15px; margin-left: 15px;" id="showForms-import-file-button"> Importuj plik Csv</button></div>
+    <div class = "panel-btn"><button style = "margin-top: 15px; margin-left: 15px;" id="showForms-import-file-button"> Importuj plik Csv</button></div>
     <h2>Lista formularzy</h2>
 
     <div id="showForms-content">
@@ -108,8 +108,8 @@
                 </div>
             </div>
         </div>
-        
-        
+
+
         <div id="showForms-form">
             <h3 id="showForms-form-title"></h3>
             <div id="showForms-form-content"></div>
@@ -148,7 +148,7 @@
         </div>
 
         <div id="showFilledForms-form">
-            <h3 id="showFilledForms-form-title"></h3>
+            <h3 id="showFilledForms-form-title">Test</h3>
             <div id="showFilledForms-form-content"></div>
             <div id="showFilledForms-form-buttons">
                 <button name="back" id="showFilledForms-form-buttons-back">Powrót</button>
@@ -171,17 +171,24 @@
     <h2>Dodawanie formularza</h2>
 
     <div id="addForm-content">
-        <input id="addForm-formName" type="text" placeholder="Enter form name" />
-
-        <div id="addForm-addQuestions">
-            <button id="addForm-addQuestions-openButton">Add new Open Question</button>
-            <button id="addForm-addQuestions-closedButton">Add new Close Question</button>
+        <h3 id="addForm-form-title">
+            <input type="text" placeholder="Tytuł formularza..." />
+        </h3>
+        <div id="addForm-form-actions">
+            <div id="add-form-openBtn">
+                <p>Pytanie otwarte</p>
+            </div>
+            <div id="add-form-closedBtn">
+                <p>Pytanie zamknięte</p>
+            </div>
+            <div id="add-form-numberBtn">
+                <p>Pytanie liczbowe</p>
+            </div>
         </div>
-
-        <main id="addForm-questionList"></main>
-
-        <div id="addForm-final">
-            <button id="addForm-final-button">Save Form to Base</button>
+        <div id="addForm-form-content"></div>
+        <div id="addForm-form-buttons">
+            <button name="back" id="addForm-form-buttons-back">Wyczyść</button>
+            <button name="apply" id="addForm-form-buttons-apply">Stwórz</button>
         </div>
     </div>
 </section>
