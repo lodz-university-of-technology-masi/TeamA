@@ -1,4 +1,4 @@
-const validate = {
+const Validate = {
     validResult: { validated: true, warnings: [] },
 
     validateForm(form) {
@@ -47,4 +47,4 @@ const validate = {
 
 };
 
-exports.validate = validate;
+exports.Validate = Validate;
