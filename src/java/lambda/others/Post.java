@@ -2,21 +2,18 @@ package lambda.others;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
+import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
-
 import cognito.Authorizer;
-import exceptions.BodyException;
-import interfaces.Deletable;
+import exceptions.RequestException;
+import interfaces.Postable;
 import lambda.structures.ServerlessOutput;
 
-public class DeleteById {
-	
+public class Post {
+
 	private static AmazonDynamoDB dynamoDB;
 	private static DynamoDB dynamo;
 	
@@ -26,32 +23,26 @@ public class DeleteById {
 		                .build();
 		dynamo = new DynamoDB(dynamoDB);
 	}
-	
-	public ServerlessOutput output(Deletable input, String tableName, String tableKey, String... roles) {
+
+	public ServerlessOutput output(Postable input, String tableName, String... roles) {
 		
-		Authorizer auth = new Authorizer(input.getAuthorization());
-		
-        ServerlessOutput output = new ServerlessOutput();
+        ServerlessOutput output = new ServerlessOutput()
+        		.withStandardHeaders("POST");
         
-        DeleteItemSpec spec = new DeleteItemSpec();
-
+        Authorizer auth = new Authorizer(input.getAuthorization());
+        
         try {
-        	
         	auth.verifyRole(roles);
-        	
-            if(input.getId() == null)
-            	throw new BodyException("id=null");
-            else
-            	spec = spec.withPrimaryKey(new PrimaryKey(tableKey, input.getId()));
-
+           
         	Table table = dynamo.getTable(tableName);
-            table.deleteItem(spec);
-            
+        	Item item = input.toItem();
+        	table.putItem(item);
+
             output.setStatusCode(200);
-            output.setBody("Item with id=" + input.getId() + " deleted");
-            
-        } catch (BodyException be) {
-        	output.requestRejected(be.getErr());
+            output.setBody("Successfully inserted item: " + item.toString());
+
+        } catch (RequestException re) {
+        	output.requestRejected(re.getErr());
         } catch (Exception e) {
             output.setStatusCode(500);
             StringWriter sw = new StringWriter();
@@ -59,5 +50,6 @@ public class DeleteById {
             output.setBody(sw.toString());
         }
 	    return output;
-	}	
+	}
+
 }

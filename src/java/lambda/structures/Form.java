@@ -1,19 +1,24 @@
 package lambda.structures;
 
+import java.util.Map;
+import java.util.UUID;
 
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
-public class Form {
+public class Form extends Header {
 
 	private String id;
 	private String title;
 	private String questions;
 	
-	public Form(String id, String title, String questions) {
+	public Form(String authorization, String id, String title, String questions) {
+		super(authorization);
 		this.id = id;
 		this.title = title;
 		this.questions = questions;
 	}
-
+	
 	public Form() {
 		
 	}
@@ -44,6 +49,25 @@ public class Form {
 	
 	@Override
 	public String toString() {
-		return "Form{id=" + id + ", title=" + title + ", questions=" + questions + "]";
+		return super.toString() + " Form [id=" + id + ", title=" + title + ", questions=" + questions + "]";
+	}
+	
+	@Override
+	public Item toItem() {
+    	Item item = new Item()
+      	      .withPrimaryKey("FormId", UUID.randomUUID().toString())
+      	      .withString("Title", this.getTitle())
+      	      .withString("Questions", this.getQuestions());
+		return item;
+	}
+
+	@Override
+	public String fromMapToJson(Map<String, AttributeValue> item) {
+		return new String("{"
+	        	+ "\"formId\":\"" + item.get("FormId").getS() + "\","
+	    	    + "\"title\":\"" + item.get("Title").getS() + "\","
+	    	    + "\"questions\":" + item.get("Questions").getS()
+	    	    + "}"
+				);
 	}
 }

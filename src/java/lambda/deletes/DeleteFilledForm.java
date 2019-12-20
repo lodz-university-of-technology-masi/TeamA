@@ -10,6 +10,6 @@ public class DeleteFilledForm implements RequestHandler<FilledForm, ServerlessOu
 	
 	@Override
 	public ServerlessOutput handleRequest(FilledForm input, Context context) {
-		return new DeleteById().output(input.getId(), "FilledForms", "FormId");
+		return new DeleteById().output(input, "FilledForms", "FormId", "HR", "guest");
 	}
 }
