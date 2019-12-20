@@ -3,6 +3,8 @@ const startPng = require('../../icons/play.png');
 const { $id } = require('../utils');
 const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
 const { getFormsFromDatabase, sendFilledFormToDatabase } = require('../databaseConnector');
+const { validate } = require('../validator');
+const Dialogs = require('../common/dialogs');
 
 const FillForm = {
     initialized: false,
@@ -124,7 +126,18 @@ const FillForm = {
             }
         }
         const formToBase = { title: form.title, questions, owner: document.getElementById('header-user-label').textContent };
-        sendFilledFormToDatabase(formToBase);
+        const validResult = validate.validateFilledForm(formToBase);
+        if (validResult.validated) {
+            sendFilledFormToDatabase(formToBase);
+        } else {
+            let warning = 'Uwagi: ';
+            for (const validateWarning in validResult.warnings) {
+                if (Object.prototype.hasOwnProperty.call(validResult.warnings, validateWarning))
+                    warning = `${warning} , ${validateWarning}`;
+            }
+            Dialogs.alert('Nie poprawny formularz!',
+                `Podczas wypełniania formularza wprowadzono dane które nie spełniają wymagań formularza. ${warning}`);
+        }
         this.showAll();
     },
 

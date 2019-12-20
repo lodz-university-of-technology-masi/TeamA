@@ -6,6 +6,7 @@ const {
     createClosedQuestion,
     createNumberQuestion
 } = require('../HRModules/newForm');
+const { validate } = require('../validator');
 
 const AddForm = {
     questions: [],
@@ -186,8 +187,18 @@ const AddForm = {
             }
         }
         const formToBase = { title: document.getElementById('addForm-form-title').children[0].value, questions };
-        console.log(JSON.stringify(formToBase));
-        sendFormToDatabase(formToBase);
+        const validationData = validate.validateForm(formToBase);
+        if (validationData.validated) {
+            sendFormToDatabase(formToBase);
+        } else {
+            let warning = 'Uwagi: ';
+            for (const validateWarning in validationData.warnings) {
+                if (Object.prototype.hasOwnProperty.call(validationData.warnings, validateWarning))
+                    warning = `${warning} , ${validateWarning}`;
+            }
+            Dialogs.alert('Nie poprawny formularz!',
+                `Podczas tworzenia formularza wprowadzono dane które nie spełniają wymagań formularza. ${warning}`);
+        }
     },
 
     assignEventListeners() {
