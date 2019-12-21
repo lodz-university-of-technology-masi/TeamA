@@ -5,8 +5,8 @@ const Validate = {
         this.validResult = { validated: true, warnings: [] };
         if (form.title.length < 1 || form.title.length > 250)
             this.updateResult('tutuł nie może mieć mniej niż 1 znaku oraz więcej niż 250');
-        if (form.questions.length < 1)
-            this.updateResult('tutuł nie może mieć mniej niż 1 znaku oraz więcej niż 250');
+        if (form.questions.length < 2)
+            this.updateResult('liczba odpowiedzi nie może być mniejsza od 2 ');
         for (const question in form.questions) {
             if (Object.prototype.hasOwnProperty.call(form.questions, question)) {
                 if (question.type !== 'O' || question.type !== 'W' || question.type !== 'L')
@@ -15,7 +15,7 @@ const Validate = {
                     this.updateResult(`niepoprawny język pytania numer ${question.number}`);
                 if (question.content.length < 1 || question.content.length > 250)
                     this.updateResult(`zawartość pytania numer ${question.number} nie może być mniejsza niż 1 oraz więcej niż 250`);
-                if (question.type === 'W' || question.answers.length < 1)
+                if (question.type === 'W' && question.answers.length < 1)
                     this.updateResult('pytania zamknięte nie mogą mieć mniej niż 2 odpowiedzi');
                 if (question.type === 'W') {
                     for (const answer in question.answers) {
