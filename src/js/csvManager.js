@@ -11,17 +11,17 @@ exports.saveCsv = data => {
     for (let i = 0; i < readForm.length; i++) {
         let csvStringOneLine = '';
         csvStringOneLine =
-      `"${
-          readForm[i].number
-      };${
-          readForm[i].type
-      };${
-          readForm[i].language
-      };${
-          readForm[i].content
-      };${
-          readForm[i].numberOfAnswers
-      };`;
+            `"${
+                readForm[i].number
+            };${
+                readForm[i].type
+            };${
+                readForm[i].language
+            };${
+                readForm[i].content
+            };${
+                readForm[i].numberOfAnswers
+            };`;
         readAnswers = readForm[i].answers;
         for (let j = 0; j < readAnswers.length; j++) {
             csvStringOneLine += `${readAnswers[j]};`;
@@ -38,83 +38,182 @@ exports.saveCsv = data => {
     document.body.appendChild(link);
     link.click();
 };
-function checkFormTitle(filename) {
+
+function checkFileName(fileName) {
+    if (fileName.substring(fileName.length - 3) !== 'csv') {
+        Dialogs.alert('Błąd walidacji pliku', 'Wybrany plik ma złe rozszerzenie, wybierz plik z rozszerzeniem csv');
+        return false;
+    }
+    return true;
+}
+
+function numerationInCorrectOrder(lines) {
+    let questionNumber = 1;
+    for (const line of lines) {
+        const currentLine = line.split(';');
+        if (currentLine[0].trim().length === 0) {
+            continue;
+        } else if (Number(line[1]) === questionNumber) {
+            questionNumber += 1;
+            continue;
+        } else {
+            Dialogs.alert('Błąd walidacji pliku', 'Pytania są źle ponumerowane');
+            return false;
+        }
+    }
+    return true;
+}
+
+function checkQuotes(currentLine) {
+    if (currentLine[0].substring(0, 1) === '"' && currentLine[currentLine.length - 2] === '"') {
+        return true;
+    }
+    Dialogs.alert('Błąd walidacji pliku', 'Zła liczba cudzysłowów. Powinny być dwa na początku i końcu każdego pytania');
+    return false;
+}
+
+function checkSemicolons(line) {
+    // todo to nie dziala, zawsze jest true
+    if (line.match(/;/g).length < 6) {
+        Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma złą ilość średników, minimalna ilość to 6');
+        return false;
+    }
+    return true;
+}
+
+function checkQuestionType(questionType) {
+    if (questionType === 'O' || questionType === 'W' || questionType === 'L') {
+        return true;
+    }
+    Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma zły typ, dozwolone typy to: O (otwarte), W (wyboru), L (liczbowe)');
+    return false;
+}
+
+function checkQuestionLanguage(questionLanguage) {
+    if (questionLanguage === 'PL' || questionLanguage === 'EN') {
+        return true;
+    }
+    Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma zły język, dozwolone języki to: PL lub EN');
+    return false;
+}
+
+function correctNumberOfQuestionsChaaracters(question) {
+    if (question.length > 250) {
+        Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma więcej niż 250 znaków');
+        return false;
+    }
+    return true;
+}
+
+
+// function checkAmoutOfAnswers(answersTab, numberOfAnswers) {
+//     console.log('ja psuje');
+//     if (answersTab.length === numberOfAnswers || (numberOfAnswers === '|' && answersTab.length === 0)) {
+//         return true;
+//     }
+//     Dialogs.alert('Błąd walidacji pliku', 'Faktyczna ilość odpowiedzi nie równa się podanej w treści pytania.');
+//     return true;
+// }
+
+function checkIfTitleAlreadyExists(forms, fileName) {
+    for (const form of forms) {
+        if (form.title === fileName) {
+            Dialogs.alert(
+                'Błąd walidacji pliku',
+                'Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.',
+                () => {
+
+                }
+            );
+            return false;
+        }
+    }
+    return true;
+}
+
+function checkFormTitle(fileName) {
     const reader = new FileReader();
     let csv;
     const file = $id('import-input');
-    Promise.resolve(getFormsFromDatabase()).then(str => {
-        const forms = JSON.parse(str);
-        for (const form of forms) {
-            if (form.title === filename) {
-                Dialogs.alert(
-                    'Błąd',
-                    'Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.',
-                    () => {
-
-                    }
-                );
+    Promise.resolve(getFormsFromDatabase())
+        .then(str => {
+            const forms = JSON.parse(str);
+            if (!checkIfTitleAlreadyExists(forms, fileName)) {
                 return;
             }
-        }
 
-        const output = {
-            title: filename,
-            questions: []
-        };
+            const output = {
+                title: fileName,
+                questions: []
+            };
 
-        reader.onload = () => {
-            csv = reader.result;
-            const headers = [
-                'number',
-                'type',
-                'language',
-                'content',
-                'numberOfAnswers',
-                'answers'
-            ];
-            const lines = csv.split('\n');
-            const result = [];
-            for (const line of lines) {
-                const obj = {};
-                const currentLine = line.split(';');
-                if (currentLine[0].trim().length === 0) continue;
-                const tab = [];
-                for (let j = 0; j < currentLine.length; j++) {
-                    if (j < headers.length - 1) {
-                        const value =
-              currentLine[j][0] === '"'
-                  ? currentLine[j].slice(1)
-                  : currentLine[j];
-                        obj[headers[j]] = value;
-                    } else if (
-                        currentLine[j].trim().length !== 0 &&
-              currentLine[j][0] !== '"'
-                    ) {
-                        tab.push(currentLine[j]);
-                    }
-                    if (j === currentLine.length - 1) {
-                        obj.answers = tab;
-                    }
+            reader.onload = () => {
+                csv = reader.result;
+                const headers = [
+                    'number',
+                    'type',
+                    'language',
+                    'content',
+                    'numberOfAnswers',
+                    'answers'
+                ];
+                const lines = csv.split('\n');
+                if (!numerationInCorrectOrder(lines)) {
+                    return;
                 }
-                result.push(obj);
-            }
-            output.questions = result;
-            sendFormToDatabase(output);
-            Dialogs.alert(
-                'Dodano do bazy danych',
-                'Twój formularz został dodany do bazy danych, możesz go teraz zobaczyć w oknie: "Zobacz szablony formularzy".',
-                () => {
+                const result = [];
+                for (const line of lines) {
+                    const obj = {};
+                    const currentLine = line.split(';').filter(el => (el !== ''));
+                    if (currentLine[0].trim().length === 0) continue;
+                    if (!checkSemicolons(line) || !checkQuotes(currentLine)) {
+                        return;
+                    }
+                    const tab = [];
+                    for (let j = 0; j < currentLine.length; j++) {
+                        if (j < headers.length - 1) {
+                            const value =
+                                currentLine[j][0] === '"'
+                                    ? currentLine[j].slice(1)
+                                    : currentLine[j];
+                            if (headers[j] === 'type' && !checkQuestionType(currentLine[j])) {
+                                return;
+                            } if (headers[j] === 'language' && !checkQuestionLanguage(currentLine[j])) {
+                                return;
+                            } if (headers[j] === 'content' && !correctNumberOfQuestionsChaaracters(currentLine[j])) {
+                                return;
+                            }
+                            obj[headers[j]] = value;
+                        } else if (
+                            currentLine[j].trim().length !== 0 &&
+                            currentLine[j][0] !== '"'
+                        ) {
+                            tab.push(currentLine[j]);
+                        }
+                        if (j === currentLine.length - 1) {
+                            // if (checkAmoutOfAnswers(tab, obj.numberOfAnswers)) {
+                            //     return;
+                            // }
+                            obj.answers = tab;
+                        }
+                    }
+                    result.push(obj);
                 }
-            );
-        };
-        reader.readAsBinaryString(file.files[0]);
-    });
+                output.questions = result;
+                sendFormToDatabase(output);
+            };
+            reader.readAsBinaryString(file.files[0]);
+        });
 }
 
+
 exports.read = () => {
-    let filename = $id('import-input')
-        .value.split(/(\\|\/)/g)
+    let fileName = $id('import-input')
+        .value
+        .split(/(\\|\/)/g)
         .pop();
-    filename = filename.substring(0, filename.length - 4);
-    checkFormTitle(filename);
+    if (checkFileName(fileName)) {
+        fileName = fileName.substring(0, fileName.length - 4);
+        checkFormTitle(fileName);
+    }
 };
