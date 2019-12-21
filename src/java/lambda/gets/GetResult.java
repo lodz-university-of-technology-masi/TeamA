@@ -2,9 +2,10 @@ package lambda.gets;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import lambda.others.GetById;
+
 import lambda.structures.Result;
 import lambda.structures.ServerlessOutput;
+import lambda.templates.GetById;
 
 public class GetResult implements RequestHandler<Result, ServerlessOutput>{
 

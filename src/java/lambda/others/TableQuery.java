@@ -1,7 +1,6 @@
 package lambda.others;
 
 import java.util.Iterator;
-
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -18,7 +17,7 @@ public class TableQuery {
 	
 	static {
 		dynamoDB = AmazonDynamoDBClientBuilder.standard()
-		                .withRegion("us-east-1")
+		                .withRegion(AWSConsts.AWS_DYNAMO_REGION)
 		                .build();
 		dynamo = new DynamoDB(dynamoDB);
 	}

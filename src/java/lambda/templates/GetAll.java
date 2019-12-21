@@ -1,4 +1,4 @@
-package lambda.others;
+package lambda.templates;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,6 +13,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import cognito.Authorizer;
 import exceptions.RequestException;
 import interfaces.Getable;
+import lambda.others.AWSConsts;
 import lambda.structures.ServerlessOutput;
 
 public class GetAll {
@@ -21,14 +22,12 @@ public class GetAll {
 	
 	static {
 		dynamoDB = AmazonDynamoDBClientBuilder.standard()
-		                .withRegion("us-east-1")
+		                .withRegion(AWSConsts.AWS_DYNAMO_REGION)
 		                .build();
 	}
 	
 	public ServerlessOutput output(Getable input, String tableName, String... roles) {
 		
-		Authorizer auth = new Authorizer(input.getAuthorization());
-        
         ServerlessOutput output = new ServerlessOutput()
         		.withStandardHeaders("GET");
         
@@ -37,7 +36,7 @@ public class GetAll {
         
         String body = "[ ";
         try {
-        	auth.verifyRole(roles);
+        	new Authorizer(input.getAuthorization()).verifyRole(roles);
 
         	ScanResult result = dynamoDB.scan(scanRequest);	
          

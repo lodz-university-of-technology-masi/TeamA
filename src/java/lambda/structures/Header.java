@@ -1,10 +1,8 @@
 package lambda.structures;
 
-import interfaces.Deletable;
-import interfaces.Getable;
-import interfaces.Postable;
+import interfaces.Authorizable;
 
-public abstract class Header implements Postable, Getable, Deletable {
+public class Header implements Authorizable {
 	
 	private String authorization;
 

@@ -6,7 +6,9 @@ import java.util.UUID;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
-public class Form extends Header {
+import interfaces.Allable;
+
+public class Form extends Header implements Allable  {
 
 	private String id;
 	private String title;

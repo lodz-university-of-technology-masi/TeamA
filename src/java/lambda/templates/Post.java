@@ -1,4 +1,4 @@
-package lambda.others;
+package lambda.templates;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import cognito.Authorizer;
 import exceptions.RequestException;
 import interfaces.Postable;
+import lambda.others.AWSConsts;
 import lambda.structures.ServerlessOutput;
 
 public class Post {
@@ -19,7 +20,7 @@ public class Post {
 	
 	static {
 		dynamoDB = AmazonDynamoDBClientBuilder.standard()
-		                .withRegion("us-east-1")
+		                .withRegion(AWSConsts.AWS_DYNAMO_REGION)
 		                .build();
 		dynamo = new DynamoDB(dynamoDB);
 	}
@@ -29,10 +30,8 @@ public class Post {
         ServerlessOutput output = new ServerlessOutput()
         		.withStandardHeaders("POST");
         
-        Authorizer auth = new Authorizer(input.getAuthorization());
-        
         try {
-        	auth.verifyRole(roles);
+        	new Authorizer(input.getAuthorization()).verifyRole(roles);
            
         	Table table = dynamo.getTable(tableName);
         	Item item = input.toItem();
