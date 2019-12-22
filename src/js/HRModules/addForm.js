@@ -191,14 +191,14 @@ const AddForm = {
         if (validationData.validated) {
             sendFormToDatabase(formToBase);
         } else {
-            let warning = 'Uwagi ';
-            for (const validateWarning in validationData.warnings) {
-                if (Object.prototype.hasOwnProperty.call(validationData.warnings, validateWarning))
-                    warning = `${warning} , ${validateWarning}`;
+            let generalWarning = 'Uwagi: ';
+            const validateWarnings = validationData.warnings;
+            for (let i = 0; i < validateWarnings.length; i++) {
+                generalWarning += `${validateWarnings[i]},`;
             }
-            warning = `${warning} , wymagają poprawek.`;
+            generalWarning = `${generalWarning}  wymagają poprawek.`;
             Dialogs.alert('Nie poprawny formularz!',
-                `Podczas tworzenia formularza wprowadzono dane które nie spełniają wymagań formularza. ${warning}`);
+                `Podczas tworzenia formularza wprowadzono dane które nie spełniają wymagań formularza. ${generalWarning}`);
         }
     },
 

@@ -5,9 +5,9 @@ const Validate = {
         this.validResult = { validated: true, warnings: [] };
         if (form.title.length < 1 || form.title.length > 250)
             this.updateResult('tutuł nie może mieć mniej niż 1 znaku oraz więcej niż 250');
-        if (form.questions.length < 2)
-            this.updateResult('liczba odpowiedzi nie może być mniejsza od 2 ');
-        for (const question in form.questions) {
+        if (form.questions.length < 1)
+            this.updateResult('liczba pytań nie może być mniejsza od 1 ');
+        for (const question in form.questions.entries()) {
             if (Object.prototype.hasOwnProperty.call(form.questions, question)) {
                 if (question.type !== 'O' || question.type !== 'W' || question.type !== 'L')
                     this.updateResult(`niepoprawny typ pytania numer ${question.number}`);
@@ -31,7 +31,7 @@ const Validate = {
         this.validResult = { validated: true, warnings: [] };
         if (filledForm.owner.length < 1)
             this.updateResult('błąd podczas odczytywania nazwy użytkownika');
-        for (const question in filledForm.questions) {
+        for (const question in filledForm.questions.entries()) {
             if (Object.prototype.hasOwnProperty.call(filledForm.questions, question)) {
                 if (question.userAnswer.length < 1 || question.userAnswer.length > 250)
                     this.updateResult(`odpowiedz pytania zamknietego o numerze ${question.number} nie może mieć mniej niż 1 znak oraz więcej niż 250`);
