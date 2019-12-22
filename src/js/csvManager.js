@@ -72,9 +72,8 @@ function checkQuotes(currentLine) {
     return false;
 }
 
-function checkSemicolons(line) {
-    // todo to nie dziala, zawsze jest true
-    if (line.match(/;/g).length < 6) {
+function checkSemicolons(currentLine) {
+    if (currentLine.length < 7) {
         Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma złą ilość średników, minimalna ilość to 6');
         return false;
     }
@@ -106,14 +105,13 @@ function correctNumberOfQuestionsChaaracters(question) {
 }
 
 
-// function checkAmoutOfAnswers(answersTab, numberOfAnswers) {
-//     console.log('ja psuje');
-//     if (answersTab.length === numberOfAnswers || (numberOfAnswers === '|' && answersTab.length === 0)) {
-//         return true;
-//     }
-//     Dialogs.alert('Błąd walidacji pliku', 'Faktyczna ilość odpowiedzi nie równa się podanej w treści pytania.');
-//     return true;
-// }
+function checkAmoutOfAnswers(answersTab, numberOfAnswers) {
+    if (answersTab.length === numberOfAnswers || (numberOfAnswers === '|' && answersTab.length === 0)) {
+        return true;
+    }
+    Dialogs.alert('Błąd walidacji pliku', 'Faktyczna ilość odpowiedzi nie równa się podanej w treści pytania.');
+    return true;
+}
 
 function checkIfTitleAlreadyExists(forms, fileName) {
     for (const form of forms) {
@@ -138,9 +136,7 @@ function checkFormTitle(fileName) {
     Promise.resolve(getFormsFromDatabase())
         .then(str => {
             const forms = JSON.parse(str);
-            if (!checkIfTitleAlreadyExists(forms, fileName)) {
-                return;
-            }
+            if (!checkIfTitleAlreadyExists(forms, fileName)) return;
 
             const output = {
                 title: fileName,
@@ -158,17 +154,13 @@ function checkFormTitle(fileName) {
                     'answers'
                 ];
                 const lines = csv.split('\n');
-                if (!numerationInCorrectOrder(lines)) {
-                    return;
-                }
+                if (!numerationInCorrectOrder(lines)) return;
                 const result = [];
                 for (const line of lines) {
                     const obj = {};
                     const currentLine = line.split(';').filter(el => (el !== ''));
                     if (currentLine[0].trim().length === 0) continue;
-                    if (!checkSemicolons(line) || !checkQuotes(currentLine)) {
-                        return;
-                    }
+                    if (!checkSemicolons(currentLine) || !checkQuotes(currentLine)) return;
                     const tab = [];
                     for (let j = 0; j < currentLine.length; j++) {
                         if (j < headers.length - 1) {
@@ -176,13 +168,9 @@ function checkFormTitle(fileName) {
                                 currentLine[j][0] === '"'
                                     ? currentLine[j].slice(1)
                                     : currentLine[j];
-                            if (headers[j] === 'type' && !checkQuestionType(currentLine[j])) {
-                                return;
-                            } if (headers[j] === 'language' && !checkQuestionLanguage(currentLine[j])) {
-                                return;
-                            } if (headers[j] === 'content' && !correctNumberOfQuestionsChaaracters(currentLine[j])) {
-                                return;
-                            }
+                            if (headers[j] === 'type' && !checkQuestionType(currentLine[j])) return;
+                            if (headers[j] === 'language' && !checkQuestionLanguage(currentLine[j])) return;
+                            if (headers[j] === 'content' && !correctNumberOfQuestionsChaaracters(currentLine[j])) return;
                             obj[headers[j]] = value;
                         } else if (
                             currentLine[j].trim().length !== 0 &&
@@ -191,9 +179,7 @@ function checkFormTitle(fileName) {
                             tab.push(currentLine[j]);
                         }
                         if (j === currentLine.length - 1) {
-                            // if (checkAmoutOfAnswers(tab, obj.numberOfAnswers)) {
-                            //     return;
-                            // }
+                            if (!checkAmoutOfAnswers(tab, obj.numberOfAnswers)) return;
                             obj.answers = tab;
                         }
                     }
