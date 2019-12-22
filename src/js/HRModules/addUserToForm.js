@@ -1,6 +1,7 @@
 
 const { $id, $ } = require('../utils');
 const Dialog = require('../common/dialogs');
+const { getFormsFromDatabase, getUsers } = require('../databaseConnector');
 
 const AddUserToForm = {
     initialized: false,
@@ -9,6 +10,35 @@ const AddUserToForm = {
     init() {
         if (this.initialized)
             return;
+
+        getUsers().then(str => {
+            console.log(str);
+        });
+
+        getFormsFromDatabase().then(str => {
+            const forms = JSON.parse(str);
+
+            for (const [it, form] of forms.entries()) {
+                const div = document.createElement('div');
+                div.className = 'addUserToForm-selectContainer';
+
+                const inputChild = document.createElement('input');
+                inputChild.className = 'addUserToForm-formInput';
+                inputChild.setAttribute('data-form', it + 1);
+                inputChild.name = 'addUserToForm-form';
+                inputChild.type = 'radio';
+                inputChild.id = `addUserToForm-form-${it + 1}`;
+                div.appendChild(inputChild);
+
+                const labelChild = document.createElement('label');
+                labelChild.setAttribute('for', `addUserToForm-form-${it + 1}`);
+                labelChild.innerText = form.title;
+                div.appendChild(labelChild);
+
+
+                $id('addUserToForm-forms').appendChild(div);
+            }
+        });
 
         this.initialized = true;
 

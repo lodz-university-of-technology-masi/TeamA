@@ -233,3 +233,22 @@ exports.removeResultFromDatabase = resultId => {
         }
     });
 };
+
+exports.getUsers = () => new Promise(resolve => {
+    $.ajax({
+        method: 'GET',
+        url: `${invokeUrl}/user`,
+        headers: {
+            Authorization: authMetod
+        },
+        contentType: 'application/json',
+        success: resp => resolve(resp.body),
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            Dialogs.alert(
+                'Nie pobrano listy użytkowników',
+                'Podczas pobierania userów wystąpił nieoczekiwany błąd.'
+            );
+        }
+    });
+});
