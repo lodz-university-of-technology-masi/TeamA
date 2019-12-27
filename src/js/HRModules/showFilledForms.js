@@ -3,10 +3,16 @@ const pencilPng = require('../../icons/pencil.png');
 const { $id } = require('../utils');
 const Dialogs = require('../common/dialogs');
 const {
-    createOpenQuestion, createClosedQuestion, createNumberQuestion, createEvaluationButtons
+    createOpenQuestion,
+    createClosedQuestion,
+    createNumberQuestion,
+    createEvaluationButtons
 } = require('../common/form');
 
-const { getFilledFormFromDatabase, sendResultToDatabase } = require('../databaseConnector');
+const {
+    getFilledFormFromDatabase,
+    sendResultToDatabase
+} = require('../databaseConnector');
 
 const ShowFilledForms = {
     points: [],
@@ -26,7 +32,7 @@ const ShowFilledForms = {
                 const div = document.createElement('div');
 
                 let child = document.createElement('div');
-                child.innerHTML = (it + 1);
+                child.innerHTML = it + 1;
                 div.appendChild(child);
 
                 child = document.createElement('div');
@@ -62,10 +68,8 @@ const ShowFilledForms = {
     },
 
     open() {
-        if (!this.initialized)
-            this.init();
-        else
-            this.showAll();
+        if (!this.initialized) this.init();
+        else this.showAll();
     },
 
     showAll() {
@@ -80,21 +84,25 @@ const ShowFilledForms = {
         $id('showFilledForms-list').style.display = 'none';
         $id('showFilledForms-form').style.display = 'block';
 
-        $id('showFilledForms-form-title').innerHTML = `${which.title} - ${which.owner} `;
+        $id(
+            'showFilledForms-form-title'
+        ).innerHTML = `${which.title} - ${which.owner} `;
         $id('showFilledForms-form-content').innerHTML = '';
 
         for (const [it, question] of which.questions.entries()) {
             this.points.push(null);
 
             if (question.type.toLowerCase() === 'o') {
-                const questionDOM = createOpenQuestion(question.number, question.content);
+                const questionDOM = createOpenQuestion(
+                    question.number,
+                    question.content
+                );
 
                 const input = questionDOM.querySelectorAll('input')[0];
                 input.disabled = true;
                 input.value = question.userAnswer;
 
-                $id('showFilledForms-form-content')
-                    .appendChild(questionDOM);
+                $id('showFilledForms-form-content').appendChild(questionDOM);
 
                 const evaluateButtons = createEvaluationButtons(
                     () => {
@@ -105,12 +113,22 @@ const ShowFilledForms = {
                     }
                 );
 
-                $id('showFilledForms-form-content')
-                    .appendChild(evaluateButtons);
+                $id('showFilledForms-form-content').appendChild(
+                    evaluateButtons
+                );
+
+                const textarea = document.createElement('textarea');
+                textarea.classList.add('evaluation-comment');
+                textarea.placeholder = '(opcjonalnie) Komentarz do odpowiedzi';
+                $id('showFilledForms-form-content').appendChild(
+                    textarea
+                );
             } else if (question.type.toLowerCase() === 'w') {
-                const questionDOM = createClosedQuestion(question.number,
+                const questionDOM = createClosedQuestion(
+                    question.number,
                     question.content,
-                    question.answers);
+                    question.answers
+                );
 
                 const inputs = questionDOM.querySelectorAll('input');
                 const labels = questionDOM.querySelectorAll('span');
@@ -122,8 +140,7 @@ const ShowFilledForms = {
                         inputs[i].checked = true;
                 }
 
-                $id('showFilledForms-form-content')
-                    .appendChild(questionDOM);
+                $id('showFilledForms-form-content').appendChild(questionDOM);
 
                 const evaluateButtons = createEvaluationButtons(
                     () => {
@@ -134,17 +151,31 @@ const ShowFilledForms = {
                     }
                 );
 
-                $id('showFilledForms-form-content')
-                    .appendChild(evaluateButtons);
+                $id('showFilledForms-form-content').appendChild(
+                    evaluateButtons
+                );
+
+                const textarea = document.createElement('textarea');
+                textarea.classList.add('evaluation-comment');
+                textarea.placeholder = '(opcjonalnie) Komentarz do odpowiedzi';
+                $id('showFilledForms-form-content').appendChild(
+                    textarea
+                );
             } else if (question.type.toLowerCase() === 'l') {
-                const questionDOM = createNumberQuestion(question.number, question.content);
+                const questionDOM = createNumberQuestion(
+                    question.number,
+                    question.content
+                );
 
                 const input = questionDOM.querySelectorAll('input')[0];
                 input.disabled = true;
                 input.value = question.userAnswer;
 
-                $id('showFilledForms-form-content')
-                    .appendChild(questionDOM);
+                $id('showFilledForms-form-content').appendChild(questionDOM);
+
+                const comment = document.createElement('textarea');
+                comment.placeholder = '(opcjonalny komentarz)';
+                $id('showFilledForms-form-content').appendChild(comment);
 
                 const evaluateButtons = createEvaluationButtons(
                     () => {
@@ -155,8 +186,16 @@ const ShowFilledForms = {
                     }
                 );
 
-                $id('showFilledForms-form-content')
-                    .appendChild(evaluateButtons);
+                $id('showFilledForms-form-content').appendChild(
+                    evaluateButtons
+                );
+
+                const textarea = document.createElement('textarea');
+                textarea.classList.add('evaluation-comment');
+                textarea.placeholder = '(opcjonalnie) Komentarz do odpowiedzi';
+                $id('showFilledForms-form-content').appendChild(
+                    textarea
+                );
             }
         }
     },
@@ -165,34 +204,42 @@ const ShowFilledForms = {
         const isAllChecked = !(this.points.indexOf(null) > -1);
 
         if (isAllChecked) {
-            Dialogs.confirm('Zakończenie',
+            Dialogs.confirm(
+                'Zakończenie',
                 'Czy na pewno zakończyć sprawdzanie?',
                 () => {
-                    const dataToBackend =
-                        {
-                            formTitle: this.formTitle,
-                            owner: this.owner,
-                            hrEmployer: this.hrEmployer,
-                            points: this.points
-                        };
+                    const dataToBackend = {
+                        formTitle: this.formTitle,
+                        owner: this.owner,
+                        hrEmployer: this.hrEmployer,
+                        points: this.points
+                    };
                     sendResultToDatabase(dataToBackend);
                     this.showAll();
-                });
+                }
+            );
         } else {
-            Dialogs.alert('Uwaga!', 'Nie wszystkie pytania zostały sprawdzone!');
+            Dialogs.alert(
+                'Uwaga!',
+                'Nie wszystkie pytania zostały sprawdzone!'
+            );
         }
     },
 
     assignEventListeners() {
-        $id('showFilledForms-form-buttons-back')
-            .addEventListener('click', () => {
+        $id('showFilledForms-form-buttons-back').addEventListener(
+            'click',
+            () => {
                 ShowFilledForms.showAll();
-            });
+            }
+        );
 
-        $id('showFilledForms-form-buttons-apply')
-            .addEventListener('click', () => {
+        $id('showFilledForms-form-buttons-apply').addEventListener(
+            'click',
+            () => {
                 ShowFilledForms.evaluateForm();
-            });
+            }
+        );
     }
 };
 
