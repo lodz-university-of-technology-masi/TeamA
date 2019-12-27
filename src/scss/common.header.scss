@@ -16,6 +16,66 @@
         }
     }
 }
+        #header-language {
+            padding: 0 20px;
+            max-width:100px;
+            height:100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            float: right;
+        }
+            #header-language-isPolish {
+                display: none;
+
+                &:checked ~ label > div {
+                    left: calc(50% + 2px);
+                }
+            }
+            #header-language-content {
+                position: relative;
+                width: 80px;
+                height: 30px;
+                background: rgba(0, 0, 0, 0.25);
+                border-radius: 5px;
+                display: flex;
+
+                > span {
+                    flex: 1 1;
+                    text-align:center;
+                    height:100%;
+                    line-height: 30px;
+                    color: #fff;
+                    font-size: 0.9em;
+                    font-family: 'Open Sans', sans-serif;
+                }
+
+                > div {
+                    position: absolute;
+                    top:2px;
+                    left:2px;
+                    width:calc(50% - 20px - 4px);
+                    height:calc(100% - 14px - 4px);
+                    padding: 7px 10px;
+                    border-radius: 5px;
+                    background: #eee;
+                    transition: left 0.3s;
+
+                    > div {
+                        width: 1px;
+                        height:100%;
+                        background: #ccc;
+                        float: left;
+                        margin-right: 5px;
+                        
+                        &:last-of-type {
+                            margin-right: 0;
+                        }
+                    }
+                }
+            }
+
+
         #header-user {
             position: relative;
             padding: 0 20px;
