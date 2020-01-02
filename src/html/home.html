@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,316 +10,342 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <title>Dashboard</title>
 </head>
+
 <body>
 
-<header id="header">
-    <div>
-        <h1>Panel pracownika HR</h1>
-    </div>
-    <div>
-        <div id="header-user">
-            <div id="header-user-container">
-                <span id="header-user-letter"></span>
-                <span id="header-user-label"></span>
-            </div>
+    <header id="header">
+        <div>
+            <h1>Panel pracownika HR</h1>
+        </div>
+        <div>
+            <div id="header-user">
 
-            <div id="header-userActions">
-                <div id="header-userActions-logout" class="header-userActions-action" title="Wyloguj">
-                    <img src="../icons/logout.png" alt="Wyloguj" />
-                    <span>Wyloguj</span>
+                <div id="header-user-container">
+                    <span id="header-user-letter"></span>
+                    <span id="header-user-label"></span>
+                </div>
+
+                <div id="header-userActions">
+                    <div id="header-userActions-logout" class="header-userActions-action" title="Wyloguj">
+                        <img src="../icons/logout.png" alt="Wyloguj" />
+                        <span>Wyloguj</span>
+                    </div>
+                </div>
+            </div>
+            <div id="header-language">
+                <input id="header-language-isPolish" type="checkbox" checked />
+                <label for="header-language-isPolish" id="header-language-content">
+                    <span>PL</span>
+                    <span>EN</span>
+                    <div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <main id="panel">
+        <div>
+            <div class="panel-col">
+                <h3>Formularze</h3>
+                <div>
+                    <div class="panel-btn">
+                        <button id="panel-btn-1-3">
+                            Sprawdź formularz
+                        </button>
+                    </div>
+                    <div class="panel-btn">
+                        <button id="panel-btn-1-2">
+                            Zobacz szablony formularzy
+                        </button>
+                    </div>
+                    <div class="panel-btn">
+                        <button id="panel-btn-1-1">Dodaj nowy formularz</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-col">
+                <h3>Użytkownicy</h3>
+                <div>
+                    <div class="panel-btn">
+                        <button id="panel-btn-2-1">
+                            Dodaj użytkownika do formularza
+                        </button>
+                    </div>
+                    <div class="panel-btn">
+                        <button>Usuń użytkownika z formularza</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-col">
+                <h3>Inne</h3>
+                <div>
+                    <div class="panel-btn">
+                        <button id="panel-btn-3-1">Importuj plik .csv</button>
+                    </div>
+                    <div class="panel-btn">
+                        <button id="panel-btn-3-2">Eksportuj do pliku .csv</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>
+    </main>
 
-<main id="panel">
-    <div>
-        <div class="panel-col">
-            <h3>Formularze</h3>
+    <section class="section" id="showForms">
+        <div class="sectionBack">
             <div>
-                <div class="panel-btn">
-                    <button id="panel-btn-1-3">
-                        Sprawdź formularz
-                    </button>
-                </div>
-                <div class="panel-btn">
-                    <button id="panel-btn-1-2">
-                        Zobacz szablony formularzy
-                    </button>
-                </div>
-                <div class="panel-btn">
-                    <button id="panel-btn-1-1">Dodaj nowy formularz</button>
+                <div class="sectionBack-content">
+                    <img src="../icons/arrow-left.png" alt="Back" />
+                    <span>Powrót</span>
                 </div>
             </div>
         </div>
-        <div class="panel-col">
-            <h3>Użytkownicy</h3>
+        <!--tu jestem todo wywalic inline style-->
+        <div class="panel-btn"><button style="margin-top: 15px; margin-left: 15px;" id="showForms-import-file-button">
+                Importuj plik Csv</button></div>
+        <h2>Lista formularzy</h2>
+
+        <div id="showForms-content">
+            <div id="showForms-content-loading" class="loading"></div>
+
+            <div id="showForms-list">
+                <div id="showForms-list-table">
+                    <div name="title">
+                        <div>Nr.</div>
+                        <div>Nazwa</div>
+                        <div>Pytania</div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="showForms-form">
+                <h3 id="showForms-form-title"></h3>
+                <div id="showForms-form-content"></div>
+                <div id="showForms-form-buttons">
+                    <button id="showForms-form-buttons-back">Powrót</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="showFilledForms">
+        <div class="sectionBack">
             <div>
-                <div class="panel-btn">
-                    <button id="panel-btn-2-1">
-                        Dodaj użytkownika do formularza
-                    </button>
-                </div>
-                <div class="panel-btn">
-                    <button>Usuń użytkownika z formularza</button>
+                <div class="sectionBack-content">
+                    <img src="../icons/arrow-left.png" alt="Back" />
+                    <span>Powrót</span>
                 </div>
             </div>
         </div>
-        <div class="panel-col">
-            <h3>Inne</h3>
+
+        <h2>Lista wypełnionych formularzy</h2>
+
+        <div id="showFilledForms-content">
+            <div id="showFilledForms-content-loading" class="loading"></div>
+
+            <div id="showFilledForms-list">
+                <div id="showFilledForms-list-table">
+                    <div name="title">
+                        <div>Nr.</div>
+                        <div>Nazwa</div>
+                        <div>Wykonawca</div>
+                        <div>Pytania</div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="showFilledForms-form">
+                <h3 id="showFilledForms-form-title">Test</h3>
+                <div id="showFilledForms-form-content"></div>
+                <div id="showFilledForms-form-buttons">
+                    <button name="back" id="showFilledForms-form-buttons-back">Powrót</button>
+                    <button name="apply" id="showFilledForms-form-buttons-apply">Zatwierdź</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="addForm">
+        <div class="sectionBack">
             <div>
-                <div class="panel-btn">
-                    <button id="panel-btn-3-1">Importuj plik .csv</button>
-                </div>
-                <div class="panel-btn">
-                    <button id="panel-btn-3-2">Eksportuj do pliku .csv</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<section class="section" id="showForms">
-    <div class="sectionBack">
-        <div>
-            <div class="sectionBack-content">
-                <img src="../icons/arrow-left.png" alt="Back" />
-                <span>Powrót</span>
-            </div>
-        </div>
-    </div>
-    <!--tu jestem todo wywalic inline style-->
-    <div class = "panel-btn"><button style = "margin-top: 15px; margin-left: 15px;" id="showForms-import-file-button"> Importuj plik Csv</button></div>
-    <h2>Lista formularzy</h2>
-
-    <div id="showForms-content">
-        <div id="showForms-content-loading" class="loading"></div>
-
-        <div id="showForms-list">
-            <div id="showForms-list-table">
-                <div name="title">
-                    <div>Nr.</div>
-                    <div>Nazwa</div>
-                    <div>Pytania</div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+                <div class="sectionBack-content">
+                    <img src="../icons/arrow-left.png" alt="Back" />
+                    <span>Powrót</span>
                 </div>
             </div>
         </div>
 
+        <h2>Dodawanie formularza</h2>
 
-        <div id="showForms-form">
-            <h3 id="showForms-form-title"></h3>
-            <div id="showForms-form-content"></div>
-            <div id="showForms-form-buttons">
-                <button id="showForms-form-buttons-back">Powrót</button>
+        <div id="addForm-content">
+            <h3 id="addForm-form-title">
+                <input type="text" placeholder="Tytuł formularza..." />
+            </h3>
+            <div id="addForm-form-actions">
+                <div id="add-form-openBtn">
+                    <p>Pytanie otwarte</p>
+                </div>
+                <div id="add-form-closedBtn">
+                    <p>Pytanie zamknięte</p>
+                </div>
+                <div id="add-form-numberBtn">
+                    <p>Pytanie liczbowe</p>
+                </div>
+            </div>
+            <div id="addForm-form-content"></div>
+            <div id="addForm-form-buttons">
+                <button name="back" id="addForm-form-buttons-back">Wyczyść</button>
+                <button name="apply" id="addForm-form-buttons-apply">Stwórz</button>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="section" id="showFilledForms">
-    <div class="sectionBack">
-        <div>
-            <div class="sectionBack-content">
-                <img src="../icons/arrow-left.png" alt="Back" />
-                <span>Powrót</span>
-            </div>
-        </div>
-    </div>
-
-    <h2>Lista wypełnionych formularzy</h2>
-
-    <div id="showFilledForms-content">
-        <div id="showFilledForms-content-loading" class="loading"></div>
-
-        <div id="showFilledForms-list">
-            <div id="showFilledForms-list-table">
-                <div name="title">
-                    <div>Nr.</div>
-                    <div>Nazwa</div>
-                    <div>Wykonawca</div>
-                    <div>Pytania</div>
-                    <div></div>
+    <section class="section" id="addUserToForm">
+        <div class="sectionBack">
+            <div>
+                <div class="sectionBack-content">
+                    <img src="../icons/arrow-left.png" alt="Back" />
+                    <span>Powrót</span>
                 </div>
             </div>
         </div>
 
-        <div id="showFilledForms-form">
-            <h3 id="showFilledForms-form-title">Test</h3>
-            <div id="showFilledForms-form-content"></div>
-            <div id="showFilledForms-form-buttons">
-                <button name="back" id="showFilledForms-form-buttons-back">Powrót</button>
-                <button name="apply" id="showFilledForms-form-buttons-apply">Zatwierdź</button>
-            </div>
-        </div>
-    </div>
-</section>
+        <h2>Dodawanie użytkownika do formularza</h2>
 
-<section class="section" id="addForm">
-    <div class="sectionBack">
-        <div>
-            <div class="sectionBack-content">
-                <img src="../icons/arrow-left.png" alt="Back" />
-                <span>Powrót</span>
-            </div>
-        </div>
-    </div>
-
-    <h2>Dodawanie formularza</h2>
-
-    <div id="addForm-content">
-        <h3 id="addForm-form-title">
-            <input type="text" placeholder="Tytuł formularza..." />
-        </h3>
-        <div id="addForm-form-actions">
-            <div id="add-form-openBtn">
-                <p>Pytanie otwarte</p>
-            </div>
-            <div id="add-form-closedBtn">
-                <p>Pytanie zamknięte</p>
-            </div>
-            <div id="add-form-numberBtn">
-                <p>Pytanie liczbowe</p>
-            </div>
-        </div>
-        <div id="addForm-form-content"></div>
-        <div id="addForm-form-buttons">
-            <button name="back" id="addForm-form-buttons-back">Wyczyść</button>
-            <button name="apply" id="addForm-form-buttons-apply">Stwórz</button>
-        </div>
-    </div>
-</section>
-
-<section class="section" id="addUserToForm">
-    <div class="sectionBack">
-        <div>
-            <div class="sectionBack-content">
-                <img src="../icons/arrow-left.png" alt="Back" />
-                <span>Powrót</span>
-            </div>
-        </div>
-    </div>
-
-    <h2>Dodawanie użytkownika do formularza</h2>
-
-    <div id="addUserToForm-content">
-        <header>
-            <div class="addUserToForm-headerPost">Użytkownicy</div>
-            <div class="addUserToForm-headerPost">Formularz</div>
-            <div id="addUserToForm-headerLine"></div>
-        </header>
-        <div id="addUserToForm-main">
-            <div class="addUserToForm-main-post" id="addUserToForm-user">
-                <h4>Wybierz użytkowników</h4>
-                <div class="addUserToForm-list" id="addUserToForm-users">
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-userInput" data-user="0" type="checkbox" id="addUserToForm-users-0" />
-                        <label for="addUserToForm-users-0">
-                            Chrzan
-                        </label>
+        <div id="addUserToForm-content">
+            <header>
+                <div class="addUserToForm-headerPost">Użytkownicy</div>
+                <div class="addUserToForm-headerPost">Formularz</div>
+                <div id="addUserToForm-headerLine"></div>
+            </header>
+            <div id="addUserToForm-main">
+                <div class="addUserToForm-main-post" id="addUserToForm-user">
+                    <h4>Wybierz użytkowników</h4>
+                    <div class="addUserToForm-list" id="addUserToForm-users">
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-userInput" data-user="0" type="checkbox"
+                                id="addUserToForm-users-0" />
+                            <label for="addUserToForm-users-0">
+                                Chrzan
+                            </label>
+                        </div>
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-userInput" data-user="1" type="checkbox"
+                                id="addUserToForm-users-1" />
+                            <label for="addUserToForm-users-1">
+                                Musi
+                            </label>
+                        </div>
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-userInput" data-user="2" type="checkbox"
+                                id="addUserToForm-users-2" />
+                            <label for="addUserToForm-users-2">
+                                King
+                            </label>
+                        </div>
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-userInput" data-user="3" type="checkbox"
+                                id="addUserToForm-users-3" />
+                            <label for="addUserToForm-users-3">
+                                Pjoter
+                            </label>
+                        </div>
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-userInput" data-user="4" type="checkbox"
+                                id="addUserToForm-users-4" />
+                            <label for="addUserToForm-users-4">
+                                Lejek
+                            </label>
+                        </div>
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-userInput" data-user="5" type="checkbox"
+                                id="addUserToForm-users-5" />
+                            <label for="addUserToForm-users-5">
+                                Kajak
+                            </label>
+                        </div>
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-userInput" data-user="6" type="checkbox"
+                                id="addUserToForm-users-6" />
+                            <label for="addUserToForm-users-6">
+                                Bolec
+                            </label>
+                        </div>
                     </div>
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-userInput" data-user="1" type="checkbox" id="addUserToForm-users-1" />
-                        <label for="addUserToForm-users-1">
-                            Musi
-                        </label>
-                    </div>
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-userInput" data-user="2" type="checkbox" id="addUserToForm-users-2" />
-                        <label for="addUserToForm-users-2">
-                            King
-                        </label>
-                    </div>
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-userInput" data-user="3" type="checkbox" id="addUserToForm-users-3" />
-                        <label for="addUserToForm-users-3">
-                            Pjoter
-                        </label>
-                    </div>
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-userInput" data-user="4" type="checkbox" id="addUserToForm-users-4" />
-                        <label for="addUserToForm-users-4">
-                            Lejek
-                        </label>
-                    </div>
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-userInput" data-user="5" type="checkbox" id="addUserToForm-users-5" />
-                        <label for="addUserToForm-users-5">
-                            Kajak
-                        </label>
-                    </div>
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-userInput" data-user="6" type="checkbox" id="addUserToForm-users-6" />
-                        <label for="addUserToForm-users-6">
-                            Bolec
-                        </label>
-                    </div>
+                    <button id="addUserToForm-users-button">Dalej</button>
                 </div>
-                <button id="addUserToForm-users-button">Dalej</button>
-            </div>
-            <div class="addUserToForm-main-post" id="addUserToForm-form">
-                <h4>Wybierz formularz</h4>
-                <div class="addUserToForm-list" id="addUserToForm-forms">
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-formInput" data-form="0" name="addUserToForm-form" type="radio" id="addUserToForm-form-0" />
-                        <label for="addUserToForm-form-0">
-                            #1
-                        </label>
+                <div class="addUserToForm-main-post" id="addUserToForm-form">
+                    <h4>Wybierz formularz</h4>
+                    <div class="addUserToForm-list" id="addUserToForm-forms">
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-formInput" data-form="0" name="addUserToForm-form" type="radio"
+                                id="addUserToForm-form-0" />
+                            <label for="addUserToForm-form-0">
+                                #1
+                            </label>
+                        </div>
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-formInput" data-form="1" name="addUserToForm-form" type="radio"
+                                id="addUserToForm-form-1" />
+                            <label for="addUserToForm-form-1">
+                                #2
+                            </label>
+                        </div>
+                        <div class="addUserToForm-selectContainer">
+                            <input class="addUserToForm-formInput" data-form="2" name="addUserToForm-form" type="radio"
+                                id="addUserToForm-form-2" />
+                            <label for="addUserToForm-form-2">
+                                #3
+                            </label>
+                        </div>
                     </div>
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-formInput" data-form="1" name="addUserToForm-form" type="radio" id="addUserToForm-form-1" />
-                        <label for="addUserToForm-form-1">
-                            #2
-                        </label>
-                    </div>
-                    <div class="addUserToForm-selectContainer">
-                        <input class="addUserToForm-formInput" data-form="2" name="addUserToForm-form" type="radio" id="addUserToForm-form-2" />
-                        <label for="addUserToForm-form-2">
-                            #3
-                        </label>
-                    </div>
+                    <button id="addUserToForm-form-button">Zatwierdź</button>
                 </div>
-                <button id="addUserToForm-form-button">Zatwierdź</button>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="section" id="import">
-    <div class="sectionBack">
-        <div>
-            <div class="sectionBack-content">
-                <img src="../icons/arrow-left.png" alt="Back" />
-                <span>Powrót</span>
+    <section class="section" id="import">
+        <div class="sectionBack">
+            <div>
+                <div class="sectionBack-content">
+                    <img src="../icons/arrow-left.png" alt="Back" />
+                    <span>Powrót</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <h2>Importowanie pliku .csv</h2>
+        <h2>Importowanie pliku .csv</h2>
 
-    <div id="import-content">
-        <div>
-            <input id="import-input" type="file" />
-            <label for="import-input">
-                <img src="../icons/upload.png" alt="Upload" />
-                <div>Wybierz plik</div>
-                <p>
-                    lub<br/>
-                    przenieś plik
-                </p>
-            </label>
+        <div id="import-content">
+            <div>
+                <input id="import-input" type="file" />
+                <label for="import-input">
+                    <img src="../icons/upload.png" alt="Upload" />
+                    <div>Wybierz plik</div>
+                    <p>
+                        lub<br />
+                        przenieś plik
+                    </p>
+                </label>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<div id="dialogs"></div>
+    <div id="dialogs"></div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript" src="js/home.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/home.js"></script>
 
 </body>
+
 </html>

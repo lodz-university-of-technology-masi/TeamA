@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,129 +10,143 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <title>Dashboard</title>
 </head>
+
 <body>
 
-<header id="header">
-    <div>
-        <h1>Panel gościa</h1>
-    </div>
-    <div>
-        <div id="header-user">
-            <div id="header-user-container">
-                <span id="header-user-letter"></span>
-                <span id="header-user-label"></span>
-            </div>
-
-            <div id="header-userActions">
-                <div id="header-userActions-logout" class="header-userActions-action" title="Wyloguj">
-                    <img src="../icons/logout.png" alt="Wyloguj" />
-                    <span>Wyloguj</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<main id="panel">
-    <div>
-        <div id="pane-tile-1" class="tile" style="background:#7E6551;">
-            <img src="../icons/test.png" alt="Rozwiąż test" />
-            <span>Rozwiąż test</span>
-        </div>
-        <div id="pane-tile-2" class="tile" style="background:#D6BA73;">
-            <img src="../icons/task.png" alt="Zobacz wyniki" />
-            <span>Zobacz wyniki</span>
-        </div>
-        <div class="tile" style="background:#729B79;"></div>
-        <div class="tile" style="background:#475B63;"></div>
-        <div id="pane-tile-3" class="tile" style="background:#2E2C2F;">
-            <img src="../icons/test.png" alt="Wyloguj" />
-            <span>Wyloguj</span>
-        </div>
-    </div>
-</main>
-
-<section class="section" id="fillForm">
-    <div id="fillForm-back" class="sectionBack">
+    <header id="header">
         <div>
-            <div class="sectionBack-content">
-                <img src="../icons/arrow-left.png" alt="Powrót" />
-                <span>Powrót</span>
-            </div>
+            <h1>Panel gościa</h1>
         </div>
-    </div>
-
-    <h2>Wybierz formularz</h2>
-
-    <div id="fillForm-content">
-        <div id="fillForm-content-loading" class="loading"></div>
-
-        <div id="fillForm-list">
-            <div id="fillForm-list-table">
-                <div name="title">
-                    <div>Nr.</div>
-                    <div>Nazwa</div>
-                    <div>Pytania</div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="fillForm-fill">
-            <h3 id="fillForm-form-title"></h3>
-            <div id="fillForm-form-content"></div>
-            <div id="fillForm-form-buttons">
-                <button id="fillForm-form-buttons-finish">Zakończ</button>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section" id="checkedForm">
-    <div id="checkedForm-back" class="sectionBack">
         <div>
-            <div class="sectionBack-content">
-                <img src="../icons/arrow-left.png" alt="Powrót" />
-                <span>Powrót</span>
+            <div id="header-user">
+                <div id="header-user-container">
+                    <span id="header-user-letter"></span>
+                    <span id="header-user-label"></span>
+                </div>
+
+                <div id="header-userActions">
+                    <div id="header-userActions-logout" class="header-userActions-action" title="Wyloguj">
+                        <img src="../icons/logout.png" alt="Wyloguj" />
+                        <span>Wyloguj</span>
+                    </div>
+                </div>
+            </div>
+            <div id="header-language">
+                <input id="header-language-isPolish" type="checkbox" checked />
+                <label for="header-language-isPolish" id="header-language-content">
+                    <span>PL</span>
+                    <span>EN</span>
+                    <div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </label>
             </div>
         </div>
-    </div>
+    </header>
 
-    <h2>Wyniki</h2>
+    <main id="panel">
+        <div>
+            <div id="pane-tile-1" class="tile" style="background:#7E6551;">
+                <img src="../icons/test.png" alt="Rozwiąż test" />
+                <span>Rozwiąż test</span>
+            </div>
+            <div id="pane-tile-2" class="tile" style="background:#D6BA73;">
+                <img src="../icons/task.png" alt="Zobacz wyniki" />
+                <span>Zobacz wyniki</span>
+            </div>
+            <div class="tile" style="background:#729B79;"></div>
+            <div class="tile" style="background:#475B63;"></div>
+            <div id="pane-tile-3" class="tile" style="background:#2E2C2F;">
+                <img src="../icons/test.png" alt="Wyloguj" />
+                <span>Wyloguj</span>
+            </div>
+        </div>
+    </main>
 
-    <div id="checkedForm-content">
-        <div id="checkedForm-content-loading" class="loading"></div>
-
-        <div id="checkedForm-list">
-            <div id="checkedForm-list-table">
-                <div name="title">
-                    <div>Nr.</div>
-                    <div>Nazwa</div>
-                    <div>Sprawdzał</div>
-                    <div>Wynik</div>
-                    <div></div>
+    <section class="section" id="fillForm">
+        <div id="fillForm-back" class="sectionBack">
+            <div>
+                <div class="sectionBack-content">
+                    <img src="../icons/arrow-left.png" alt="Powrót" />
+                    <span>Powrót</span>
                 </div>
             </div>
         </div>
 
-        <div id="checkedForm-results">
-            <div id="checkedForm-results-loading">
-                <div class="loading"></div>
+        <h2>Wybierz formularz</h2>
+
+        <div id="fillForm-content">
+            <div id="fillForm-content-loading" class="loading"></div>
+
+            <div id="fillForm-list">
+                <div id="fillForm-list-table">
+                    <div name="title">
+                        <div>Nr.</div>
+                        <div>Nazwa</div>
+                        <div>Pytania</div>
+                        <div></div>
+                    </div>
+                </div>
             </div>
-            <div id="checkedForm-results-container">
-                <h3 id="checkedForm-form-title"></h3>
-                <div id="checkedForm-form-content"></div>
-                <div id="checkedForm-form-buttons">
-                    <button id="checkedForm-form-buttons-back">Powrót</button>
+
+            <div id="fillForm-fill">
+                <h3 id="fillForm-form-title"></h3>
+                <div id="fillForm-form-content"></div>
+                <div id="fillForm-form-buttons">
+                    <button id="fillForm-form-buttons-finish">Zakończ</button>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<div id="dialogs"></div>
+    <section class="section" id="checkedForm">
+        <div id="checkedForm-back" class="sectionBack">
+            <div>
+                <div class="sectionBack-content">
+                    <img src="../icons/arrow-left.png" alt="Powrót" />
+                    <span>Powrót</span>
+                </div>
+            </div>
+        </div>
 
-<script type="text/javascript" src="js/guest.js"></script>
+        <h2>Wyniki</h2>
+
+        <div id="checkedForm-content">
+            <div id="checkedForm-content-loading" class="loading"></div>
+
+            <div id="checkedForm-list">
+                <div id="checkedForm-list-table">
+                    <div name="title">
+                        <div>Nr.</div>
+                        <div>Nazwa</div>
+                        <div>Sprawdzał</div>
+                        <div>Wynik</div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="checkedForm-results">
+                <div id="checkedForm-results-loading">
+                    <div class="loading"></div>
+                </div>
+                <div id="checkedForm-results-container">
+                    <h3 id="checkedForm-form-title"></h3>
+                    <div id="checkedForm-form-content"></div>
+                    <div id="checkedForm-form-buttons">
+                        <button id="checkedForm-form-buttons-back">Powrót</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="dialogs"></div>
+
+    <script type="text/javascript" src="js/guest.js"></script>
 
 </body>
+
 </html>
