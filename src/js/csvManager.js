@@ -100,7 +100,7 @@ function correctNumberOfQuestionsChaaracters(question) {
     if (question.length < 250 && question.length > 0) {
         return true;
     }
-    Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma więcej niż 250 znaków');
+    Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma więcej niż 250 znaków, lub jest puste');
     return false;
 }
 
