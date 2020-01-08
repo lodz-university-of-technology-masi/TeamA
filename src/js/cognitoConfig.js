@@ -6,8 +6,8 @@ const Dialogs = require('./common/dialogs');
 
 const cognitoConfig = {
     cognito: {
-        userPoolId: 'us-east-1_lS2tMePyI',
-        userPoolClientId: '4k3to3pjtidq5qvnglpdvmtvfc',
+        userPoolId: 'us-east-1_uO80M34RK',
+        userPoolClientId: '4ic0bopkrdbm28ec09ln8to5o8',
         region: 'us-east-1'
     }
 };
@@ -18,6 +18,8 @@ const poolData = {
 };
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+exports.getUserPool = () => userPool;
 
 exports.signOut = () => {
     userPool.getCurrentUser().signOut();
