@@ -186,7 +186,7 @@ const AddForm = {
                 questions.push(question);
             }
         }
-        const formToBase = { title: document.getElementById('addForm-form-title').children[0].value, questions };
+        const formToBase = { title: document.getElementById('addForm-form-title').children[0].value, questions, assignedUsers: [] };
         const validationData = Validate.validateForm(formToBase);
         if (validationData.validated) {
             sendFormToDatabase(formToBase);

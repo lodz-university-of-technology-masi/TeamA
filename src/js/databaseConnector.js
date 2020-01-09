@@ -14,7 +14,8 @@ exports.sendFormToDatabase = dataToBase => {
         },
         data: JSON.stringify({
             title: dataToBase.title,
-            questions: JSON.stringify(dataToBase.questions)
+            questions: JSON.stringify(dataToBase.questions),
+            assignedUsers: JSON.stringify(dataToBase.assignedUsers)
         }),
         contentType: 'application/json',
         success: () => {
@@ -75,6 +76,33 @@ exports.removeFormFromDatabase = formId => {
                 'Twój formularz został pomyślnie usunięty z bazy danych.'
             );
         },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error(
+                'Error requesting ride: ',
+                textStatus,
+                ', Details: ',
+                errorThrown
+            );
+            Dialogs.alert(
+                'Nie usunięto formularza z bazy danych',
+                'Podczas usuwania wystąpił nieoczekiwany błąd.'
+            );
+        }
+    });
+};
+
+exports.removeFormFromDatabaseWithoutWarning = formId => {
+    $.ajax({
+        method: 'DELETE',
+        url: `${invokeUrl}/-test`,
+        headers: {
+            Authorization: authMetod
+        },
+        data: JSON.stringify({
+            id: formId
+        }),
+        contentType: 'application/json',
+        success: () => {},
         error: (jqXHR, textStatus, errorThrown) => {
             console.error(
                 'Error requesting ride: ',
@@ -238,6 +266,25 @@ exports.getUsers = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
         url: 'https://iqxvh51xp7.execute-api.us-east-1.amazonaws.com/CognitoStage/user',
+        headers: {
+            Authorization: authMetod
+        },
+        contentType: 'application/json',
+        success: resp => resolve(resp.body),
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            Dialogs.alert(
+                'Nie pobrano listy użytkowników',
+                'Podczas pobierania userów wystąpił nieoczekiwany błąd.'
+            );
+        }
+    });
+});
+
+exports.getRole = () => new Promise(resolve => {
+    $.ajax({
+        method: 'GET',
+        url: 'https://iqxvh51xp7.execute-api.us-east-1.amazonaws.com/CognitoStage/role',
         headers: {
             Authorization: authMetod
         },
