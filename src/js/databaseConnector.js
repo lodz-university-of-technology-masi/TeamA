@@ -237,7 +237,7 @@ exports.removeResultFromDatabase = resultId => {
 exports.getUsers = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: `${invokeUrl}/user`,
+        url: 'https://iqxvh51xp7.execute-api.us-east-1.amazonaws.com/CognitoStage/user',
         headers: {
             Authorization: authMetod
         },
