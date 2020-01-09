@@ -1,5 +1,6 @@
 import '../html/login.html';
 import '../scss/login.scss';
+import { getUserPool } from './cognitoConfig';
 
 global.fetch = require('node-fetch');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
@@ -103,9 +104,8 @@ const SignIn = {
         window.location.href = 'home.html';
     },
 
-    failure(err) {
+    failure() {
         SignIn.stopQueue('Wrong credentials');
-        console.log(err);
         $id('button-signin').style.background = '#ff0000';
     },
 
@@ -163,7 +163,8 @@ const SignUp = {
         attributeList.push(attributeRole);
         attributeList.push(attributeNickname);
 
-        Cognito.signUp(
+        const userPool = getUserPool();
+        userPool.signUp(
             this.email,
             password,
             attributeList,

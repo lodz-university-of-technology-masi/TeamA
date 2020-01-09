@@ -1,4 +1,4 @@
-package lambda.others;
+package lambda.templates;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -12,7 +12,9 @@ import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 
 import cognito.Authorizer;
 import exceptions.BodyException;
+import exceptions.RequestException;
 import interfaces.Deletable;
+import lambda.others.AWSConsts;
 import lambda.structures.ServerlessOutput;
 
 public class DeleteById {
@@ -22,22 +24,21 @@ public class DeleteById {
 	
 	static {
 		dynamoDB = AmazonDynamoDBClientBuilder.standard()
-		                .withRegion("us-east-1")
+		                .withRegion(AWSConsts.AWS_DYNAMO_REGION)
 		                .build();
 		dynamo = new DynamoDB(dynamoDB);
 	}
 	
 	public ServerlessOutput output(Deletable input, String tableName, String tableKey, String... roles) {
 		
-		Authorizer auth = new Authorizer(input.getAuthorization());
-		
-        ServerlessOutput output = new ServerlessOutput();
+        ServerlessOutput output = new ServerlessOutput()
+        		.withStandardHeaders("DELETE");
         
         DeleteItemSpec spec = new DeleteItemSpec();
 
         try {
         	
-        	auth.verifyRole(roles);
+        	new Authorizer(input.getAuthorization()).verifyRole(roles);
         	
             if(input.getId() == null)
             	throw new BodyException("id=null");
@@ -50,8 +51,8 @@ public class DeleteById {
             output.setStatusCode(200);
             output.setBody("Item with id=" + input.getId() + " deleted");
             
-        } catch (BodyException be) {
-        	output.requestRejected(be.getErr());
+        } catch (RequestException re) {
+        	output.requestRejected(re.getErr());
         } catch (Exception e) {
             output.setStatusCode(500);
             StringWriter sw = new StringWriter();

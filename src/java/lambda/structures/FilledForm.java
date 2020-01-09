@@ -6,7 +6,9 @@ import java.util.UUID;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
-public class FilledForm extends Form {
+import interfaces.Allable;
+
+public class FilledForm extends Form implements Allable {
 	
 	private String owner;
 

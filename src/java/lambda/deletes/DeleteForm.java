@@ -2,9 +2,10 @@ package lambda.deletes;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import lambda.others.DeleteById;
+
 import lambda.structures.Form;
 import lambda.structures.ServerlessOutput;
+import lambda.templates.DeleteById;
 
 public class DeleteForm implements RequestHandler<Form, ServerlessOutput>{
 
