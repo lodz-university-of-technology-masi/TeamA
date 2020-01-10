@@ -2,7 +2,7 @@ const startPng = require('../../icons/play.png');
 
 const { $id } = require('../utils');
 const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
-const { getFormsFromDatabase, sendFilledFormToDatabase } = require('../databaseConnector');
+const { getUserFormsFromDatabase, sendFilledFormToDatabase } = require('../databaseConnector');
 const { Validate } = require('../validator');
 const Dialogs = require('../common/dialogs');
 
@@ -13,7 +13,7 @@ const FillForm = {
     init() {
         this.initialized = true;
 
-        Promise.resolve(getFormsFromDatabase())
+        Promise.resolve(getUserFormsFromDatabase())
             .then(str => {
                 const forms = JSON.parse(str);
 
