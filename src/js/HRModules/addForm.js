@@ -7,9 +7,38 @@ const {
     createNumberQuestion
 } = require('../HRModules/newForm');
 const { Validate } = require('../validator');
+const { getOneSynonym, getSynonyms } = require('../common/yandex');
 
 const AddForm = {
     questions: [],
+
+    findSynonym() {
+        const list = document.getElementsByTagName('input');
+        let selection = '';
+        for (const l of list) {
+            selection = l.value.slice(l.selectionStart, l.selectionEnd);
+            if (selection) break;
+        }
+        if (selection != null) {
+            console.log('sel: ', selection.toString());
+        }
+
+        Promise.resolve(getOneSynonym(selection))
+            .then(str => {
+                const firstSynonym = str[0].tr[0].text;
+                Promise.resolve(getSynonyms(firstSynonym))
+                    .then(tab => {
+                        console.log('tablica: ', tab[1].tr[0].syn);
+                    });
+            });
+        // Promise.resolve(getLanguages()).then(str => {
+        //     const forms = JSON.parse(str);
+        //     for (const form of forms) {
+        //         console.log(form);
+        //     }
+        // });
+    },
+
 
     removeQuestion(question) {
         const myIndex = this.questions.indexOf(question);
@@ -203,6 +232,11 @@ const AddForm = {
     },
 
     assignEventListeners() {
+        $id('addForm-synonym-button')
+            .addEventListener('click', () => {
+                AddForm.findSynonym();
+            });
+
         $id('add-form-openBtn')
             .addEventListener('click', () => {
                 AddForm.addOpenQuestion();

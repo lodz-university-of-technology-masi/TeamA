@@ -106,11 +106,11 @@ function correctNumberOfQuestionsChaaracters(question) {
 
 
 function checkAmoutOfAnswers(answersTab, numberOfAnswers) {
-    if (answersTab.length === numberOfAnswers || (numberOfAnswers === '|' && answersTab.length === 0)) {
+    if (answersTab.length === Number(numberOfAnswers) || (numberOfAnswers === '|' && answersTab.length === 0)) {
         return true;
     }
     Dialogs.alert('Błąd walidacji pliku', 'Faktyczna ilość odpowiedzi nie równa się podanej w treści pytania.');
-    return true;
+    return false;
 }
 
 function checkIfTitleAlreadyExists(forms, fileName) {
