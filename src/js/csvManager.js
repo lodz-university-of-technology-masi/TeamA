@@ -159,6 +159,7 @@ function checkFormTitle(fileName) {
                 for (const line of lines) {
                     const obj = {};
                     const currentLine = line.split(';').filter(el => (el !== ''));
+                    if (currentLine[0] === null || currentLine[0] === undefined) continue;
                     if (currentLine[0].trim().length === 0) continue;
                     if (!checkSemicolons(currentLine) || !checkQuotes(currentLine)) return;
                     const tab = [];
