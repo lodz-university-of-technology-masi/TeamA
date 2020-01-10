@@ -59,6 +59,26 @@ exports.getFormsFromDatabase = () => new Promise((resolve, reject) => {
     });
 });
 
+exports.getUserFormsFromDatabase = () => new Promise((resolve, reject) => {
+    $.ajax({
+        method: 'GET',
+        url: `${invokeUrl}/-test/my`,
+        headers: {
+            Authorization: authMetod
+        },
+        contentType: 'application/json',
+        success: resp => resolve(resp.body),
+        error: (jqXHR, textStatus, errorThrown) => {
+            reject();
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            Dialogs.alert(
+                'Nie pobrano z bazy danych',
+                'Podczas pobierania listy formularzy wystąpił nieoczekiwany błąd.'
+            );
+        }
+    });
+});
+
 exports.removeFormFromDatabase = formId => {
     $.ajax({
         method: 'DELETE',
