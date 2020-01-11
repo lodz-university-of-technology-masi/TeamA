@@ -17,8 +17,8 @@ exports.getOneSynonym = text => new Promise((resolve, reject) => {
             reject();
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             Dialogs.alert(
-                'Nie pobrano z bazy danych',
-                'Podczas pobierania listy formularzy wystąpił nieoczekiwany błąd.'
+                'Nie pobrano z bazy synonimów',
+                'Podczas pobierania listy synonimów wystąpił nieoczekiwany błąd.'
             );
         }
     });
@@ -37,8 +37,8 @@ exports.getSynonyms = text => new Promise((resolve, reject) => {
             reject();
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             Dialogs.alert(
-                'Nie pobrano z bazy danych',
-                'Podczas pobierania listy formularzy wystąpił nieoczekiwany błąd.'
+                'Nie pobrano z bazy synonimów',
+                'Podczas pobierania listy synonimów wystąpił nieoczekiwany błąd.'
             );
         }
     });

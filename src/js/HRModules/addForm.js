@@ -14,7 +14,6 @@ const AddForm = {
 
     findSynonym() {
         const list = document.getElementsByTagName('input');
-        console.log('inputs: ', list);
         let selection = '';
         for (const l of list) {
             selection = l.value.slice(l.selectionStart, l.selectionEnd);
@@ -26,23 +25,19 @@ const AddForm = {
 
         Promise.resolve(getOneSynonym(selection))
             .then(str => {
-                console.log('find first syninym', str);
+                if (str.length === 0) {
+                    Dialogs.alert('Bład', 'Nie ma takiego słowa w bazie');
+                    return;
+                }
                 const firstSynonym = str[0].tr[0].text;
                 Promise.resolve(getSynonyms(firstSynonym))
                     .then(tab => {
-                        // const returnTab = tab[1].tr[0].syn;
                         let synonyms = '';
                         for (speech_parts of tab) {
                             for (obj of speech_parts.tr[0].syn) {
                                 synonyms += obj.text + ', '
                             }
-                            // console.log('s: ', speech_parts.tr[0].syn);
                         }
-                        
-                        // console.log('tablica: ', tab);
-                        // for (obj of returnTab) {
-                        //     synonyms+= obj.text + ', '
-                        // }
                         Dialogs.alert('Synonimy : ', synonyms)
                     });
             });
