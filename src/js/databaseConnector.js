@@ -14,7 +14,8 @@ exports.sendFormToDatabase = dataToBase => {
         },
         data: JSON.stringify({
             title: dataToBase.title,
-            questions: JSON.stringify(dataToBase.questions)
+            questions: JSON.stringify(dataToBase.questions),
+            assignedUsers: JSON.stringify(dataToBase.assignedUsers)
         }),
         contentType: 'application/json',
         success: () => {

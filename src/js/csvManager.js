@@ -140,7 +140,8 @@ function checkFormTitle(fileName) {
 
             const output = {
                 title: fileName,
-                questions: []
+                questions: [],
+                assignedUsers: []
             };
 
             reader.onload = () => {
