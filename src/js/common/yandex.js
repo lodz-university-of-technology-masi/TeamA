@@ -53,7 +53,7 @@ exports.getLanguages = () => new Promise((resolve, reject) => {
         },
         contentType: 'application/json',
         // eslint-disable-next-line no-undef
-        success: resp => resolve(resp.body),
+        success: resp => resolve(resp),
         error: (jqXHR, textStatus, errorThrown) => {
             // eslint-disable-next-line no-undef
             reject();

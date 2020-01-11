@@ -7,13 +7,14 @@ const {
     createNumberQuestion
 } = require('../HRModules/newForm');
 const { Validate } = require('../validator');
-const { getOneSynonym, getSynonyms } = require('../common/yandex');
+const { getOneSynonym, getSynonyms, getLanguages } = require('../common/yandex');
 
 const AddForm = {
     questions: [],
 
     findSynonym() {
         const list = document.getElementsByTagName('input');
+        console.log('inputs: ', list);
         let selection = '';
         for (const l of list) {
             selection = l.value.slice(l.selectionStart, l.selectionEnd);
@@ -25,18 +26,35 @@ const AddForm = {
 
         Promise.resolve(getOneSynonym(selection))
             .then(str => {
+                console.log('find first syninym', str);
                 const firstSynonym = str[0].tr[0].text;
                 Promise.resolve(getSynonyms(firstSynonym))
                     .then(tab => {
-                        console.log('tablica: ', tab[1].tr[0].syn);
+                        // const returnTab = tab[1].tr[0].syn;
+                        let synonyms = '';
+                        for (speech_parts of tab) {
+                            for (obj of speech_parts.tr[0].syn) {
+                                synonyms += obj.text + ', '
+                            }
+                            // console.log('s: ', speech_parts.tr[0].syn);
+                        }
+                        
+                        // console.log('tablica: ', tab);
+                        // for (obj of returnTab) {
+                        //     synonyms+= obj.text + ', '
+                        // }
+                        Dialogs.alert('Synonimy : ', synonyms)
                     });
             });
+
         // Promise.resolve(getLanguages()).then(str => {
-        //     const forms = JSON.parse(str);
-        //     for (const form of forms) {
-        //         console.log(form);
-        //     }
+        //     console.log('languages: ', str);
         // });
+
+        // Promise.resolve(getSynonyms(selection))
+        //     .then(str => {
+        //         console.log('wszystko: ', str);
+        //     });
     },
 
 
