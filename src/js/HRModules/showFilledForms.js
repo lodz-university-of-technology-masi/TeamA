@@ -16,6 +16,7 @@ const {
 
 const ShowFilledForms = {
     points: [],
+    optionalComments: [],
     initialized: false,
     owner: '',
     hrEmployer: '',
@@ -79,6 +80,7 @@ const ShowFilledForms = {
 
     show(which) {
         this.points = [];
+        this.optionalComments = [];
         this.owner = which.owner;
         this.formTitle = which.title;
         $id('showFilledForms-list').style.display = 'none';
@@ -208,11 +210,16 @@ const ShowFilledForms = {
                 'Zakończenie',
                 'Czy na pewno zakończyć sprawdzanie?',
                 () => {
+                    const commentsLabels = document.getElementsByClassName('evaluation-comment');
+                    for (let i = 0; i < commentsLabels.length; i++) {
+                        this.optionalComments.push(commentsLabels[i].value);
+                    }
                     const dataToBackend = {
                         formTitle: this.formTitle,
                         owner: this.owner,
                         hrEmployer: this.hrEmployer,
-                        points: this.points
+                        points: this.points,
+                        optionalComments: this.optionalComments
                     };
                     sendResultToDatabase(dataToBackend);
                     this.showAll();
