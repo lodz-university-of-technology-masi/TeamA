@@ -43,25 +43,3 @@ exports.getSynonyms = text => new Promise((resolve, reject) => {
         }
     });
 });
-
-exports.getLanguages = () => new Promise((resolve, reject) => {
-    $.ajax({
-        method: 'GET',
-        url: `https://dictionary.yandex.net/api/v1/dicservice.json/getLangs?key=${apiKey}`,
-        headers: {
-            Authorization: authMetod,
-        },
-        contentType: 'application/json',
-        // eslint-disable-next-line no-undef
-        success: resp => resolve(resp),
-        error: (jqXHR, textStatus, errorThrown) => {
-            // eslint-disable-next-line no-undef
-            reject();
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            Dialogs.alert(
-                'cos nie dziala',
-                'ale nw co'
-            );
-        }
-    });
-});

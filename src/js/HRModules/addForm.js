@@ -9,21 +9,22 @@ const {
 const { Validate } = require('../validator');
 const { getOneSynonym, getSynonyms, getLanguages } = require('../common/yandex');
 
+let focused;
+
+
 const AddForm = {
     questions: [],
 
-    findSynonym() {
-        const list = document.getElementsByTagName('input');
-        let selection = '';
-        for (const l of list) {
-            selection = l.value.slice(l.selectionStart, l.selectionEnd);
-            if (selection) break;
+    getText(elem) {
+        if(elem.tagName === "INPUT" && elem.type === "text") {
+            return elem.value.substring(elem.selectionStart,
+                    elem.selectionEnd);
         }
-        if (selection != null) {
-            console.log('sel: ', selection.toString());
-        }
+        return null;
+    },
 
-        Promise.resolve(getOneSynonym(selection))
+    findSynonym() {
+        Promise.resolve(getOneSynonym(focused))
             .then(str => {
                 if (str.length === 0) {
                     Dialogs.alert('Bład', 'Nie ma takiego słowa w bazie');
@@ -34,22 +35,17 @@ const AddForm = {
                     .then(tab => {
                         let synonyms = '';
                         for (speech_parts of tab) {
-                            for (obj of speech_parts.tr[0].syn) {
-                                synonyms += obj.text + ', '
+                            if (speech_parts.tr[0].syn) {
+                                for (obj of speech_parts.tr[0].syn) {
+                                    synonyms += obj.text + ', '
+                                }
                             }
+                            else Dialogs.alert('Błąd', 'Nasza baza nie ma synonimów dla tego słowa');
                         }
-                        Dialogs.alert('Synonimy : ', synonyms)
+                        if (synonyms) Dialogs.alert('Synonimy : ', synonyms);
+                        else Dialogs.alert('Błąd', 'Nasza baza nie ma synonimów dla tego słowa');
                     });
             });
-
-        // Promise.resolve(getLanguages()).then(str => {
-        //     console.log('languages: ', str);
-        // });
-
-        // Promise.resolve(getSynonyms(selection))
-        //     .then(str => {
-        //         console.log('wszystko: ', str);
-        //     });
     },
 
 
@@ -244,10 +240,15 @@ const AddForm = {
         }
     },
 
+  
+
+    
+
     assignEventListeners() {
         $id('addForm-synonym-button')
             .addEventListener('click', () => {
                 AddForm.findSynonym();
+                focused = null;
             });
 
         $id('add-form-openBtn')
@@ -276,5 +277,17 @@ const AddForm = {
             });
     }
 };
+
+
+exports.initAddForm = () => {
+    setInterval(function () {
+        if (document.activeElement.tagName !== 'BUTTON') {
+            let temp = AddForm.getText(document.activeElement);
+            if (temp) {
+                focused = temp;
+            }
+        }
+    }, 100);
+}
 
 exports.AddForm = AddForm;
