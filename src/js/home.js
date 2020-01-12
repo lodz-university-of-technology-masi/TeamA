@@ -2,7 +2,7 @@ import '../scss/home.scss';
 import '../html/home.html';
 
 const { $id } = require('./utils');
-const { AddForm } = require('./HRModules/addForm');
+const { AddForm, initAddForm } = require('./HRModules/addForm');
 const { AddUserToForm } = require('./HRModules/addUserToForm');
 const { ShowForms } = require('./HRModules/showForms');
 const { ShowFilledForms } = require('./HRModules/showFilledForms');
@@ -75,6 +75,7 @@ window.onload = () => {
     $id('panel-btn-1-1')
         .addEventListener('click', () => {
             // AddForm.open(); Na wszelki zostawiam
+            initAddForm();
             SectionManager.choose('addForm');
         });
 

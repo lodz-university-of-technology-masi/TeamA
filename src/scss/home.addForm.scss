@@ -17,7 +17,7 @@
         text-overflow: ellipsis;
 
         > input {
-            width: calc(100% - 40px);
+            width: calc(100% - 200px);
             height: calc(100% - 21px);
             padding: 5px 0;
             margin: 5px 20px;
@@ -28,6 +28,23 @@
             border: none;
 
             &::placeholder {
+                color: #fff;
+            }
+        }
+        > button {
+            text-align: center;
+            margin:0 auto;
+            padding: 7px 7px;
+            font-size: 0.9em;
+            font-family: 'Open Sans', sans-serif;
+            background: white;
+            border-radius: 10px;
+            border:solid 2px #39557C;
+            color: #39557C;
+            cursor: pointer;
+
+            &:hover {
+                background: #7397c9;
                 color: #fff;
             }
         }
