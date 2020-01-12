@@ -1,5 +1,6 @@
 import '../scss/guest.scss';
 import '../html/guest.html';
+import '../favicon.ico';
 
 const { FillForm } = require('./guestModules/fillForm');
 const { CheckedForm } = require('./guestModules/checkedForm');

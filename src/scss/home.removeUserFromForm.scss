@@ -1,0 +1,126 @@
+#removeUserFromForm-content {
+    width: calc(100% - 12px - 40px);
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 0 5px 1px #ccc;
+    overflow: auto;
+
+    > header {
+        position: relative;
+        width:100%;
+        height:48px;
+        display: flex;
+        border-bottom: solid 2px #ccc;
+    }
+}
+        .removeUserFromForm-headerPost {
+            flex:1 1;
+            text-align: center;
+            line-height: 48px;
+            font-size: 1em;
+            color: #666;
+            font-family: 'Open Sans', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            cursor: pointer;
+
+            &[name="chosen"] {
+                color: #39557C;
+            }
+
+            &:hover {
+                background: #eee;
+            }
+        }
+
+        #removeUserFromForm-headerLine {
+            position: absolute;
+            bottom: -2px;
+            left:0px;
+            width: 33%;
+            height:2px;
+            background: #39557C;
+
+            transition: left 0.3s;
+        }
+    #removeUserFromForm-main {
+        width:100%;
+    }
+        .removeUserFromForm-main-post {
+            display: none;
+            width:calc(100% - 40px);
+            padding: 10px 20px;
+            overflow: hidden;
+
+             > h4 {
+                font-size: 1.4em;
+                font-family: 'Open Sans', sans-serif;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            > p {
+                width:80%;
+                margin: 0 auto;
+                font-size: 1em;
+                font-family: 'Open Sans', sans-serif;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            > button {
+                border-radius: 10px;
+                padding: 8px 20px;
+                background: #39557C;
+                color: #fff;
+                font-size: 0.9em;
+                font-family: 'Open Sans', sans-serif;
+                border:none;
+
+                &[name="inactive"] {
+                    background: #ccc;
+                    cursor: not-allowed;
+                }
+            }
+
+            &:first-of-type > button,
+            &:nth-of-type(2) > button {
+                float:right;
+            }
+        }
+            .removeUserFromForm-list {
+                width:100%;
+                max-height:300px;
+                margin-bottom: 15px;
+                overflow: auto;
+            }
+                .removeUserFromForm-selectContainer {
+                    width:100%;
+                    height:50px;
+
+                    > input {
+                        display: none;
+
+                        &:checked ~ label {
+                            background: #39557C;
+                            color: #fff;
+                        }
+                    }
+
+                    > label {
+                        width:100%;
+                        height:100%;
+                        font-size: 0.9em;
+                        line-height: 50px;
+                        text-indent: 15px;
+                        font-family: 'Open Sans', sans-serif;
+                        display: block;
+                        cursor: pointer;
+
+                        &:nth-of-type(even) {
+                            background: #eee;
+                        }
+                    }
+                }

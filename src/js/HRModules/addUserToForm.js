@@ -66,8 +66,6 @@ const AddUserToForm = {
         });
 
         this.initialized = true;
-
-        this.chooseSection(0);
     },
 
     open() {
