@@ -9,12 +9,24 @@ const {
     createClosedQuestion,
     createNumberQuestion
 } = require('../common/form');
+const {
+    editOpenQuestion,
+    editClosedQuestion,
+    editNumberQuestion,
+    removeQuestion,
+    overWriteForm
+} = require('./editForm');
+
 const Dialogs = require('../common/dialogs');
-const { getFormsFromDatabase, removeFormFromDatabase } = require('../databaseConnector');
+
+const {
+    getFormsFromDatabase, removeFormFromDatabase
+} = require('../databaseConnector');
 const csvManager = require('../csvManager');
 
 const ShowForms = {
     initialized: false,
+    form: null,
 
     init() {
         this.initialized = true;
@@ -42,6 +54,7 @@ const ShowForms = {
                 img.src = eyePng;
                 img.onclick = () => {
                     this.show(form);
+                    this.form = form;
                 };
                 child.appendChild(img);
                 div.appendChild(child);
@@ -49,6 +62,10 @@ const ShowForms = {
                 child = document.createElement('div');
                 img = new Image();
                 img.src = pencilPng;
+                img.onclick = () => {
+                    this.edit(form);
+                    this.form = form;
+                };
                 child.appendChild(img);
                 div.appendChild(child);
 
@@ -124,9 +141,47 @@ const ShowForms = {
         }
     },
 
+    edit(which) {
+        $id('showForms-list').style.display = 'none';
+        $id('showForms-edit').style.display = 'block';
+
+        $id('showForms-edit-title').innerHTML = which.title;
+        $id('showForms-edit-content').innerHTML = '';
+
+        for (const question of which.questions) {
+            if (question.type.toLowerCase() === 'o') {
+                $id('showForms-edit-content').appendChild(
+                    editOpenQuestion(question.number, question.content, () => {
+                        removeQuestion(question);
+                    })
+                );
+            } else if (question.type.toLowerCase() === 'w') {
+                $id('showForms-edit-content').appendChild(
+                    editClosedQuestion(
+                        question.number,
+                        question.content,
+                        question.answers, () => {
+                            removeQuestion(question);
+                        }
+                    )
+                );
+            } else if (question.type.toLowerCase() === 'l') {
+                $id('showForms-edit-content').appendChild(
+                    editNumberQuestion(question.number, question.content, () => {
+                        removeQuestion(question);
+                    })
+                );
+            }
+        }
+    },
+
     assignEventListeners() {
         $id('showForms-form-buttons-back').addEventListener('click', () => {
             this.showAll();
+        });
+
+        $id('showForms-edit-buttons-apply').addEventListener('click', () => {
+            overWriteForm(this.form);
         });
     }
 };

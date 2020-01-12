@@ -86,7 +86,7 @@
             }
         }
 
-    #showForms-form {
+    #showForms-form, #showForms-edit {
         display: none;
         height:100%;
 
@@ -104,7 +104,7 @@
             text-overflow: ellipsis;
         }
     }
-        #showForms-form-content {
+        #showForms-form-content, #showForms-edit-content {
             width:calc(100% - 40px);
             height:calc(100% - 20px - 73px - 50px);
             padding: 10px 20px;
@@ -112,7 +112,7 @@
         }
 
 
-    #showForms-form-buttons {
+    #showForms-form-buttons, #showForms-edit-buttons {
         width:calc(100% - 40px);
         height:50px;
         padding: 0 20px;
