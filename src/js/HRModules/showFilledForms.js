@@ -14,6 +14,8 @@ const {
     sendResultToDatabase
 } = require('../databaseConnector');
 
+const { Wait } = require('../common/wait');
+
 const ShowFilledForms = {
     points: [],
     optionalComments: [],
@@ -222,6 +224,7 @@ const ShowFilledForms = {
                         optionalComments: this.optionalComments
                     };
                     sendResultToDatabase(dataToBackend);
+                    Wait.open();
                     this.showAll();
                 }
             );

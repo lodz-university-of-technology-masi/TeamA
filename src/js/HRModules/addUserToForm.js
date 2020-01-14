@@ -3,6 +3,7 @@ const Dialog = require('../common/dialogs');
 const {
     getFormsFromDatabase, removeFormFromDatabaseWithoutWarning, sendFormToDatabase, getUsers
 } = require('../databaseConnector');
+const { Wait } = require('../common/wait');
 
 const AddUserToForm = {
     initialized: false,
@@ -128,6 +129,7 @@ const AddUserToForm = {
                         updatedForm.assignedUsers = users;
                         removeFormFromDatabaseWithoutWarning(updatedForm.formId);
                         sendFormToDatabase(updatedForm);
+                        Wait.open();
                     }
                 );
             } else {

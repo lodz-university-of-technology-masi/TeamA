@@ -1,6 +1,7 @@
 const $ = require('jquery');
 const Cookies = require('./cookies');
 const Dialogs = require('./common/dialogs');
+const { Wait } = require('./common/wait');
 
 const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage';
 const authMetod = Cookies.get('IdToken');
@@ -19,6 +20,7 @@ exports.sendFormToDatabase = dataToBase => {
         }),
         contentType: 'application/json',
         success: () => {
+            Wait.close();
             Dialogs.alert(
                 'Dodano do bazy danych',
                 'Twój formularz został dodany do bazy danych, możesz go teraz zobaczyć w oknie: "Zobacz szablony formularzy".'
@@ -91,6 +93,7 @@ exports.removeFormFromDatabase = formId => {
         }),
         contentType: 'application/json',
         success: () => {
+            Wait.close();
             Dialogs.alert(
                 'Usunięto formularz z bazy',
                 'Twój formularz został pomyślnie usunięty z bazy danych.'
@@ -152,6 +155,7 @@ exports.sendFilledFormToDatabase = filledForm => {
         }),
         contentType: 'application/json',
         success: () => {
+            Wait.close();
             Dialogs.alert(
                 'Dodano do bazy danych',
                 'Twój wypełniony formularz został dodany do bazy danych.'
@@ -239,6 +243,7 @@ exports.sendResultToDatabase = result => {
         }),
         contentType: 'application/json',
         success: () => {
+            Wait.close()
             Dialogs.alert(
                 'Dodano do bazy danych',
                 'Twój wynik został pomyślnie dodany do bazy danych.'

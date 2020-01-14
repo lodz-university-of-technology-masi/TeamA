@@ -1,8 +1,9 @@
 const { $id, $ } = require('../utils');
 const Dialog = require('../common/dialogs');
 const {
-    getFormsFromDatabase, getUsers
+    getFormsFromDatabase, removeFormFromDatabaseWithoutWarning, sendFormToDatabase,
 } = require('../databaseConnector');
+const { Wait } = require('../common/wait');
 
 const RemoveUserFromForm = {
     initialized: false,
@@ -46,31 +47,28 @@ const RemoveUserFromForm = {
     getUsersFromForm() {
         $id('removeUserFromForm-users').innerHTML = '';
 
-        // TUTAJ ZMIANA NA USERÓW Z FORMULARZA A NIE WSZYSTKICH
-        getUsers().then(str => {
-            const users = JSON.parse(str);
-            this.users = users;
+        const users = this.forms[$('.removeUserFromForm-formInput:checked')[0].dataset.form - 1].assignedUsers;
+        this.users = users;
 
-            for (const [it, user] of users.entries()) {
-                const div = document.createElement('div');
-                div.className = 'removeUserFromForm-selectContainer';
+        for (const [it, user] of users.entries()) {
+            const div = document.createElement('div');
+            div.className = 'removeUserFromForm-selectContainer';
 
-                const inputChild = document.createElement('input');
-                inputChild.className = 'removeUserFromForm-userInput';
-                inputChild.setAttribute('data-user', it + 1);
-                inputChild.type = 'checkbox';
-                inputChild.id = `removeUserFromForm-user-${it + 1}`;
-                div.appendChild(inputChild);
+            const inputChild = document.createElement('input');
+            inputChild.className = 'removeUserFromForm-userInput';
+            inputChild.setAttribute('data-user', it + 1);
+            inputChild.type = 'checkbox';
+            inputChild.id = `removeUserFromForm-user-${it + 1}`;
+            div.appendChild(inputChild);
 
-                const labelChild = document.createElement('label');
-                labelChild.setAttribute('for', `removeUserFromForm-user-${it + 1}`);
-                labelChild.innerText = user.username;
-                div.appendChild(labelChild);
+            const labelChild = document.createElement('label');
+            labelChild.setAttribute('for', `removeUserFromForm-user-${it + 1}`);
+            labelChild.innerText = user;
+            div.appendChild(labelChild);
 
 
-                $id('removeUserFromForm-users').appendChild(div);
-            }
-        });
+            $id('removeUserFromForm-users').appendChild(div);
+        }
     },
 
     open() {
@@ -151,7 +149,9 @@ const RemoveUserFromForm = {
                         const updatedForm = this.forms[idForm - 1];
                         updatedForm.assignedUsers = users;
 
-                        // TUTAJ WYSYŁANIE ŻĄDANIA
+                        removeFormFromDatabaseWithoutWarning(updatedForm.formId);
+                        sendFormToDatabase(updatedForm);
+                        Wait.open();
                     }
                 );
             } else {
