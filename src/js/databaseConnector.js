@@ -170,6 +170,25 @@ exports.sendFilledFormToDatabase = filledForm => {
 exports.getFilledFormFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
+        url: `${invokeUrl}/filledform`,
+        headers: {
+            Authorization: authMetod
+        },
+        contentType: 'application/json',
+        success: resp => resolve(resp.body),
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            Dialogs.alert(
+                'Nie pobrano listy z bazy danych',
+                'Podczas pobierania formularzy wystąpił nieoczekiwany błąd.'
+            );
+        }
+    });
+});
+
+exports.getEvaluatedFilledFormFromDatabase = () => new Promise(resolve => {
+    $.ajax({
+        method: 'GET',
         url: `${invokeUrl}/filledform/my`,
         headers: {
             Authorization: authMetod

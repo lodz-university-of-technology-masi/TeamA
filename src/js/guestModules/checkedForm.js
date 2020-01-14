@@ -2,7 +2,7 @@ const eyePng = require('../../icons/eye.png');
 
 const { $id } = require('../utils');
 const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
-const { getResultFromDatabase, getFilledFormFromDatabase } = require('../databaseConnector');
+const { getResultFromDatabase, getEvaluatedFilledFormFromDatabase } = require('../databaseConnector');
 
 const CheckedForm = {
     initialized: false,
@@ -77,7 +77,7 @@ const CheckedForm = {
         $id('checkedForm-results-loading').style.display = 'block';
         $id('checkedForm-results-container').style.display = 'none';
 
-        getFilledFormFromDatabase().then(str => {
+        getEvaluatedFilledFormFromDatabase().then(str => {
             const forms = JSON.parse(str);
 
             let form = '';
