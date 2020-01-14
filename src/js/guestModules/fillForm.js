@@ -5,6 +5,7 @@ const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = requi
 const { getUserFormsFromDatabase, sendFilledFormToDatabase } = require('../databaseConnector');
 const { Validate } = require('../validator');
 const Dialogs = require('../common/dialogs');
+const { Wait } = require('../common/wait');
 
 const FillForm = {
     initialized: false,
@@ -129,6 +130,7 @@ const FillForm = {
         const validResult = Validate.validateFilledForm(formToBase);
         if (validResult.validated) {
             sendFilledFormToDatabase(formToBase);
+            Wait.open();
         } else {
             let warning = 'Uwagi ';
             for (const validateWarning in validResult.warnings) {
