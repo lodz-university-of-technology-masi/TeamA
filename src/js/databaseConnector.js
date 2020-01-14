@@ -186,6 +186,25 @@ exports.getFilledFormFromDatabase = () => new Promise(resolve => {
     });
 });
 
+exports.getEvaluatedFilledFormFromDatabase = () => new Promise(resolve => {
+    $.ajax({
+        method: 'GET',
+        url: `${invokeUrl}/filledform/my`,
+        headers: {
+            Authorization: authMetod
+        },
+        contentType: 'application/json',
+        success: resp => resolve(resp.body),
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            Dialogs.alert(
+                'Nie pobrano listy z bazy danych',
+                'Podczas pobierania formularzy wystąpił nieoczekiwany błąd.'
+            );
+        }
+    });
+});
+
 exports.removeFilledFormFromDatabase = filledFormId => {
     $.ajax({
         method: 'DELETE',
@@ -243,7 +262,7 @@ exports.sendResultToDatabase = result => {
 exports.getResultFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: `${invokeUrl}/results`,
+        url: `${invokeUrl}/results/my`,
         headers: {
             Authorization: authMetod
         },
