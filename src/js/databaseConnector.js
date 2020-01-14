@@ -170,7 +170,7 @@ exports.sendFilledFormToDatabase = filledForm => {
 exports.getFilledFormFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: `${invokeUrl}/filledform`,
+        url: `${invokeUrl}/filledform/my`,
         headers: {
             Authorization: authMetod
         },
@@ -243,7 +243,7 @@ exports.sendResultToDatabase = result => {
 exports.getResultFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: `${invokeUrl}/results`,
+        url: `${invokeUrl}/results/my`,
         headers: {
             Authorization: authMetod
         },
