@@ -7,6 +7,7 @@ const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const { $id } = require('./utils');
 const Cookies = require('./cookies');
 const Cognito = require('./cognitoConfig');
+const { getRole } = require('./databaseConnector');
 
 const FormManager = {
     current: null,
@@ -100,8 +101,12 @@ const SignIn = {
         SignIn.stopQueue('Success');
         Cookies.set('user', SignIn.email.split('@')[0], 365);
         Cookies.set('IdToken', result.getIdToken().getJwtToken(), 365);
-
-        window.location.href = 'home.html';
+        getRole().then(resultFromDatabase => {
+            if (resultFromDatabase.toString() === 'guest')
+                window.location.href = 'guest.html';
+            else
+                window.location.href = 'home.html';
+        });
     },
 
     failure() {
