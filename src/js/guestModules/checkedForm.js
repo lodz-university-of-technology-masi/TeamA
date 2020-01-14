@@ -62,7 +62,8 @@ const CheckedForm = {
     open() {
         if (!this.initialized)
             this.init();
-        this.showAll();
+        else
+            this.showAll();
     },
 
     showAll() {
@@ -90,6 +91,8 @@ const CheckedForm = {
             $id('checkedForm-form-title').innerHTML = form.title;
             $id('checkedForm-form-content').innerHTML = '';
             for (const [it, question] of form.questions.entries()) {
+                console.log(question);
+
                 if (question.type.toLowerCase() === 'o') {
                     const questionDOM = createOpenQuestion(question.number, question.content);
 
