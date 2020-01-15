@@ -1,22 +1,54 @@
 const startPng = require('../../icons/play.png');
 
-const { $id } = require('../utils');
-const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
-const { getUserFormsFromDatabase, sendFilledFormToDatabase } = require('../databaseConnector');
-const { Validate } = require('../validator');
+const {
+    $id
+} = require('../utils');
+const {
+    createOpenQuestion,
+    createClosedQuestion,
+    createNumberQuestion
+} = require('../common/form');
+const {
+    getUserFormsFromDatabase,
+    sendFilledFormToDatabase
+} = require('../databaseConnector');
+const {
+    Validate
+} = require('../validator');
 const Dialogs = require('../common/dialogs');
-const { Wait } = require('../common/wait');
+const {
+    Wait
+} = require('../common/wait');
 const { translateText } = require('../translator');
 
+
 const FillForm = {
+    queue: false,
     initialized: false,
     active: false,
 
     init() {
         this.initialized = true;
+        this.assignEventListeners();
+
+        this.getData();
+    },
+
+    getData() {
+        if (FillForm.queue)
+            return;
+
+        FillForm.queue = true;
+        FillForm.hideAll();
+        $id('fillForm-content-loading').style.display = 'block';
+
+        while ($id('fillForm-list-table').children.length !== 1) {
+            $id('fillForm-list-table').children[1].remove();
+        }
 
         Promise.resolve(getUserFormsFromDatabase())
             .then(str => {
+                FillForm.queue = false;
                 const forms = JSON.parse(str);
 
                 for (const [it, form] of forms.entries()) {
@@ -39,7 +71,7 @@ const FillForm = {
                     const img = new Image();
                     img.src = startPng;
                     img.onclick = () => {
-                        this.show(form);
+                        FillForm.show(form);
                     };
                     child.appendChild(img);
 
@@ -49,7 +81,7 @@ const FillForm = {
 
                 this.showAll();
 
-                $id('fillForm-content-loading').remove();
+                $id('fillForm-content-loading').style.display = 'none';
             });
     },
 
@@ -129,10 +161,15 @@ const FillForm = {
     },
 
     showAll() {
+        $id('fillForm-list-table').style.display = 'block';
         $id('fillForm-list').style.display = 'block';
         $id('fillForm-fill').style.display = 'none';
     },
 
+    hideAll() {
+        $id('fillForm-list-table').style.display = 'none';
+    },
+  
     clear() {
         const node = document.getElementById('fillForm-list-table');
         while (node.children.length > 1) {
@@ -204,7 +241,11 @@ const FillForm = {
                 questions.push(question);
             }
         }
-        const formToBase = { title: form.title, questions, owner: document.getElementById('header-user-label').textContent };
+        const formToBase = {
+            title: form.title,
+            questions,
+            owner: document.getElementById('header-user-label').textContent
+        };
         const validResult = Validate.validateFilledForm(formToBase);
         if (validResult.validated) {
             sendFilledFormToDatabase(formToBase);
@@ -222,7 +263,11 @@ const FillForm = {
         this.showAll();
     },
 
-    assignEventListeners() {}
+    assignEventListeners() {
+        $id('fillForm-refresh').addEventListener('click', () => {
+            FillForm.getData();
+        });
+    }
 };
 
 exports.FillForm = FillForm;
