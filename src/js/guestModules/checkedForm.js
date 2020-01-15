@@ -1,17 +1,45 @@
 const eyePng = require('../../icons/eye.png');
 
-const { $id } = require('../utils');
-const { createOpenQuestion, createClosedQuestion, createNumberQuestion } = require('../common/form');
-const { getResultFromDatabase, getEvaluatedFilledFormFromDatabase } = require('../databaseConnector');
+const {
+    $id
+} = require('../utils');
+const {
+    createOpenQuestion,
+    createClosedQuestion,
+    createNumberQuestion
+} = require('../common/form');
+const Dialogs = require('../common/dialogs');
+const {
+    getResultFromDatabase,
+    getEvaluatedFilledFormFromDatabase
+} = require('../databaseConnector');
 
 const CheckedForm = {
+    queue: false,
     initialized: false,
 
     init() {
         this.initialized = true;
         this.assignEventListeners();
 
+        this.getData();
+    },
+
+    getData() {
+        if (CheckedForm.queue)
+            return;
+
+        CheckedForm.queue = true;
+        CheckedForm.hideAll();
+
+        while ($id('checkedForm-list-table').children.length !== 1) {
+            $id('checkedForm-list-table').children[1].remove();
+        }
+
+        $id('checkedForm-content-loading').style.display = 'block';
+
         getResultFromDatabase().then(str => {
+            CheckedForm.queue = false;
             const forms = JSON.parse(str);
 
             for (const [it, form] of forms.entries()) {
@@ -55,7 +83,15 @@ const CheckedForm = {
 
             this.showAll();
 
-            $id('checkedForm-content-loading').remove();
+            $id('checkedForm-content-loading').style.display = 'none';
+        }).catch(err => {
+            console.error(err);
+
+            CheckedForm.queue = false;
+            Dialogs.alert(
+                'Wystąpił problem',
+                'Podczas przetwarzania wystąpił nieoczekiwany błąd...'
+            );
         });
     },
 
@@ -71,6 +107,11 @@ const CheckedForm = {
         $id('checkedForm-results').style.display = 'none';
     },
 
+    hideAll() {
+        $id('checkedForm-list').style.display = 'none';
+        $id('checkedForm-results').style.display = 'none';
+    },
+
     show(which) {
         $id('checkedForm-list').style.display = 'none';
         $id('checkedForm-results').style.display = 'block';
@@ -83,8 +124,8 @@ const CheckedForm = {
 
             let form = '';
             forms.forEach(form1 => {
-                if (form1.title === which.formTitle && form1.owner === which.owner
-                    && form1.questions.length === which.points.length)
+                if (form1.title === which.formTitle && form1.owner === which.owner &&
+                    form1.questions.length === which.points.length)
                     form = form1;
             });
 
@@ -163,6 +204,10 @@ const CheckedForm = {
     assignEventListeners() {
         $id('checkedForm-form-buttons-back').onclick = () => {
             this.showAll();
+        };
+
+        $id('checkedForm-refresh').onclick = () => {
+            CheckedForm.getData();
         };
     }
 };
