@@ -144,6 +144,14 @@ const CheckedForm = {
                     $id('checkedForm-form-content')
                         .appendChild(questionDOM);
                 }
+
+                // TODO: TEXTAREA
+                const textarea = document.createElement('textarea');
+                textarea.classList.add('evaluation-comment');
+                textarea.placeholder = 'KOMENTARZ PROWADZĄCEGO';
+                $id('checkedForm-form-content').appendChild(
+                    textarea
+                );
             }
 
 
