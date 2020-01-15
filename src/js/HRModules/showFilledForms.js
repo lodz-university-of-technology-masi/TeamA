@@ -83,7 +83,6 @@ const ShowFilledForms = {
     },
 
     show(which) {
-        console.log(which);
         this.points = [];
         this.optionalComments = [];
         this.owner = which.owner;
