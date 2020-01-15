@@ -91,8 +91,6 @@ const CheckedForm = {
             $id('checkedForm-form-title').innerHTML = form.title;
             $id('checkedForm-form-content').innerHTML = '';
             for (const [it, question] of form.questions.entries()) {
-                console.log(question);
-
                 if (question.type.toLowerCase() === 'o') {
                     const questionDOM = createOpenQuestion(question.number, question.content);
 
@@ -145,13 +143,15 @@ const CheckedForm = {
                         .appendChild(questionDOM);
                 }
 
-                // TODO: TEXTAREA
-                const textarea = document.createElement('textarea');
-                textarea.classList.add('evaluation-comment');
-                textarea.placeholder = 'KOMENTARZ PROWADZĄCEGO';
-                $id('checkedForm-form-content').appendChild(
-                    textarea
-                );
+                if (which.optionalComments[it].length !== 0) {
+                    const textarea = document.createElement('textarea');
+                    textarea.classList.add('evaluation-comment');
+                    textarea.readOnly = true;
+                    textarea.placeholder = which.optionalComments[it];
+                    $id('checkedForm-form-content').appendChild(
+                        textarea
+                    );
+                }
             }
 
 
