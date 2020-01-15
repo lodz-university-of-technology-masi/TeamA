@@ -108,6 +108,13 @@ window.onload = () => {
         SectionManager.goBack();
         SectionManager.choose('import');
     });
+
+    $id('showForms-translator-button').addEventListener('click', () => {
+        ShowForms.clear();
+        ShowForms.translated();
+        SectionManager.choose('showForms');
+    });
+
     const backButtons = document.querySelectorAll('.sectionBack > div');
     for (const button of backButtons)
         button.addEventListener('click', () => SectionManager.goBack());
