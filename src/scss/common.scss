@@ -58,6 +58,16 @@ $fontfamily: 'Open Sans', sans-serif;
     animation: rotate 0.8s ease-in-out 0s infinite normal forwards;
 }
 
+.evaluation-comment {
+    min-width: calc(100% - 10px);
+    max-width: calc(100% - 10px);
+    height:20px;
+    min-height:20px;
+    padding: 5px;
+    font-size: 0.9em;
+    font-family: $fontfamily;
+}
+
 @import 'common.header';
 @import 'common.dialogs';
 @import 'common.wait';

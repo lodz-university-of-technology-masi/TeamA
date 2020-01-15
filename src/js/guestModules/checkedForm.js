@@ -62,7 +62,8 @@ const CheckedForm = {
     open() {
         if (!this.initialized)
             this.init();
-        this.showAll();
+        else
+            this.showAll();
     },
 
     showAll() {
@@ -140,6 +141,16 @@ const CheckedForm = {
 
                     $id('checkedForm-form-content')
                         .appendChild(questionDOM);
+                }
+
+                if (which.optionalComments[it].length !== 0) {
+                    const textarea = document.createElement('textarea');
+                    textarea.classList.add('evaluation-comment');
+                    textarea.readOnly = true;
+                    textarea.placeholder = which.optionalComments[it];
+                    $id('checkedForm-form-content').appendChild(
+                        textarea
+                    );
                 }
             }
 

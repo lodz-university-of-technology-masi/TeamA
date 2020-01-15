@@ -24,6 +24,7 @@ exports.getUserPool = () => userPool;
 exports.signOut = () => {
     userPool.getCurrentUser().signOut();
     Cookies.set('user', '', -1);
+    Cookies.set('IdToken', '', -1);
     window.location.href = '/login.html';
 };
 

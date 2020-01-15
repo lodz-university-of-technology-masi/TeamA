@@ -239,6 +239,7 @@ exports.sendResultToDatabase = result => {
             formTitle: result.formTitle,
             owner: result.owner,
             hrEmployer: result.hrEmployer,
+            optionalComments: JSON.stringify(result.optionalComments),
             points: result.points
         }),
         contentType: 'application/json',
