@@ -73,7 +73,7 @@ const CheckedForm = {
                 const img = new Image();
                 img.src = eyePng;
                 img.onclick = () => {
-                    this.show(form);
+                    CheckedForm.show(form);
                 };
                 child.appendChild(img);
 
@@ -103,13 +103,13 @@ const CheckedForm = {
     },
 
     showAll() {
+        $id('checkedForm-list-table').style.display = 'block';
         $id('checkedForm-list').style.display = 'block';
         $id('checkedForm-results').style.display = 'none';
     },
 
     hideAll() {
-        $id('checkedForm-list').style.display = 'none';
-        $id('checkedForm-results').style.display = 'none';
+        $id('checkedForm-list-table').style.display = 'none';
     },
 
     show(which) {
@@ -122,16 +122,13 @@ const CheckedForm = {
         getEvaluatedFilledFormFromDatabase().then(str => {
             const forms = JSON.parse(str);
 
-            let form = '';
-            forms.forEach(form1 => {
-                if (form1.title === which.formTitle && form1.owner === which.owner &&
-                    form1.questions.length === which.points.length)
-                    form = form1;
-            });
+            const chosenForm = forms.find(form => form.title === which.formTitle &&
+                form.owner === which.owner &&
+                form.questions.length === which.points.length);
 
-            $id('checkedForm-form-title').innerHTML = form.title;
+            $id('checkedForm-form-title').innerHTML = which.title;
             $id('checkedForm-form-content').innerHTML = '';
-            for (const [it, question] of form.questions.entries()) {
+            for (const [it, question] of chosenForm.questions.entries()) {
                 if (question.type.toLowerCase() === 'o') {
                     const questionDOM = createOpenQuestion(question.number, question.content);
 
@@ -194,7 +191,6 @@ const CheckedForm = {
                     );
                 }
             }
-
 
             $id('checkedForm-results-loading').style.display = 'none';
             $id('checkedForm-results-container').style.display = 'block';

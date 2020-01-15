@@ -69,7 +69,7 @@ const FillForm = {
                     const img = new Image();
                     img.src = startPng;
                     img.onclick = () => {
-                        this.show(form);
+                        FillForm.show(form);
                     };
                     child.appendChild(img);
 
@@ -89,13 +89,13 @@ const FillForm = {
     },
 
     showAll() {
+        $id('fillForm-list-table').style.display = 'block';
         $id('fillForm-list').style.display = 'block';
         $id('fillForm-fill').style.display = 'none';
     },
 
     hideAll() {
-        $id('fillForm-list').style.display = 'none';
-        $id('fillForm-fill').style.display = 'none';
+        $id('fillForm-list-table').style.display = 'none';
     },
 
     show(which) {
