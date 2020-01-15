@@ -11,13 +11,13 @@ const {
 
 const {
     getFilledFormFromDatabase,
-    sendResultToDatabase,
-    removeFilledFormFromDatabase
+    sendResultToDatabase
 } = require('../databaseConnector');
 
 const { Wait } = require('../common/wait');
 
 const ShowFilledForms = {
+    queue: false,
     points: [],
     optionalComments: [],
     initialized: false,
@@ -30,7 +30,23 @@ const ShowFilledForms = {
         this.initialized = true;
         this.hrEmployer = $id('header-user-label').innerText;
         this.assignEventListeners();
+        this.getData();
+    },
+
+    getData() {
+        if (this.queue)
+            return;
+
+        this.queue = true;
+        this.hideAll();
+        $id('showFilledForms-content-loading').style.display = 'block';
+
+        while ($id('showFilledForms-list-table').children.length !== 1) {
+            $id('showFilledForms-list-table').children[1].remove();
+        }
+
         getFilledFormFromDatabase().then(str => {
+            this.queue = false;
             const forms = JSON.parse(str);
 
             for (const [it, form] of forms.entries()) {
@@ -68,7 +84,9 @@ const ShowFilledForms = {
 
             this.showAll();
 
-            $id('showFilledForms-content-loading').remove();
+            $id('showFilledForms-content-loading').style.display = 'none';
+        }).catch(() => {
+            this.queue = false;
         });
     },
 
@@ -79,6 +97,11 @@ const ShowFilledForms = {
 
     showAll() {
         $id('showFilledForms-list').style.display = 'block';
+        $id('showFilledForms-form').style.display = 'none';
+    },
+
+    hideAll() {
+        $id('showFilledForms-list').style.display = 'none';
         $id('showFilledForms-form').style.display = 'none';
     },
 
@@ -228,9 +251,7 @@ const ShowFilledForms = {
                         optionalComments: this.optionalComments
                     };
                     sendResultToDatabase(dataToBackend);
-                    removeFilledFormFromDatabase(this.formId);
                     Wait.open();
-                    this.showAll();
                 }
             );
         } else {
@@ -248,6 +269,10 @@ const ShowFilledForms = {
                 ShowFilledForms.showAll();
             }
         );
+
+        $id('showFilledForms-refresh').addEventListener('click', () => {
+            ShowFilledForms.getData();
+        });
 
         $id('showFilledForms-form-buttons-apply').addEventListener(
             'click',

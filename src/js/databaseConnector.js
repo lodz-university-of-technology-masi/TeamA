@@ -2,6 +2,7 @@ const $ = require('jquery');
 const Cookies = require('./cookies');
 const Dialogs = require('./common/dialogs');
 const { Wait } = require('./common/wait');
+const { ShowFilledForms } = require('./HRModules/showFilledForms');
 
 const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage';
 const authMetod = Cookies.get('IdToken');
@@ -209,7 +210,7 @@ exports.getEvaluatedFilledFormFromDatabase = () => new Promise(resolve => {
     });
 });
 
-exports.removeFilledFormFromDatabase = filledFormId => {
+const removeFilledFormFromDatabase = filledFormId => {
     $.ajax({
         method: 'DELETE',
         url: `${invokeUrl}/filledform`,
@@ -220,12 +221,17 @@ exports.removeFilledFormFromDatabase = filledFormId => {
             id: filledFormId
         }),
         contentType: 'application/json',
-        success: () => {},
+        success: () => {
+            Wait.close();
+            ShowFilledForms.getData();
+        },
         error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
         }
     });
 };
+
+exports.removeFilledFormFromDatabase = removeFilledFormFromDatabase;
 
 
 exports.sendResultToDatabase = result => {
@@ -244,13 +250,15 @@ exports.sendResultToDatabase = result => {
         }),
         contentType: 'application/json',
         success: () => {
-            Wait.close()
+            removeFilledFormFromDatabase(this.formId);
+
             Dialogs.alert(
                 'Dodano do bazy danych',
                 'Twój wynik został pomyślnie dodany do bazy danych.'
             );
         },
         error: (jqXHR, textStatus, errorThrown) => {
+            Wait.close();
             console.error(
                 'Error requesting ride: ',
                 textStatus,

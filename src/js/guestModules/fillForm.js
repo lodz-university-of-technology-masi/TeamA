@@ -48,7 +48,7 @@ const FillForm = {
 
                 this.showAll();
 
-                $id('fillForm-content-loading').remove();
+                $id('fillForm-content-loading').display = 'none';
             });
     },
 
