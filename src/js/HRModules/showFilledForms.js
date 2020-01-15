@@ -1,6 +1,8 @@
 const pencilPng = require('../../icons/pencil.png');
 
-const { $id } = require('../utils');
+const {
+    $id
+} = require('../utils');
 const Dialogs = require('../common/dialogs');
 const {
     createOpenQuestion,
@@ -14,7 +16,9 @@ const {
     sendResultToDatabase
 } = require('../databaseConnector');
 
-const { Wait } = require('../common/wait');
+const {
+    Wait
+} = require('../common/wait');
 
 const ShowFilledForms = {
     queue: false,
@@ -34,11 +38,11 @@ const ShowFilledForms = {
     },
 
     getData() {
-        if (this.queue)
+        if (ShowFilledForms.queue)
             return;
 
-        this.queue = true;
-        this.hideAll();
+        ShowFilledForms.queue = true;
+        ShowFilledForms.hideAll();
         $id('showFilledForms-content-loading').style.display = 'block';
 
         while ($id('showFilledForms-list-table').children.length !== 1) {
@@ -46,7 +50,7 @@ const ShowFilledForms = {
         }
 
         getFilledFormFromDatabase().then(str => {
-            this.queue = false;
+            ShowFilledForms.queue = false;
             const forms = JSON.parse(str);
 
             for (const [it, form] of forms.entries()) {
@@ -73,7 +77,7 @@ const ShowFilledForms = {
                 const img = new Image();
                 img.src = pencilPng;
                 img.onclick = () => {
-                    this.show(form);
+                    ShowFilledForms.show(form);
                 };
                 child.appendChild(img);
 
@@ -82,11 +86,17 @@ const ShowFilledForms = {
                 $id('showFilledForms-list-table').appendChild(div);
             }
 
-            this.showAll();
+            ShowFilledForms.showAll();
 
             $id('showFilledForms-content-loading').style.display = 'none';
-        }).catch(() => {
-            this.queue = false;
+        }).catch((err) => {
+            console.error(err);
+
+            ShowFilledForms.queue = false;
+            Dialogs.alert(
+                'Wystąpił problem',
+                'Podczas przetwarzania wystąpił nieoczekiwany błąd...'
+            );
         });
     },
 
@@ -244,14 +254,15 @@ const ShowFilledForms = {
                         this.optionalComments.push(commentsLabels[i].value);
                     }
                     const dataToBackend = {
+                        formId: this.formId,
                         formTitle: this.formTitle,
                         owner: this.owner,
                         hrEmployer: this.hrEmployer,
                         points: this.points,
                         optionalComments: this.optionalComments
                     };
-                    sendResultToDatabase(dataToBackend);
                     Wait.open();
+                    sendResultToDatabase(dataToBackend, ShowFilledForms.getData);
                 }
             );
         } else {
