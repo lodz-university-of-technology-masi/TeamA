@@ -3,24 +3,49 @@ const pencilPng = require('../../icons/pencil.png');
 const deletePng = require('../../icons/delete.png');
 const downloadPng = require('../../icons/download.png');
 
-const { $id } = require('../utils');
+const {
+    $id
+} = require('../utils');
 const {
     createOpenQuestion,
     createClosedQuestion,
     createNumberQuestion
 } = require('../common/form');
 const Dialogs = require('../common/dialogs');
-const { getFormsFromDatabase, removeFormFromDatabase } = require('../databaseConnector');
+const {
+    getFormsFromDatabase,
+    removeFormFromDatabase
+} = require('../databaseConnector');
 const csvManager = require('../csvManager');
-const { translateText } = require('../translator');
+const {
+    translateText
+} = require('../translator');
 
 const ShowForms = {
+    queue: false,
     initialized: false,
 
     init() {
         this.initialized = true;
 
+        this.getData();
+    },
+
+    getData() {
+        if (ShowForms.queue)
+            return;
+
+        ShowForms.queue = true;
+        ShowForms.hideAll();
+
+        while ($id('showForms-list-table').children.length !== 1) {
+            $id('showForms-list-table').children[1].remove();
+        }
+
+        $id('showForms-content-loading').style.display = 'block';
+
         Promise.resolve(getFormsFromDatabase()).then(str => {
+            ShowForms.queue = false;
             const forms = JSON.parse(str);
 
             for (const [it, form] of forms.entries()) {
@@ -81,9 +106,17 @@ const ShowForms = {
                 $id('showForms-list-table').appendChild(div);
             }
 
-            this.showAll();
+            ShowForms.showAll();
 
-            $id('showForms-content-loading').remove();
+            $id('showForms-content-loading').style.display = 'none';
+        }).catch(err => {
+            console.error(err);
+
+            ShowForms.queue = false;
+            Dialogs.alert(
+                'Wystąpił problem',
+                'Podczas przetwarzania wystąpił nieoczekiwany błąd...'
+            );
         });
     },
 
@@ -193,6 +226,11 @@ const ShowForms = {
         $id('showForms-form').style.display = 'none';
     },
 
+    hideAll() {
+        $id('showForms-list').style.display = 'none';
+        $id('showForms-form').style.display = 'none';
+    },
+
     clear() {
         const node = document.getElementById('showForms-list-table');
         while (node.children.length > 1) {
@@ -231,6 +269,10 @@ const ShowForms = {
     assignEventListeners() {
         $id('showForms-form-buttons-back').addEventListener('click', () => {
             this.showAll();
+        });
+
+        $id('showForms-refresh').addEventListener('click', () => {
+            ShowForms.getData();
         });
     }
 };

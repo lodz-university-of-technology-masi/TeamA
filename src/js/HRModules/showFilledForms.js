@@ -89,7 +89,7 @@ const ShowFilledForms = {
             ShowFilledForms.showAll();
 
             $id('showFilledForms-content-loading').style.display = 'none';
-        }).catch((err) => {
+        }).catch(err => {
             console.error(err);
 
             ShowFilledForms.queue = false;
