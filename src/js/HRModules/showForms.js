@@ -101,16 +101,22 @@ const ShowForms = {
                 }
             }
             translateText(JSON.stringify(dataToTranslate)).then(result => {
-                const translatedText = JSON.parse(result);
+                try {
+                    const translatedText = JSON.parse(result);
 
-                let i = 0;
-                for (let z = 0; z < forms.length; z++) {
-                    forms[z].title = translatedText[i];
-                    for (let j = 0; j < forms[z].questions.length; j++) {
+                    let i = 0;
+                    for (let z = 0; z < forms.length; z++) {
+                        forms[z].title = translatedText[i];
+                        for (let j = 0; j < forms[z].questions.length; j++) {
+                            i += 1;
+                            forms[z].questions[j].content = translatedText[i];
+                        }
                         i += 1;
-                        forms[z].questions[j].content = translatedText[i];
                     }
-                    i += 1;
+                } catch (e) {
+                    Dialogs.alert('Error', 'Nastąpił problem podczas działania aplikacji translatora, aplikacja zwróciła nie poprawne dane, proszę przeładować aplikację.');
+                    this.clear();
+                    this.showAll();
                 }
 
 
@@ -173,8 +179,6 @@ const ShowForms = {
                 }
 
                 this.showAll();
-
-                $id('showForms-content-loading').remove();
             });
         });
     },
