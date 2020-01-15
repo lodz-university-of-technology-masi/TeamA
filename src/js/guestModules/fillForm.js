@@ -6,6 +6,7 @@ const { getUserFormsFromDatabase, sendFilledFormToDatabase } = require('../datab
 const { Validate } = require('../validator');
 const Dialogs = require('../common/dialogs');
 const { Wait } = require('../common/wait');
+const { translateText } = require('../translator');
 
 const FillForm = {
     initialized: false,
@@ -52,6 +53,76 @@ const FillForm = {
             });
     },
 
+    translated() {
+        this.initialized = true;
+
+
+        Promise.resolve(getUserFormsFromDatabase())
+            .then(str => {
+                const forms = JSON.parse(str);
+
+                const dataToTranslate = [];
+                for (let i = 0; i < forms.length; i++) {
+                    dataToTranslate.push(forms[i].title);
+                    for (let j = 0; j < forms[i].questions.length; j++) {
+                        dataToTranslate.push(forms[i].questions[j].content);
+                    }
+                }
+
+
+                translateText(JSON.stringify(dataToTranslate)).then(result => {
+                    try {
+                        const translatedText = JSON.parse(result);
+
+                        let i = 0;
+                        for (let z = 0; z < forms.length; z++) {
+                            forms[z].title = translatedText[i];
+                            for (let j = 0; j < forms[z].questions.length; j++) {
+                                i += 1;
+                                forms[z].questions[j].content = translatedText[i];
+                            }
+                            i += 1;
+                        }
+                    } catch (e) {
+                        Dialogs.alert('Error', 'Nastąpił problem podczas działania aplikacji translatora, aplikacja zwróciła nie poprawne dane, proszę przeładować aplikację.');
+                        this.clear();
+                        this.showAll();
+                    }
+
+
+                    for (const [it, form] of forms.entries()) {
+                        const div = document.createElement('div');
+
+                        let child = document.createElement('div');
+                        child.innerHTML = (it + 1);
+                        div.appendChild(child);
+
+                        child = document.createElement('div');
+                        child.innerHTML = form.title;
+                        div.appendChild(child);
+
+                        child = document.createElement('div');
+                        child.innerHTML = form.questions.length;
+                        div.appendChild(child);
+
+                        child = document.createElement('div');
+
+                        const img = new Image();
+                        img.src = startPng;
+                        img.onclick = () => {
+                            this.show(form);
+                        };
+                        child.appendChild(img);
+
+                        div.appendChild(child);
+                        $id('fillForm-list-table').appendChild(div);
+                    }
+
+                    this.showAll();
+                });
+            });
+    },
+
     open() {
         if (!this.initialized)
             this.init();
@@ -60,6 +131,13 @@ const FillForm = {
     showAll() {
         $id('fillForm-list').style.display = 'block';
         $id('fillForm-fill').style.display = 'none';
+    },
+
+    clear() {
+        const node = document.getElementById('fillForm-list-table');
+        while (node.children.length > 1) {
+            node.removeChild(node.children[1]);
+        }
     },
 
     show(which) {

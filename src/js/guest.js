@@ -7,6 +7,7 @@ const { CheckedForm } = require('./guestModules/checkedForm');
 const { $id } = require('./utils');
 const { signOut, getToken } = require('./cognitoConfig');
 const Cookies = require('./cookies');
+const { Wait } = require('./common/wait');
 
 const SectionManager = {
     currentElement: null,
@@ -69,6 +70,15 @@ window.onload = () => {
     $id('pane-tile-3')
         .addEventListener('click', () => {
             signOut();
+        });
+
+    $id('showGuestForms-translator-button')
+        .addEventListener('click', () => {
+            Wait.open();
+            FillForm.clear();
+            FillForm.translated();
+            SectionManager.choose('fillForm');
+            Wait.close();
         });
 
     const backButtons = document.querySelectorAll('.sectionBack > div');
