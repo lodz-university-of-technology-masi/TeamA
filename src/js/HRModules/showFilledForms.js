@@ -11,7 +11,8 @@ const {
 
 const {
     getFilledFormFromDatabase,
-    sendResultToDatabase
+    sendResultToDatabase,
+    removeFilledFormFromDatabase
 } = require('../databaseConnector');
 
 const { Wait } = require('../common/wait');
@@ -23,6 +24,7 @@ const ShowFilledForms = {
     owner: '',
     hrEmployer: '',
     formTitle: '',
+    formId: null,
 
     init() {
         this.initialized = true;
@@ -85,6 +87,8 @@ const ShowFilledForms = {
         this.optionalComments = [];
         this.owner = which.owner;
         this.formTitle = which.title;
+        this.formId = which.formId;
+
         $id('showFilledForms-list').style.display = 'none';
         $id('showFilledForms-form').style.display = 'block';
 
@@ -224,6 +228,7 @@ const ShowFilledForms = {
                         optionalComments: this.optionalComments
                     };
                     sendResultToDatabase(dataToBackend);
+                    removeFilledFormFromDatabase(this.formId);
                     Wait.open();
                     this.showAll();
                 }
