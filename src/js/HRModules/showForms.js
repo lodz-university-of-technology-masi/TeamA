@@ -81,8 +81,8 @@ const ShowForms = {
                 let img = new Image();
                 img.src = eyePng;
                 img.onclick = () => {
-                    this.show(form);
-                    this.form = form;
+                    ShowForms.show(form);
+                    ShowForms.form = form;
                 };
                 child.appendChild(img);
                 div.appendChild(child);
@@ -91,9 +91,9 @@ const ShowForms = {
                 img = new Image();
                 img.src = pencilPng;
                 img.onclick = () => {
-                    this.edit(form);
-                    this.backToList = true;
-                    this.form = form;
+                    ShowForms.edit(form);
+                    ShowForms.backToList = true;
+                    ShowForms.form = form;
                 };
                 child.appendChild(img);
                 div.appendChild(child);
@@ -299,6 +299,7 @@ const ShowForms = {
         $id('showForms-edit-title-input').value = which.title;
         $id('showForms-edit-content').innerHTML = '';
 
+        this.questions = [];
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
                 const q = {};
@@ -434,7 +435,11 @@ const ShowForms = {
             });
 
         $id('showForms-form-buttons-back').addEventListener('click', () => {
-            this.showAll();
+            ShowForms.showAll();
+        });
+
+        $id('showForms-edit-buttons-back').addEventListener('click', () => {
+            ShowForms.showAll();
         });
 
         $id('showForms-edit-buttons-apply').addEventListener('click', () => {
