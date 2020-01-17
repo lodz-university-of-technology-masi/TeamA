@@ -276,7 +276,8 @@ exports.overwriteForm = (form, callback) => {
     const validationData = Validate.validateForm(formToBase);
     if (validationData.validated) {
         Wait.open();
-        removeFormFromDatabaseWithoutWarning(form.id, () => {
+
+        removeFormFromDatabaseWithoutWarning(form.formId, () => {
             sendFormToDatabase(formToBase, () => {
                 callback();
             });

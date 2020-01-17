@@ -22,10 +22,15 @@
         "nonblock-statement-body-position": ["error", "any"],
         "no-restricted-syntax": 0,
         "comma-dangle": ["error", "never"],
-        "no-use-before-define": ["error", { "functions": false, "classes": false, "variables": false }],
+        "no-use-before-define": ["error", {
+            "functions": false,
+            "classes": false,
+            "variables": false
+        }],
         "operator-linebreak": 0,
         "arrow-parens": ["error", "as-needed"],
         "linebreak-style": 0,
-        "no-continue": 0
+        "no-continue": 0,
+        "no-loop-func": 0
     }
 }

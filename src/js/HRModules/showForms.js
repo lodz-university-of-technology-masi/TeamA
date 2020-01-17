@@ -4,6 +4,9 @@ const deletePng = require('../../icons/delete.png');
 const downloadPng = require('../../icons/download.png');
 
 const {
+    Wait
+} = require('../common/wait');
+const {
     $id
 } = require('../utils');
 const sf = require('../common/form');
@@ -112,7 +115,10 @@ const ShowForms = {
                         'Usuwanie formularza',
                         'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
                         () => {
-                            removeFormFromDatabase(form.formId);
+                            Wait.open();
+                            removeFormFromDatabase(form.formId, () => {
+                                ShowForms.getData();
+                            });
                         }
                     );
                 };

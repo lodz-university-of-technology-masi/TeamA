@@ -85,7 +85,7 @@ exports.getUserFormsFromDatabase = () => new Promise((resolve, reject) => {
     });
 });
 
-exports.removeFormFromDatabase = formId => {
+exports.removeFormFromDatabase = (formId, callback) => {
     $.ajax({
         method: 'DELETE',
         url: `${invokeUrl}/-test`,
@@ -98,6 +98,8 @@ exports.removeFormFromDatabase = formId => {
         contentType: 'application/json',
         success: () => {
             Wait.close();
+            if (typeof callback !== 'undefined')
+                callback();
             Dialogs.alert(
                 'Usunięto formularz z bazy',
                 'Twój formularz został pomyślnie usunięty z bazy danych.'
