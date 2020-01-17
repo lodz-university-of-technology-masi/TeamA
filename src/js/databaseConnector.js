@@ -8,7 +8,7 @@ const {
 const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage';
 const authMetod = Cookies.get('IdToken');
 
-exports.sendFormToDatabase = dataToBase => {
+exports.sendFormToDatabase = (dataToBase, callback) => {
     $.ajax({
         method: 'POST',
         url: `${invokeUrl}/-test`,
@@ -23,6 +23,8 @@ exports.sendFormToDatabase = dataToBase => {
         contentType: 'application/json',
         success: () => {
             Wait.close();
+            if (typeof callback !== 'undefined')
+                callback();
             Dialogs.alert(
                 'Dodano do bazy danych',
                 'Twój formularz został dodany do bazy danych, możesz go teraz zobaczyć w oknie: "Zobacz szablony formularzy".'
@@ -83,7 +85,7 @@ exports.getUserFormsFromDatabase = () => new Promise((resolve, reject) => {
     });
 });
 
-exports.removeFormFromDatabase = formId => {
+exports.removeFormFromDatabase = (formId, callback) => {
     $.ajax({
         method: 'DELETE',
         url: `${invokeUrl}/-test`,
@@ -96,6 +98,8 @@ exports.removeFormFromDatabase = formId => {
         contentType: 'application/json',
         success: () => {
             Wait.close();
+            if (typeof callback !== 'undefined')
+                callback();
             Dialogs.alert(
                 'Usunięto formularz z bazy',
                 'Twój formularz został pomyślnie usunięty z bazy danych.'
@@ -116,7 +120,7 @@ exports.removeFormFromDatabase = formId => {
     });
 };
 
-exports.removeFormFromDatabaseWithoutWarning = formId => {
+exports.removeFormFromDatabaseWithoutWarning = (formId, callback) => {
     $.ajax({
         method: 'DELETE',
         url: `${invokeUrl}/-test`,
@@ -127,7 +131,10 @@ exports.removeFormFromDatabaseWithoutWarning = formId => {
             id: formId
         }),
         contentType: 'application/json',
-        success: () => {},
+        success: () => {
+            if (typeof callback !== 'undefined')
+                callback();
+        },
         error: (jqXHR, textStatus, errorThrown) => {
             console.error(
                 'Error requesting ride: ',

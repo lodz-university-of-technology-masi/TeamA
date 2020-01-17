@@ -1,6 +1,12 @@
-const { sendFormToDatabase } = require('./databaseConnector');
-const { getFormsFromDatabase } = require('./databaseConnector');
-const { $id } = require('./utils');
+const {
+    sendFormToDatabase
+} = require('./databaseConnector');
+const {
+    getFormsFromDatabase
+} = require('./databaseConnector');
+const {
+    $id
+} = require('./utils');
 const Dialogs = require('./common/dialogs');
 const { Wait } = require('./common/wait');
 
@@ -176,9 +182,9 @@ function checkFormTitle(fileName) {
                     for (let j = 0; j < currentLine.length; j++) {
                         if (j < headers.length - 1) {
                             const value =
-                                currentLine[j][0] === '"'
-                                    ? currentLine[j].slice(1)
-                                    : currentLine[j];
+                                currentLine[j][0] === '"' ?
+                                currentLine[j].slice(1) :
+                                currentLine[j];
                             if (headers[j] === 'type' && !checkQuestionType(currentLine[j])) return;
                             if (headers[j] === 'language' && !checkQuestionLanguage(currentLine[j])) return;
                             if (headers[j] === 'content' && !correctNumberOfQuestionsChaaracters(currentLine[j])) return;

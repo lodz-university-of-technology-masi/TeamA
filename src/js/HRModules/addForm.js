@@ -1,13 +1,23 @@
-const { sendFormToDatabase } = require('../databaseConnector');
-const { $id } = require('../utils');
+const {
+    sendFormToDatabase
+} = require('../databaseConnector');
+const {
+    $id
+} = require('../utils');
 const Dialogs = require('../common/dialogs');
 const {
     createOpenQuestion,
     createClosedQuestion,
     createNumberQuestion
 } = require('../HRModules/newForm');
-const { Validate } = require('../validator');
-const { getOneSynonym, getSynonyms, getLanguages } = require('../common/yandex');
+const {
+    Validate
+} = require('../validator');
+const {
+    getOneSynonym,
+    getSynonyms,
+    getLanguages
+} = require('../common/yandex');
 
 let focused;
 
@@ -16,9 +26,9 @@ const AddForm = {
     questions: [],
 
     getText(elem) {
-        if(elem.tagName === "INPUT" && elem.type === "text") {
+        if (elem.tagName === 'INPUT' && elem.type === 'text') {
             return elem.value.substring(elem.selectionStart,
-                    elem.selectionEnd);
+                elem.selectionEnd);
         }
         return null;
     },
@@ -34,13 +44,12 @@ const AddForm = {
                 Promise.resolve(getSynonyms(firstSynonym))
                     .then(tab => {
                         let synonyms = '';
-                        for (speech_parts of tab) {
-                            if (speech_parts.tr[0].syn) {
-                                for (obj of speech_parts.tr[0].syn) {
-                                    synonyms += obj.text + ', '
+                        for (const speechParts of tab) {
+                            if (speechParts.tr[0].syn) {
+                                for (const obj of speechParts.tr[0].syn) {
+                                    synonyms += `${obj.text}, `;
                                 }
-                            }
-                            else Dialogs.alert('Błąd', 'Nasza baza nie ma synonimów dla tego słowa');
+                            } else Dialogs.alert('Błąd', 'Nasza baza nie ma synonimów dla tego słowa');
                         }
                         if (synonyms) Dialogs.alert('Synonimy : ', synonyms);
                         else Dialogs.alert('Błąd', 'Nasza baza nie ma synonimów dla tego słowa');
@@ -224,7 +233,11 @@ const AddForm = {
                 questions.push(question);
             }
         }
-        const formToBase = { title: document.getElementById('addForm-form-title').children[0].value, questions, assignedUsers: [] };
+        const formToBase = {
+            title: document.getElementById('addForm-form-title').children[0].value,
+            questions,
+            assignedUsers: []
+        };
         const validationData = Validate.validateForm(formToBase);
         if (validationData.validated) {
             sendFormToDatabase(formToBase);
@@ -239,10 +252,6 @@ const AddForm = {
                 `Podczas tworzenia formularza wprowadzono dane które nie spełniają wymagań formularza. ${generalWarning}`);
         }
     },
-
-  
-
-    
 
     assignEventListeners() {
         $id('addForm-synonym-button')
@@ -280,14 +289,14 @@ const AddForm = {
 
 
 exports.initAddForm = () => {
-    setInterval(function () {
+    setInterval(() => {
         if (document.activeElement.tagName !== 'BUTTON') {
-            let temp = AddForm.getText(document.activeElement);
+            const temp = AddForm.getText(document.activeElement);
             if (temp) {
                 focused = temp;
             }
         }
     }, 100);
-}
+};
 
 exports.AddForm = AddForm;

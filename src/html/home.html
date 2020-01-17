@@ -130,7 +130,6 @@
                 </div>
             </div>
 
-
             <div id="showForms-form">
                 <h3 id="showForms-form-title"></h3>
                 <div id="showForms-form-content"></div>
@@ -138,6 +137,29 @@
                     <button id="showForms-form-buttons-back">Powrót</button>
                 </div>
             </div>
+
+            <div class="form-editing" id="showForms-edit">
+                <h3 id="showForms-edit-title">
+                    <input id="showForms-edit-title-input" type="text" placeholder="Tytuł formularza..." />
+                </h3>
+                <div class="form-question-actions">
+                    <div id="edit-form-openBtn">
+                        <p>Pytanie otwarte</p>
+                    </div>
+                    <div id="edit-form-closedBtn">
+                        <p>Pytanie zamknięte</p>
+                    </div>
+                    <div id="edit-form-numberBtn">
+                        <p>Pytanie liczbowe</p>
+                    </div>
+                </div>
+                <div class="form-change-content" id="showForms-edit-content"></div>
+                <div class="form-change-buttons">
+                    <button name="back" id="showForms-edit-buttons-back">Odrzuć</button>
+                    <button name="apply" id="showForms-edit-buttons-apply">Zatwierdź</button>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -192,12 +214,12 @@
 
         <h2>Dodawanie formularza</h2>
 
-        <div id="addForm-content">
+        <div class="form-editing" id="addForm-content">
             <h3 id="addForm-form-title">
                 <input type="text" placeholder="Tytuł formularza..." />
                 <button name="synonym" id="addForm-synonym-button">Znajdź synonim</button>
             </h3>
-            <div id="addForm-form-actions">
+            <div class="form-question-actions">
                 <div id="add-form-openBtn">
                     <p>Pytanie otwarte</p>
                 </div>
@@ -208,8 +230,8 @@
                     <p>Pytanie liczbowe</p>
                 </div>
             </div>
-            <div id="addForm-form-content"></div>
-            <div id="addForm-form-buttons">
+            <div class="form-change-content" id="addForm-form-content"></div>
+            <div class="form-change-buttons">
                 <button name="back" id="addForm-form-buttons-back">Wyczyść</button>
                 <button name="apply" id="addForm-form-buttons-apply">Stwórz</button>
             </div>

@@ -5,13 +5,24 @@ const downloadPng = require('../../icons/download.png');
 const { Wait } = require('../common/wait');
 
 const {
+    Wait
+} = require('../common/wait');
+const {
     $id
 } = require('../utils');
+const sf = require('../common/form');
 const {
     createOpenQuestion,
     createClosedQuestion,
     createNumberQuestion
-} = require('../common/form');
+} = require('./newForm');
+const {
+    editOpenQuestion,
+    editClosedQuestion,
+    editNumberQuestion,
+    overwriteForm
+} = require('./editForm');
+
 const Dialogs = require('../common/dialogs');
 const {
     getFormsFromDatabase,
@@ -25,6 +36,9 @@ const {
 const ShowForms = {
     queue: false,
     initialized: false,
+    backToList: true,
+    form: null,
+    questions: [],
 
     init() {
         this.initialized = true;
@@ -68,7 +82,8 @@ const ShowForms = {
                 let img = new Image();
                 img.src = eyePng;
                 img.onclick = () => {
-                    this.show(form);
+                    ShowForms.show(form);
+                    ShowForms.form = form;
                 };
                 child.appendChild(img);
                 div.appendChild(child);
@@ -76,6 +91,11 @@ const ShowForms = {
                 child = document.createElement('div');
                 img = new Image();
                 img.src = pencilPng;
+                img.onclick = () => {
+                    ShowForms.edit(form);
+                    ShowForms.backToList = true;
+                    ShowForms.form = form;
+                };
                 child.appendChild(img);
                 div.appendChild(child);
 
@@ -96,8 +116,10 @@ const ShowForms = {
                         'Usuwanie formularza',
                         'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
                         () => {
-                            Wait.open()
-                            removeFormFromDatabase(form.formId);
+                            Wait.open();
+                            removeFormFromDatabase(form.formId, () => {
+                                ShowForms.getData();
+                            });
                         }
                     );
                 };
@@ -226,11 +248,13 @@ const ShowForms = {
     showAll() {
         $id('showForms-list').style.display = 'block';
         $id('showForms-form').style.display = 'none';
+        $id('showForms-edit').style.display = 'none';
     },
 
     hideAll() {
         $id('showForms-list').style.display = 'none';
         $id('showForms-form').style.display = 'none';
+        $id('showForms-edit').style.display = 'none';
     },
 
     clear() {
@@ -250,11 +274,11 @@ const ShowForms = {
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
                 $id('showForms-form-content').appendChild(
-                    createOpenQuestion(question.number, question.content)
+                    sf.createOpenQuestion(question.number, question.content)
                 );
             } else if (question.type.toLowerCase() === 'w') {
                 $id('showForms-form-content').appendChild(
-                    createClosedQuestion(
+                    sf.createClosedQuestion(
                         question.number,
                         question.content,
                         question.answers
@@ -262,15 +286,165 @@ const ShowForms = {
                 );
             } else if (question.type.toLowerCase() === 'l') {
                 $id('showForms-form-content').appendChild(
-                    createNumberQuestion(question.number, question.content)
+                    sf.createNumberQuestion(question.number, question.content)
                 );
             }
         }
     },
 
+    edit(which) {
+        $id('showForms-list').style.display = 'none';
+        $id('showForms-form').style.display = 'none';
+        $id('showForms-edit').style.display = 'block';
+
+        $id('showForms-edit-title-input').value = which.title;
+        $id('showForms-edit-content').innerHTML = '';
+
+        this.questions = [];
+        for (const question of which.questions) {
+            if (question.type.toLowerCase() === 'o') {
+                const q = {};
+
+                const number = this.questions.length + 1;
+                const dom = editOpenQuestion(number, question.content, () => {
+                    this.removeQuestion(q);
+                });
+
+                q.type = 'o';
+                q.dom = dom;
+
+                this.questions.push(q);
+
+                $id('showForms-edit-content').appendChild(dom);
+            } else if (question.type.toLowerCase() === 'w') {
+                const q = {};
+
+                const number = this.questions.length + 1;
+                const closedObject = editClosedQuestion(number,
+                    question.content,
+                    question.answers,
+                    () => {
+                        this.removeQuestion(q);
+                    });
+
+                q.type = 'w';
+                q.commonName = closedObject.commonName;
+                q.dom = closedObject.dom;
+                q.answers = closedObject.answers;
+
+                this.questions.push(q);
+
+                $id('showForms-edit-content').appendChild(closedObject.dom);
+            } else if (question.type.toLowerCase() === 'l') {
+                const q = {};
+
+                const number = this.questions.length + 1;
+                const dom = editNumberQuestion(number, question.content, () => {
+                    this.removeQuestion(q);
+                });
+
+                q.type = 'l';
+                q.dom = dom;
+
+                this.questions.push(q);
+
+                $id('showForms-edit-content').appendChild(dom);
+            }
+        }
+    },
+
+    removeQuestion(question) {
+        const myIndex = this.questions.indexOf(question);
+
+        if (myIndex > -1) {
+            this.questions.splice(myIndex, 1);
+
+            const limit = this.questions.length;
+            for (let i = myIndex; i < limit; i++) {
+                this.questions[i].dom.querySelectorAll('p')[0]
+                    .innerHTML = `${i + 1}. `;
+            }
+
+            question.dom.remove();
+        }
+    },
+
+    addOpenQuestion() {
+        const question = {};
+
+        const number = this.questions.length + 1;
+        const dom = createOpenQuestion(number, () => {
+            this.removeQuestion(question);
+        });
+
+        question.type = 'o';
+        question.dom = dom;
+
+        this.questions.push(question);
+
+        $id('showForms-edit-content').appendChild(dom);
+    },
+
+    addClosedQuestion() {
+        const question = {};
+
+        const number = this.questions.length + 1;
+        const closedObject = createClosedQuestion(number, () => {
+            this.removeQuestion(question);
+        });
+
+        question.type = 'w';
+        question.commonName = closedObject.commonName;
+        question.dom = closedObject.dom;
+        question.answers = closedObject.answers;
+
+        this.questions.push(question);
+
+        $id('showForms-edit-content').appendChild(closedObject.dom);
+    },
+
+    addNumericalQuestion() {
+        const question = {};
+
+        const number = this.questions.length + 1;
+        const dom = createNumberQuestion(number, () => {
+            this.removeQuestion(question);
+        });
+
+        question.type = 'l';
+        question.dom = dom;
+
+        this.questions.push(question);
+
+        $id('showForms-edit-content').appendChild(dom);
+    },
+
     assignEventListeners() {
+        $id('edit-form-openBtn')
+            .addEventListener('click', () => {
+                ShowForms.addOpenQuestion();
+            });
+
+        $id('edit-form-closedBtn')
+            .addEventListener('click', () => {
+                ShowForms.addClosedQuestion();
+            });
+
+        $id('edit-form-numberBtn')
+            .addEventListener('click', () => {
+                ShowForms.addNumericalQuestion();
+            });
+
         $id('showForms-form-buttons-back').addEventListener('click', () => {
-            this.showAll();
+            ShowForms.showAll();
+        });
+
+        $id('showForms-edit-buttons-back').addEventListener('click', () => {
+            ShowForms.showAll();
+        });
+
+        $id('showForms-edit-buttons-apply').addEventListener('click', () => {
+            overwriteForm(this.form, ShowForms.getData);
         });
 
         $id('showForms-refresh').addEventListener('click', () => {
