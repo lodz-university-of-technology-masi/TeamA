@@ -6,6 +6,7 @@ const downloadPng = require('../../icons/download.png');
 const {
     $id
 } = require('../utils');
+const sf = require('../common/form');
 const {
     createOpenQuestion,
     createClosedQuestion,
@@ -129,11 +130,11 @@ const ShowForms = {
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
                 $id('showForms-form-content').appendChild(
-                    createOpenQuestion(question.number, question.content)
+                    sf.createOpenQuestion(question.number, question.content)
                 );
             } else if (question.type.toLowerCase() === 'w') {
                 $id('showForms-form-content').appendChild(
-                    createClosedQuestion(
+                    sf.createClosedQuestion(
                         question.number,
                         question.content,
                         question.answers
@@ -141,7 +142,7 @@ const ShowForms = {
                 );
             } else if (question.type.toLowerCase() === 'l') {
                 $id('showForms-form-content').appendChild(
-                    createNumberQuestion(question.number, question.content)
+                    sf.createNumberQuestion(question.number, question.content)
                 );
             }
         }
