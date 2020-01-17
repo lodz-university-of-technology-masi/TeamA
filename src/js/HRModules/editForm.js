@@ -1,14 +1,15 @@
-import { removeFormFromDatabaseWithoutWarning, sendFormToDatabase } from '../databaseConnector';
+const {
+    removeFormFromDatabaseWithoutWarning,
+    sendFormToDatabase
+} = require('../databaseConnector');
 
 const removeImage = require('../../icons/delete.png');
 const remove2Image = require('../../icons/close.png');
 
-const { Validate } = require('../validator');
+const {
+    Validate
+} = require('../validator');
 const Dialogs = require('../common/dialogs');
-
-exports.removeQuestion = question => {
-    // asd
-};
 
 exports.editOpenQuestion = (number, question, removeCallback) => {
     const div = document.createElement('div');
@@ -22,6 +23,7 @@ exports.editOpenQuestion = (number, question, removeCallback) => {
     row.appendChild(p);
 
     const pInput = document.createElement('input');
+    pInput.value = question;
     pInput.placeholder = question;
     row.appendChild(pInput);
 
@@ -56,7 +58,37 @@ function editClosedOption(which, commonName, answerQuestion, removeCallback) {
 
     const questionInput = document.createElement('input');
     questionInput.type = 'text';
+    questionInput.value = `${answerQuestion[which - 1]}`;
     questionInput.placeholder = `${answerQuestion[which - 1]}`;
+    label.appendChild(questionInput);
+
+    if (which !== 1 && which !== 2) {
+        const image = new Image();
+        image.src = remove2Image;
+        image.onclick = removeCallback;
+        label.appendChild(image);
+    }
+
+    return label;
+}
+
+function addClosedOption(which, commonName, removeCallback) {
+    const label = document.createElement('label');
+    label.for = `showForms-form-question-${which}`;
+
+    const input = document.createElement('input');
+    input.id = `showForms-form-question-${which}`;
+    input.name = commonName;
+    input.type = 'radio';
+    input.disabled = true;
+    label.appendChild(input);
+
+    const child = document.createElement('div');
+    label.appendChild(child);
+
+    const questionInput = document.createElement('input');
+    questionInput.type = 'text';
+    questionInput.placeholder = `Opcja #${which}`;
     label.appendChild(questionInput);
 
     if (which !== 1 && which !== 2) {
@@ -81,6 +113,7 @@ exports.editClosedQuestion = (number, question, answersQuestion, removeCallback)
     row.appendChild(p);
 
     const pInput = document.createElement('input');
+    pInput.value = question;
     pInput.placeholder = question;
     row.appendChild(pInput);
 
@@ -99,7 +132,11 @@ exports.editClosedQuestion = (number, question, answersQuestion, removeCallback)
     for (let i = 1; i < answersQuestion.length + 1; i++) {
         const answer = {};
 
-        const dom = editClosedOption(i, commonName, answersQuestion, removeCallback);
+        let dom;
+        if (i > 2)
+            dom = editClosedOption(i, commonName, answersQuestion, removeCallback);
+        else
+            dom = editClosedOption(i, commonName, answersQuestion);
 
         answer.number = i;
         answer.dom = dom;
@@ -119,7 +156,7 @@ exports.editClosedQuestion = (number, question, answersQuestion, removeCallback)
         const answer = {};
 
         const answerNumber = answers.length + 1;
-        const dom = editClosedOption(answerNumber, commonName, () => {
+        const dom = addClosedOption(answerNumber, commonName, () => {
             const myIndex = answers.indexOf(answer);
 
             if (myIndex > -1) {
@@ -150,7 +187,11 @@ exports.editClosedQuestion = (number, question, answersQuestion, removeCallback)
     };
     div.appendChild(button);
 
-    return div;
+    return {
+        commonName,
+        answers,
+        dom: div
+    };
 };
 
 exports.editNumberQuestion = (number, question, removeCallback) => {
@@ -165,6 +206,7 @@ exports.editNumberQuestion = (number, question, removeCallback) => {
     row.appendChild(p);
 
     const pInput = document.createElement('input');
+    pInput.value = question;
     pInput.placeholder = question;
     row.appendChild(pInput);
 
@@ -183,7 +225,7 @@ exports.editNumberQuestion = (number, question, removeCallback) => {
     return div;
 };
 
-exports.overWriteForm = (form) => {
+exports.overwriteForm = form => {
     const questions = [];
     const doc = document.getElementById('showForms-edit-content').children;
     for (let i = 0; i < doc.length; i++) {

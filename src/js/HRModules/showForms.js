@@ -3,30 +3,34 @@ const pencilPng = require('../../icons/pencil.png');
 const deletePng = require('../../icons/delete.png');
 const downloadPng = require('../../icons/download.png');
 
-const { $id } = require('../utils');
+const {
+    $id
+} = require('../utils');
 const {
     createOpenQuestion,
     createClosedQuestion,
     createNumberQuestion
-} = require('../common/form');
+} = require('./newForm');
 const {
     editOpenQuestion,
     editClosedQuestion,
     editNumberQuestion,
-    removeQuestion,
-    overWriteForm
+    overwriteForm
 } = require('./editForm');
 
 const Dialogs = require('../common/dialogs');
 
 const {
-    getFormsFromDatabase, removeFormFromDatabase
+    getFormsFromDatabase,
+    removeFormFromDatabase
 } = require('../databaseConnector');
 const csvManager = require('../csvManager');
 
 const ShowForms = {
     initialized: false,
+    backToList: true,
     form: null,
+    questions: [],
 
     init() {
         this.initialized = true;
@@ -64,6 +68,7 @@ const ShowForms = {
                 img.src = pencilPng;
                 img.onclick = () => {
                     this.edit(form);
+                    this.backToList = true;
                     this.form = form;
                 };
                 child.appendChild(img);
@@ -111,6 +116,7 @@ const ShowForms = {
     showAll() {
         $id('showForms-list').style.display = 'block';
         $id('showForms-form').style.display = 'none';
+        $id('showForms-edit').style.display = 'none';
     },
 
     show(which) {
@@ -143,45 +149,152 @@ const ShowForms = {
 
     edit(which) {
         $id('showForms-list').style.display = 'none';
+        $id('showForms-form').style.display = 'none';
         $id('showForms-edit').style.display = 'block';
 
-        $id('showForms-edit-title').innerHTML = which.title;
+        $id('showForms-edit-title-input').value = which.title;
         $id('showForms-edit-content').innerHTML = '';
 
         for (const question of which.questions) {
             if (question.type.toLowerCase() === 'o') {
-                $id('showForms-edit-content').appendChild(
-                    editOpenQuestion(question.number, question.content, () => {
-                        removeQuestion(question);
-                    })
-                );
+                const q = {};
+
+                const number = this.questions.length + 1;
+                const dom = editOpenQuestion(number, question.content, () => {
+                    this.removeQuestion(q);
+                });
+
+                q.type = 'o';
+                q.dom = dom;
+
+                this.questions.push(q);
+
+                $id('showForms-edit-content').appendChild(dom);
             } else if (question.type.toLowerCase() === 'w') {
-                $id('showForms-edit-content').appendChild(
-                    editClosedQuestion(
-                        question.number,
-                        question.content,
-                        question.answers, () => {
-                            removeQuestion(question);
-                        }
-                    )
-                );
+                const q = {};
+
+                const number = this.questions.length + 1;
+                const closedObject = editClosedQuestion(number,
+                    question.content,
+                    question.answers,
+                    () => {
+                        this.removeQuestion(q);
+                    });
+
+                q.type = 'w';
+                q.commonName = closedObject.commonName;
+                q.dom = closedObject.dom;
+                q.answers = closedObject.answers;
+
+                this.questions.push(q);
+
+                $id('showForms-edit-content').appendChild(closedObject.dom);
             } else if (question.type.toLowerCase() === 'l') {
-                $id('showForms-edit-content').appendChild(
-                    editNumberQuestion(question.number, question.content, () => {
-                        removeQuestion(question);
-                    })
-                );
+                const q = {};
+
+                const number = this.questions.length + 1;
+                const dom = editNumberQuestion(number, question.content, () => {
+                    this.removeQuestion(q);
+                });
+
+                q.type = 'l';
+                q.dom = dom;
+
+                this.questions.push(q);
+
+                $id('showForms-edit-content').appendChild(dom);
             }
         }
     },
 
+    removeQuestion(question) {
+        const myIndex = this.questions.indexOf(question);
+
+        if (myIndex > -1) {
+            this.questions.splice(myIndex, 1);
+
+            const limit = this.questions.length;
+            for (let i = myIndex; i < limit; i++) {
+                this.questions[i].dom.querySelectorAll('p')[0]
+                    .innerHTML = `${i + 1}. `;
+            }
+
+            question.dom.remove();
+        }
+    },
+
+    addOpenQuestion() {
+        const question = {};
+
+        const number = this.questions.length + 1;
+        const dom = createOpenQuestion(number, () => {
+            this.removeQuestion(question);
+        });
+
+        question.type = 'o';
+        question.dom = dom;
+
+        this.questions.push(question);
+
+        $id('showForms-edit-content').appendChild(dom);
+    },
+
+    addClosedQuestion() {
+        const question = {};
+
+        const number = this.questions.length + 1;
+        const closedObject = createClosedQuestion(number, () => {
+            this.removeQuestion(question);
+        });
+
+        question.type = 'w';
+        question.commonName = closedObject.commonName;
+        question.dom = closedObject.dom;
+        question.answers = closedObject.answers;
+
+        this.questions.push(question);
+
+        $id('showForms-edit-content').appendChild(closedObject.dom);
+    },
+
+    addNumericalQuestion() {
+        const question = {};
+
+        const number = this.questions.length + 1;
+        const dom = createNumberQuestion(number, () => {
+            this.removeQuestion(question);
+        });
+
+        question.type = 'l';
+        question.dom = dom;
+
+        this.questions.push(question);
+
+        $id('showForms-edit-content').appendChild(dom);
+    },
+
     assignEventListeners() {
+        $id('edit-form-openBtn')
+            .addEventListener('click', () => {
+                ShowForms.addOpenQuestion();
+            });
+
+        $id('edit-form-closedBtn')
+            .addEventListener('click', () => {
+                ShowForms.addClosedQuestion();
+            });
+
+        $id('edit-form-numberBtn')
+            .addEventListener('click', () => {
+                ShowForms.addNumericalQuestion();
+            });
+
         $id('showForms-form-buttons-back').addEventListener('click', () => {
             this.showAll();
         });
 
         $id('showForms-edit-buttons-apply').addEventListener('click', () => {
-            overWriteForm(this.form);
+            overwriteForm(this.form);
         });
     }
 };
