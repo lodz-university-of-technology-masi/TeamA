@@ -2,6 +2,9 @@ const {
     removeFormFromDatabaseWithoutWarning,
     sendFormToDatabase
 } = require('../databaseConnector');
+const {
+    Wait
+} = require('../common/wait');
 
 const removeImage = require('../../icons/delete.png');
 const remove2Image = require('../../icons/close.png');
@@ -225,7 +228,7 @@ exports.editNumberQuestion = (number, question, removeCallback) => {
     return div;
 };
 
-exports.overwriteForm = form => {
+exports.overwriteForm = (form, callback) => {
     const questions = [];
     const doc = document.getElementById('showForms-edit-content').children;
     for (let i = 0; i < doc.length; i++) {
@@ -272,8 +275,12 @@ exports.overwriteForm = form => {
     };
     const validationData = Validate.validateForm(formToBase);
     if (validationData.validated) {
-        removeFormFromDatabaseWithoutWarning(form.id);
-        sendFormToDatabase(formToBase);
+        Wait.open();
+        removeFormFromDatabaseWithoutWarning(form.id, () => {
+            sendFormToDatabase(formToBase, () => {
+                callback();
+            });
+        });
     } else {
         let generalWarning = 'Uwagi: ';
         const validateWarnings = validationData.warnings;

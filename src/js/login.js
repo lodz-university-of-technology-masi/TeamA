@@ -7,9 +7,10 @@ const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const { $id } = require('./utils');
 const Cookies = require('./cookies');
 const Cognito = require('./cognitoConfig');
+const { getRole } = require('./databaseConnector');
 
 const FormManager = {
-    current: null,
+    current: 'signin',
 
     init() {
         this.assignHandlers();
@@ -37,6 +38,20 @@ const FormManager = {
     },
 
     assignHandlers() {
+        window.addEventListener('keyup', ev => {
+            if (ev.code === 'Enter') {
+                if (FormManager.current === 'signin') {
+                    SignIn.validate();
+                } else if (FormManager.current === 'signup') {
+                    if (Verify.shown) {
+                        Verify.validate();
+                    } else {
+                        SignUp.validate();
+                    }
+                }
+            }
+        });
+
         $id('form-tab-signin').addEventListener('click', () => {
             this.chooseSection('signin');
         });
@@ -100,8 +115,12 @@ const SignIn = {
         SignIn.stopQueue('Success');
         Cookies.set('user', SignIn.email.split('@')[0], 365);
         Cookies.set('IdToken', result.getIdToken().getJwtToken(), 365);
-
-        window.location.href = 'home.html';
+        getRole().then(resultFromDatabase => {
+            if (resultFromDatabase.toString() === 'guest')
+                window.location.href = 'guest.html';
+            else
+                window.location.href = 'home.html';
+        });
     },
 
     failure() {
@@ -221,13 +240,16 @@ const SignUp = {
 
 const Verify = {
     queue: false,
+    shown: false,
 
     show() {
+        this.shown = true;
         $id('form-signup-inputs').style.display = 'none';
         $id('form-signup-verify').style.display = 'block';
     },
 
     back() {
+        this.shown = false;
         $id('form-signup-inputs').style.display = 'block';
         $id('form-signup-verify').style.display = 'none';
 

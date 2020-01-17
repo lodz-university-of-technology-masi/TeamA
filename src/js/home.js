@@ -1,9 +1,11 @@
 import '../scss/home.scss';
 import '../html/home.html';
+import '../favicon.ico';
 
 const { $id } = require('./utils');
-const { AddForm } = require('./HRModules/addForm');
+const { AddForm, initAddForm } = require('./HRModules/addForm');
 const { AddUserToForm } = require('./HRModules/addUserToForm');
+const { RemoveUserFromForm } = require('./HRModules/removeUserFromForm');
 const { ShowForms } = require('./HRModules/showForms');
 const { ShowFilledForms } = require('./HRModules/showFilledForms');
 const { signOut, getToken } = require('./cognitoConfig');
@@ -53,6 +55,7 @@ window.onload = () => {
 
     AddForm.assignEventListeners();
     AddUserToForm.assignEventListeners();
+    RemoveUserFromForm.assignEventListeners();
     ShowForms.assignEventListeners();
 
     $id('header-userActions-logout')
@@ -75,6 +78,7 @@ window.onload = () => {
     $id('panel-btn-1-1')
         .addEventListener('click', () => {
             // AddForm.open(); Na wszelki zostawiam
+            initAddForm();
             SectionManager.choose('addForm');
         });
 
@@ -82,6 +86,11 @@ window.onload = () => {
         .addEventListener('click', () => {
             SectionManager.choose('addUserToForm');
             AddUserToForm.open();
+        });
+    $id('panel-btn-2-2')
+        .addEventListener('click', () => {
+            SectionManager.choose('removeUserFromForm');
+            RemoveUserFromForm.open();
         });
 
     $id('panel-btn-3-1')
@@ -99,6 +108,13 @@ window.onload = () => {
         SectionManager.goBack();
         SectionManager.choose('import');
     });
+
+    $id('showForms-translator-button').addEventListener('click', () => {
+        ShowForms.clear();
+        ShowForms.translated();
+        SectionManager.choose('showForms');
+    });
+
     const backButtons = document.querySelectorAll('.sectionBack > div');
     for (const button of backButtons)
         button.addEventListener('click', () => SectionManager.goBack());

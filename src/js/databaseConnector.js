@@ -1,11 +1,14 @@
 const $ = require('jquery');
 const Cookies = require('./cookies');
 const Dialogs = require('./common/dialogs');
+const {
+    Wait
+} = require('./common/wait');
 
 const invokeUrl = 'https://2gs2moc88g.execute-api.us-east-1.amazonaws.com/Webpage';
 const authMetod = Cookies.get('IdToken');
 
-exports.sendFormToDatabase = dataToBase => {
+exports.sendFormToDatabase = (dataToBase, callback) => {
     $.ajax({
         method: 'POST',
         url: `${invokeUrl}/-test`,
@@ -19,6 +22,9 @@ exports.sendFormToDatabase = dataToBase => {
         }),
         contentType: 'application/json',
         success: () => {
+            Wait.close();
+            if (typeof callback !== 'undefined')
+                callback();
             Dialogs.alert(
                 'Dodano do bazy danych',
                 'Twój formularz został dodany do bazy danych, możesz go teraz zobaczyć w oknie: "Zobacz szablony formularzy".'
@@ -91,6 +97,7 @@ exports.removeFormFromDatabase = formId => {
         }),
         contentType: 'application/json',
         success: () => {
+            Wait.close();
             Dialogs.alert(
                 'Usunięto formularz z bazy',
                 'Twój formularz został pomyślnie usunięty z bazy danych.'
@@ -111,7 +118,7 @@ exports.removeFormFromDatabase = formId => {
     });
 };
 
-exports.removeFormFromDatabaseWithoutWarning = formId => {
+exports.removeFormFromDatabaseWithoutWarning = (formId, callback) => {
     $.ajax({
         method: 'DELETE',
         url: `${invokeUrl}/-test`,
@@ -122,7 +129,10 @@ exports.removeFormFromDatabaseWithoutWarning = formId => {
             id: formId
         }),
         contentType: 'application/json',
-        success: () => {},
+        success: () => {
+            if (typeof callback !== 'undefined')
+                callback();
+        },
         error: (jqXHR, textStatus, errorThrown) => {
             console.error(
                 'Error requesting ride: ',
@@ -152,6 +162,7 @@ exports.sendFilledFormToDatabase = filledForm => {
         }),
         contentType: 'application/json',
         success: () => {
+            Wait.close();
             Dialogs.alert(
                 'Dodano do bazy danych',
                 'Twój wypełniony formularz został dodany do bazy danych.'
@@ -186,7 +197,26 @@ exports.getFilledFormFromDatabase = () => new Promise(resolve => {
     });
 });
 
-exports.removeFilledFormFromDatabase = filledFormId => {
+exports.getEvaluatedFilledFormFromDatabase = () => new Promise(resolve => {
+    $.ajax({
+        method: 'GET',
+        url: `${invokeUrl}/filledform/my`,
+        headers: {
+            Authorization: authMetod
+        },
+        contentType: 'application/json',
+        success: resp => resolve(resp.body),
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            Dialogs.alert(
+                'Nie pobrano listy z bazy danych',
+                'Podczas pobierania formularzy wystąpił nieoczekiwany błąd.'
+            );
+        }
+    });
+});
+
+const removeFilledFormFromDatabase = (filledFormId, callback) => {
     $.ajax({
         method: 'DELETE',
         url: `${invokeUrl}/filledform`,
@@ -197,15 +227,25 @@ exports.removeFilledFormFromDatabase = filledFormId => {
             id: filledFormId
         }),
         contentType: 'application/json',
-        success: () => {},
+        success: () => {
+            Wait.close();
+            callback();
+
+            Dialogs.alert(
+                'Dodano do bazy danych',
+                'Twój wynik został pomyślnie dodany do bazy danych.'
+            );
+        },
         error: (jqXHR, textStatus, errorThrown) => {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
         }
     });
 };
 
+exports.removeFilledFormFromDatabase = removeFilledFormFromDatabase;
 
-exports.sendResultToDatabase = result => {
+
+exports.sendResultToDatabase = (result, callback) => {
     $.ajax({
         method: 'POST',
         url: `${invokeUrl}/results`,
@@ -216,16 +256,15 @@ exports.sendResultToDatabase = result => {
             formTitle: result.formTitle,
             owner: result.owner,
             hrEmployer: result.hrEmployer,
+            optionalComments: JSON.stringify(result.optionalComments),
             points: result.points
         }),
         contentType: 'application/json',
         success: () => {
-            Dialogs.alert(
-                'Dodano do bazy danych',
-                'Twój wynik został pomyślnie dodany do bazy danych.'
-            );
+            removeFilledFormFromDatabase(result.formId, callback);
         },
         error: (jqXHR, textStatus, errorThrown) => {
+            Wait.close();
             console.error(
                 'Error requesting ride: ',
                 textStatus,
@@ -243,7 +282,7 @@ exports.sendResultToDatabase = result => {
 exports.getResultFromDatabase = () => new Promise(resolve => {
     $.ajax({
         method: 'GET',
-        url: `${invokeUrl}/results`,
+        url: `${invokeUrl}/results/my`,
         headers: {
             Authorization: authMetod
         },

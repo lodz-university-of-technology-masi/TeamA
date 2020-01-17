@@ -7,9 +7,47 @@ const {
     createNumberQuestion
 } = require('../HRModules/newForm');
 const { Validate } = require('../validator');
+const { getOneSynonym, getSynonyms, getLanguages } = require('../common/yandex');
+
+let focused;
+
 
 const AddForm = {
     questions: [],
+
+    getText(elem) {
+        if(elem.tagName === "INPUT" && elem.type === "text") {
+            return elem.value.substring(elem.selectionStart,
+                    elem.selectionEnd);
+        }
+        return null;
+    },
+
+    findSynonym() {
+        Promise.resolve(getOneSynonym(focused))
+            .then(str => {
+                if (str.length === 0) {
+                    Dialogs.alert('Bład', 'Nie ma takiego słowa w bazie');
+                    return;
+                }
+                const firstSynonym = str[0].tr[0].text;
+                Promise.resolve(getSynonyms(firstSynonym))
+                    .then(tab => {
+                        let synonyms = '';
+                        for (speech_parts of tab) {
+                            if (speech_parts.tr[0].syn) {
+                                for (obj of speech_parts.tr[0].syn) {
+                                    synonyms += obj.text + ', '
+                                }
+                            }
+                            else Dialogs.alert('Błąd', 'Nasza baza nie ma synonimów dla tego słowa');
+                        }
+                        if (synonyms) Dialogs.alert('Synonimy : ', synonyms);
+                        else Dialogs.alert('Błąd', 'Nasza baza nie ma synonimów dla tego słowa');
+                    });
+            });
+    },
+
 
     removeQuestion(question) {
         const myIndex = this.questions.indexOf(question);
@@ -202,7 +240,17 @@ const AddForm = {
         }
     },
 
+  
+
+    
+
     assignEventListeners() {
+        $id('addForm-synonym-button')
+            .addEventListener('click', () => {
+                AddForm.findSynonym();
+                focused = null;
+            });
+
         $id('add-form-openBtn')
             .addEventListener('click', () => {
                 AddForm.addOpenQuestion();
@@ -229,5 +277,17 @@ const AddForm = {
             });
     }
 };
+
+
+exports.initAddForm = () => {
+    setInterval(function () {
+        if (document.activeElement.tagName !== 'BUTTON') {
+            let temp = AddForm.getText(document.activeElement);
+            if (temp) {
+                focused = temp;
+            }
+        }
+    }, 100);
+}
 
 exports.AddForm = AddForm;

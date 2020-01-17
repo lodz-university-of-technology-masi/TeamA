@@ -75,6 +75,9 @@
             </div>
         </div>
 
+        <div class="panel-btn"><button style="margin-top: 15px; margin-left: 15px;" id="showGuestForms-translator-button">
+            Przetłumacz szablony</button></div>
+
         <h2>Wybierz formularz</h2>
 
         <div id="fillForm-content">
@@ -86,7 +89,8 @@
                         <div>Nr.</div>
                         <div>Nazwa</div>
                         <div>Pytania</div>
-                        <div></div>
+                        <div><img id="fillForm-refresh" src="../icons/refresh.png" alt="Refresh" title="Refresh" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -98,7 +102,6 @@
                     <button id="fillForm-form-buttons-finish">Zakończ</button>
                 </div>
             </div>
-        </div>
     </section>
 
     <section class="section" id="checkedForm">
@@ -116,14 +119,15 @@
         <div id="checkedForm-content">
             <div id="checkedForm-content-loading" class="loading"></div>
 
-            <div id="checkedForm-list">
+            <div id="checkedForm-list" style="display: none;">
                 <div id="checkedForm-list-table">
                     <div name="title">
                         <div>Nr.</div>
                         <div>Nazwa</div>
                         <div>Sprawdzał</div>
                         <div>Wynik</div>
-                        <div></div>
+                        <div><img id="checkedForm-refresh" src="../icons/refresh.png" alt="Refresh" title="Refresh" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,8 +144,14 @@
                     </div>
                 </div>
             </div>
-        </div>
     </section>
+
+    <div id="wait" class="dialogs">
+        <div id="wait-content">
+            <h5>Proszę czekać</h5>
+            <div class="loading"></div>
+        </div>
+    </div>
 
     <div id="dialogs"></div>
 

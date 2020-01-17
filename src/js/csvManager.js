@@ -106,11 +106,11 @@ function correctNumberOfQuestionsChaaracters(question) {
 
 
 function checkAmoutOfAnswers(answersTab, numberOfAnswers) {
-    if (answersTab.length === numberOfAnswers || (numberOfAnswers === '|' && answersTab.length === 0)) {
+    if (answersTab.length === Number(numberOfAnswers) || (numberOfAnswers === '|' && answersTab.length === 0)) {
         return true;
     }
     Dialogs.alert('Błąd walidacji pliku', 'Faktyczna ilość odpowiedzi nie równa się podanej w treści pytania.');
-    return true;
+    return false;
 }
 
 function checkIfTitleAlreadyExists(forms, fileName) {
@@ -140,7 +140,8 @@ function checkFormTitle(fileName) {
 
             const output = {
                 title: fileName,
-                questions: []
+                questions: [],
+                assignedUsers: []
             };
 
             reader.onload = () => {
@@ -159,6 +160,7 @@ function checkFormTitle(fileName) {
                 for (const line of lines) {
                     const obj = {};
                     const currentLine = line.split(';').filter(el => (el !== ''));
+                    if (currentLine[0] === null || currentLine[0] === undefined) continue;
                     if (currentLine[0].trim().length === 0) continue;
                     if (!checkSemicolons(currentLine) || !checkQuotes(currentLine)) return;
                     const tab = [];

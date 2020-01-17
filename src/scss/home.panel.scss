@@ -1,8 +1,10 @@
 #panel {
+    position: relative;
     width:100%;
     height: calc(100% - 46px);
     overflow: hidden;
     display: block;
+    z-index: 10;
 
     > div {
         width: calc(100% - 20px);

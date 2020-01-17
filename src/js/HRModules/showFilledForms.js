@@ -1,6 +1,8 @@
 const pencilPng = require('../../icons/pencil.png');
 
-const { $id } = require('../utils');
+const {
+    $id
+} = require('../utils');
 const Dialogs = require('../common/dialogs');
 const {
     createOpenQuestion,
@@ -14,19 +16,41 @@ const {
     sendResultToDatabase
 } = require('../databaseConnector');
 
+const {
+    Wait
+} = require('../common/wait');
+
 const ShowFilledForms = {
+    queue: false,
     points: [],
     optionalComments: [],
     initialized: false,
     owner: '',
     hrEmployer: '',
     formTitle: '',
+    formId: null,
 
     init() {
         this.initialized = true;
         this.hrEmployer = $id('header-user-label').innerText;
         this.assignEventListeners();
+        this.getData();
+    },
+
+    getData() {
+        if (ShowFilledForms.queue)
+            return;
+
+        ShowFilledForms.queue = true;
+        ShowFilledForms.hideAll();
+        $id('showFilledForms-content-loading').style.display = 'block';
+
+        while ($id('showFilledForms-list-table').children.length !== 1) {
+            $id('showFilledForms-list-table').children[1].remove();
+        }
+
         getFilledFormFromDatabase().then(str => {
+            ShowFilledForms.queue = false;
             const forms = JSON.parse(str);
 
             for (const [it, form] of forms.entries()) {
@@ -53,7 +77,7 @@ const ShowFilledForms = {
                 const img = new Image();
                 img.src = pencilPng;
                 img.onclick = () => {
-                    this.show(form);
+                    ShowFilledForms.show(form);
                 };
                 child.appendChild(img);
 
@@ -62,9 +86,17 @@ const ShowFilledForms = {
                 $id('showFilledForms-list-table').appendChild(div);
             }
 
-            this.showAll();
+            ShowFilledForms.showAll();
 
-            $id('showFilledForms-content-loading').remove();
+            $id('showFilledForms-content-loading').style.display = 'none';
+        }).catch(err => {
+            console.error(err);
+
+            ShowFilledForms.queue = false;
+            Dialogs.alert(
+                'Wystąpił problem',
+                'Podczas przetwarzania wystąpił nieoczekiwany błąd...'
+            );
         });
     },
 
@@ -78,11 +110,18 @@ const ShowFilledForms = {
         $id('showFilledForms-form').style.display = 'none';
     },
 
+    hideAll() {
+        $id('showFilledForms-list').style.display = 'none';
+        $id('showFilledForms-form').style.display = 'none';
+    },
+
     show(which) {
         this.points = [];
         this.optionalComments = [];
         this.owner = which.owner;
         this.formTitle = which.title;
+        this.formId = which.formId;
+
         $id('showFilledForms-list').style.display = 'none';
         $id('showFilledForms-form').style.display = 'block';
 
@@ -215,14 +254,15 @@ const ShowFilledForms = {
                         this.optionalComments.push(commentsLabels[i].value);
                     }
                     const dataToBackend = {
+                        formId: this.formId,
                         formTitle: this.formTitle,
                         owner: this.owner,
                         hrEmployer: this.hrEmployer,
                         points: this.points,
                         optionalComments: this.optionalComments
                     };
-                    sendResultToDatabase(dataToBackend);
-                    this.showAll();
+                    Wait.open();
+                    sendResultToDatabase(dataToBackend, ShowFilledForms.getData);
                 }
             );
         } else {
@@ -240,6 +280,10 @@ const ShowFilledForms = {
                 ShowFilledForms.showAll();
             }
         );
+
+        $id('showFilledForms-refresh').addEventListener('click', () => {
+            ShowFilledForms.getData();
+        });
 
         $id('showFilledForms-form-buttons-apply').addEventListener(
             'click',

@@ -76,7 +76,7 @@
                         </button>
                     </div>
                     <div class="panel-btn">
-                        <button>Usuń użytkownika z formularza</button>
+                        <button id="panel-btn-2-2">Usuń użytkownika z formularza</button>
                     </div>
                 </div>
             </div>
@@ -106,8 +106,12 @@
         <!--tu jestem todo wywalic inline style-->
         <div class="panel-btn"><button style="margin-top: 15px; margin-left: 15px;" id="showForms-import-file-button">
                 Importuj plik Csv</button></div>
-        <h2>Lista formularzy</h2>
 
+
+        <div class="panel-btn"><button style="margin-top: 5px; margin-left: 15px;" id="showForms-translator-button">
+                Przetłumacz szablony</button></div>
+
+        <h2>Lista formularzy</h2>
         <div id="showForms-content">
             <div id="showForms-content-loading" class="loading"></div>
 
@@ -120,7 +124,8 @@
                         <div></div>
                         <div></div>
                         <div></div>
-                        <div></div>
+                        <div><img id="showForms-refresh" src="../icons/refresh.png" alt="Refresh" title="Refresh" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -189,7 +194,8 @@
                         <div>Nazwa</div>
                         <div>Wykonawca</div>
                         <div>Pytania</div>
-                        <div></div>
+                        <div><img id="showFilledForms-refresh" src="../icons/refresh.png" alt="Refresh"
+                                title="Refresh" /></div>
                     </div>
                 </div>
             </div>
@@ -220,6 +226,7 @@
         <div class="form-editing" id="addForm-content">
             <h3 id="addForm-form-title">
                 <input type="text" placeholder="Tytuł formularza..." />
+                <button name="synonym" id="addForm-synonym-button">Znajdź synonim</button>
             </h3>
             <div class="form-question-actions">
                 <div id="add-form-openBtn">
@@ -273,6 +280,39 @@
         </div>
     </section>
 
+    <section class="section" id="removeUserFromForm">
+        <div class="sectionBack">
+            <div>
+                <div class="sectionBack-content">
+                    <img src="../icons/arrow-left.png" alt="Back" />
+                    <span>Powrót</span>
+                </div>
+            </div>
+        </div>
+
+        <h2>Usuwanie użytkownika z formularza</h2>
+
+        <div id="removeUserFromForm-content">
+            <header>
+                <div class="removeUserFromForm-headerPost">Formularz</div>
+                <div class="removeUserFromForm-headerPost">Użytkownicy</div>
+                <div id="removeUserFromForm-headerLine"></div>
+            </header>
+            <div id="removeUserFromForm-main">
+                <div class="removeUserFromForm-main-post" id="removeUserFromForm-form">
+                    <h4>Wybierz formularz</h4>
+                    <div class="removeUserFromForm-list" id="removeUserFromForm-forms"></div>
+                    <button id="removeUserFromForm-form-button">Dalej</button>
+                </div>
+                <div class="removeUserFromForm-main-post" id="removeUserFromForm-user">
+                    <h4>Wybierz użytkowników</h4>
+                    <div class="removeUserFromForm-list" id="removeUserFromForm-users"></div>
+                    <button id="removeUserFromForm-users-button">Zatwierdź</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="section" id="import">
         <div class="sectionBack">
             <div>
@@ -300,7 +340,14 @@
         </div>
     </section>
 
-    <div id="dialogs"></div>
+    <div id="wait" class="dialogs">
+        <div id="wait-content">
+            <h5>Proszę czekać</h5>
+            <div class="loading"></div>
+        </div>
+    </div>
+
+    <div class="dialogs" id="dialogs"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/home.js"></script>

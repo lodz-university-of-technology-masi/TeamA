@@ -38,6 +38,17 @@ module.exports = {
                 }
             },
             {
+                test: /favicon.ico$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        publicPath: './',
+                        outputPath: '../'
+                    }
+                }
+            },
+            {
                 test: /icons(\/|\\).*\.(svg|png|jpg|gif|jpeg)$/,
                 use: {
                     loader: 'file-loader',

@@ -20,14 +20,17 @@ const {
 } = require('./editForm');
 
 const Dialogs = require('../common/dialogs');
-
 const {
     getFormsFromDatabase,
     removeFormFromDatabase
 } = require('../databaseConnector');
 const csvManager = require('../csvManager');
+const {
+    translateText
+} = require('../translator');
 
 const ShowForms = {
+    queue: false,
     initialized: false,
     backToList: true,
     form: null,
@@ -36,7 +39,24 @@ const ShowForms = {
     init() {
         this.initialized = true;
 
+        this.getData();
+    },
+
+    getData() {
+        if (ShowForms.queue)
+            return;
+
+        ShowForms.queue = true;
+        ShowForms.hideAll();
+
+        while ($id('showForms-list-table').children.length !== 1) {
+            $id('showForms-list-table').children[1].remove();
+        }
+
+        $id('showForms-content-loading').style.display = 'block';
+
         Promise.resolve(getFormsFromDatabase()).then(str => {
+            ShowForms.queue = false;
             const forms = JSON.parse(str);
 
             for (const [it, form] of forms.entries()) {
@@ -103,9 +123,113 @@ const ShowForms = {
                 $id('showForms-list-table').appendChild(div);
             }
 
-            this.showAll();
+            ShowForms.showAll();
 
-            $id('showForms-content-loading').remove();
+            $id('showForms-content-loading').style.display = 'none';
+        }).catch(err => {
+            console.error(err);
+
+            ShowForms.queue = false;
+            Dialogs.alert(
+                'Wystąpił problem',
+                'Podczas przetwarzania wystąpił nieoczekiwany błąd...'
+            );
+        });
+    },
+
+    translated() {
+        this.initialized = true;
+
+        Promise.resolve(getFormsFromDatabase()).then(str => {
+            const forms = JSON.parse(str);
+
+            const dataToTranslate = [];
+            for (let i = 0; i < forms.length; i++) {
+                dataToTranslate.push(forms[i].title);
+                for (let j = 0; j < forms[i].questions.length; j++) {
+                    dataToTranslate.push(forms[i].questions[j].content);
+                }
+            }
+            translateText(JSON.stringify(dataToTranslate)).then(result => {
+                try {
+                    const translatedText = JSON.parse(result);
+
+                    let i = 0;
+                    for (let z = 0; z < forms.length; z++) {
+                        forms[z].title = translatedText[i];
+                        for (let j = 0; j < forms[z].questions.length; j++) {
+                            i += 1;
+                            forms[z].questions[j].content = translatedText[i];
+                        }
+                        i += 1;
+                    }
+                } catch (e) {
+                    Dialogs.alert('Error', 'Nastąpił problem podczas działania aplikacji translatora, aplikacja zwróciła nie poprawne dane, proszę przeładować aplikację.');
+                    this.clear();
+                    this.showAll();
+                }
+
+
+                for (const [it, form] of forms.entries()) {
+                    const div = document.createElement('div');
+
+                    let child = document.createElement('div');
+                    child.innerHTML = it + 1;
+                    div.appendChild(child);
+
+                    child = document.createElement('div');
+                    child.innerHTML = form.title;
+                    div.appendChild(child);
+
+                    child = document.createElement('div');
+                    child.innerHTML = form.questions.length;
+                    div.appendChild(child);
+
+                    child = document.createElement('div');
+                    let img = new Image();
+                    img.src = eyePng;
+                    img.onclick = () => {
+                        this.show(form);
+                    };
+                    child.appendChild(img);
+                    div.appendChild(child);
+
+                    child = document.createElement('div');
+                    img = new Image();
+                    img.src = pencilPng;
+                    child.appendChild(img);
+                    div.appendChild(child);
+
+                    child = document.createElement('div');
+                    img = new Image();
+                    img.src = downloadPng;
+                    img.onclick = () => {
+                        csvManager.saveCsv(form);
+                    };
+                    child.appendChild(img);
+                    div.appendChild(child);
+
+                    child = document.createElement('div');
+                    img = new Image();
+                    img.src = deletePng;
+                    img.onclick = () => {
+                        Dialogs.confirm(
+                            'Usuwanie formularza',
+                            'Czy na pewno chcesz usunąć ten formluarz? Tego nie da się cofnąć!',
+                            () => {
+                                removeFormFromDatabase(form.formId);
+                            }
+                        );
+                    };
+                    child.appendChild(img);
+
+                    div.appendChild(child);
+
+                    $id('showForms-list-table').appendChild(div);
+                }
+
+                this.showAll();
+            });
         });
     },
 
@@ -118,6 +242,19 @@ const ShowForms = {
         $id('showForms-list').style.display = 'block';
         $id('showForms-form').style.display = 'none';
         $id('showForms-edit').style.display = 'none';
+    },
+
+    hideAll() {
+        $id('showForms-list').style.display = 'none';
+        $id('showForms-form').style.display = 'none';
+        $id('showForms-edit').style.display = 'none';
+    },
+
+    clear() {
+        const node = document.getElementById('showForms-list-table');
+        while (node.children.length > 1) {
+            node.removeChild(node.children[1]);
+        }
     },
 
     show(which) {
@@ -295,7 +432,11 @@ const ShowForms = {
         });
 
         $id('showForms-edit-buttons-apply').addEventListener('click', () => {
-            overwriteForm(this.form);
+            overwriteForm(this.form, ShowForms.getData);
+        });
+
+        $id('showForms-refresh').addEventListener('click', () => {
+            ShowForms.getData();
         });
     }
 };

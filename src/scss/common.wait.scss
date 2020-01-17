@@ -1,0 +1,41 @@
+#wait {
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100vw;
+    height:100vh;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+#wait-content {
+    max-width: 260px;
+    height: 70px;
+    padding: 20px;
+    border-radius: 5px;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: transform 0.3s, opacity 0.3s;
+
+    > h5 {
+        flex: 1 1;
+        font-size: 1.3em;
+        margin-bottom: 5px;
+        font-family: $fontfamily;
+        white-space: nowrap;
+        margin-right: 30px;
+    }
+
+    > div {
+        flex: 0 0 60px;
+    }
+}
