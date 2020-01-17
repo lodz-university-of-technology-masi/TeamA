@@ -2,6 +2,7 @@ const eyePng = require('../../icons/eye.png');
 const pencilPng = require('../../icons/pencil.png');
 const deletePng = require('../../icons/delete.png');
 const downloadPng = require('../../icons/download.png');
+const { Wait } = require('../common/wait');
 
 const {
     Wait

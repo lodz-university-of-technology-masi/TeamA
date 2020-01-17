@@ -8,6 +8,7 @@ const {
     $id
 } = require('./utils');
 const Dialogs = require('./common/dialogs');
+const { Wait } = require('./common/wait');
 
 exports.saveCsv = data => {
     let readForm = [];
@@ -32,7 +33,7 @@ exports.saveCsv = data => {
         for (let j = 0; j < readAnswers.length; j++) {
             csvStringOneLine += `${readAnswers[j]};`;
         }
-        csvOutput += `${csvStringOneLine}" \r\n`;
+        csvOutput += `${csvStringOneLine}"; \r\n`;
     }
 
     let csvContent = 'data:text/csv;charset=utf-8,';
@@ -46,7 +47,9 @@ exports.saveCsv = data => {
 };
 
 function checkFileName(fileName) {
+    Wait.open();
     if (fileName.substring(fileName.length - 3) !== 'csv') {
+        Wait.close();
         Dialogs.alert('Błąd walidacji pliku', 'Wybrany plik ma złe rozszerzenie, wybierz plik z rozszerzeniem csv');
         return false;
     }
@@ -63,6 +66,7 @@ function numerationInCorrectOrder(lines) {
             questionNumber += 1;
             continue;
         } else {
+            Wait.close();
             Dialogs.alert('Błąd walidacji pliku', 'Pytania są źle ponumerowane');
             return false;
         }
@@ -74,12 +78,14 @@ function checkQuotes(currentLine) {
     if (currentLine[0].substring(0, 1) === '"' && currentLine[currentLine.length - 2] === '"') {
         return true;
     }
+    Wait.close();
     Dialogs.alert('Błąd walidacji pliku', 'Zła liczba cudzysłowów. Powinny być dwa na początku i końcu każdego pytania');
     return false;
 }
 
 function checkSemicolons(currentLine) {
     if (currentLine.length < 7) {
+        Wait.close();
         Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma złą ilość średników, minimalna ilość to 6');
         return false;
     }
@@ -90,6 +96,7 @@ function checkQuestionType(questionType) {
     if (questionType === 'O' || questionType === 'W' || questionType === 'L') {
         return true;
     }
+    Wait.close();
     Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma zły typ, dozwolone typy to: O (otwarte), W (wyboru), L (liczbowe)');
     return false;
 }
@@ -98,6 +105,7 @@ function checkQuestionLanguage(questionLanguage) {
     if (questionLanguage === 'PL' || questionLanguage === 'EN') {
         return true;
     }
+    Wait.close();
     Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma zły język, dozwolone języki to: PL lub EN');
     return false;
 }
@@ -106,6 +114,7 @@ function correctNumberOfQuestionsChaaracters(question) {
     if (question.length < 250 && question.length > 0) {
         return true;
     }
+    Wait.close();
     Dialogs.alert('Błąd walidacji pliku', 'Pytanie ma więcej niż 250 znaków, lub jest puste');
     return false;
 }
@@ -115,6 +124,7 @@ function checkAmoutOfAnswers(answersTab, numberOfAnswers) {
     if (answersTab.length === Number(numberOfAnswers) || (numberOfAnswers === '|' && answersTab.length === 0)) {
         return true;
     }
+    Wait.close();
     Dialogs.alert('Błąd walidacji pliku', 'Faktyczna ilość odpowiedzi nie równa się podanej w treści pytania.');
     return false;
 }
@@ -122,13 +132,12 @@ function checkAmoutOfAnswers(answersTab, numberOfAnswers) {
 function checkIfTitleAlreadyExists(forms, fileName) {
     for (const form of forms) {
         if (form.title === fileName) {
+            Wait.close();
             Dialogs.alert(
                 'Błąd walidacji pliku',
                 'Formularz o takiej nazwie istnieje już w bazie danych! Zmień nazwę pliku lub wbierz inny plik.',
-                () => {
-
-                }
             );
+            
             return false;
         }
     }
@@ -202,6 +211,7 @@ function checkFormTitle(fileName) {
 
 
 exports.read = () => {
+    Wait.open();
     let fileName = $id('import-input')
         .value
         .split(/(\\|\/)/g)
