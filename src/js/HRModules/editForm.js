@@ -136,10 +136,29 @@ exports.editClosedQuestion = (number, question, answersQuestion, removeCallback)
         const answer = {};
 
         let dom;
-        if (i > 2)
-            dom = editClosedOption(i, commonName, answersQuestion, removeCallback);
-        else
+        if (i <= 2)
             dom = editClosedOption(i, commonName, answersQuestion);
+        else
+            dom = editClosedOption(i, commonName, answersQuestion, () => {
+                const myIndex = answers.indexOf(answer);
+
+                if (myIndex > -1) {
+                    answers.splice(myIndex, 1);
+
+                    const limit = answers.length;
+                    for (let j = myIndex; j < limit; i++) {
+                        answers[j].dom.querySelectorAll('input')[0]
+                            .id = `showForms-form-question-${j + 1}`;
+
+                        answers[j].dom.querySelectorAll('input')[1]
+                            .placeholder = `Opcja #${j + 1}`;
+                    }
+
+                    dom.remove();
+
+                    button.style.visibility = 'visible';
+                }
+            });
 
         answer.number = i;
         answer.dom = dom;
