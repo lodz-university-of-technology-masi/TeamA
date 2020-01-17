@@ -1,4 +1,4 @@
-#addForm-content {
+.form-editing {
     width: 100%;
     max-width: 1000px;
     height: 100%;
@@ -7,7 +7,7 @@
     box-shadow: 0 0 5px 1px #ccc;
     overflow: auto;
 
-    > h3 {
+    >h3 {
         background: $basecolor;
         width: 100%;
         height: 53px;
@@ -16,7 +16,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
 
-        > input {
+        >input {
             width: calc(100% - 200px);
             height: calc(100% - 21px);
             padding: 5px 0;
@@ -31,15 +31,16 @@
                 color: #fff;
             }
         }
-        > button {
+
+        >button {
             text-align: center;
-            margin:0 auto;
+            margin: 0 auto;
             padding: 7px 7px;
             font-size: 0.9em;
             font-family: 'Open Sans', sans-serif;
             background: white;
             border-radius: 10px;
-            border:solid 2px #39557C;
+            border: solid 2px #39557C;
             color: #39557C;
             cursor: pointer;
 
@@ -51,13 +52,13 @@
     }
 }
 
-#addForm-form-actions {
+.form-question-actions {
     width: 100%;
     height: 40px;
     border-bottom: solid 1px $basecolor;
     display: flex;
 
-    > div {
+    >div {
         flex: 1 1;
         height: 40px;
         font-size: 1em;
@@ -70,7 +71,7 @@
             border-right: solid 1px $basecolor;
         }
 
-        > p {
+        >p {
             width: 100%;
             height: 100%;
             display: flex;
@@ -80,25 +81,25 @@
         }
 
         &:hover,
-        &:hover > p {
+        &:hover>p {
             background: $basecolor;
             color: #fff;
         }
 
-        &:active > p {
+        &:active>p {
             transform: scale(0.9);
         }
     }
 }
 
-#addForm-form-content {
+.form-change-content {
     width: calc(100% - 40px);
     height: calc(100% - 53px - 41px - 40px - 50px);
     padding: 20px;
     overflow: auto;
 }
 
-#addForm-form-buttons {
+.form-change-buttons {
     width: calc(100% - 40px);
     height: 50px;
     padding: 0 20px;
@@ -107,7 +108,7 @@
     align-items: center;
     justify-content: flex-end;
 
-    > button {
+    >button {
         padding: 10px 20px;
         font-family: $fontfamily;
         border-radius: 5px;
@@ -130,17 +131,17 @@
     width: 100%;
     margin-bottom: 20px;
 
-    > div:first-of-type {
+    >div:first-of-type {
         display: flex;
 
-        > p {
+        >p {
             font-size: 1.2em;
             font-family: 'Open Sans', sans-serif;
             font-weight: 700;
             margin-bottom: 10px;
         }
 
-        > input {
+        >input {
             flex: 1 1;
             margin-left: 10px;
             height: 27px;
@@ -151,7 +152,7 @@
             // border-bottom: solid 1px $basecolor;
         }
 
-        > img {
+        >img {
             width: 24px;
             height: 24px;
             padding: 1px;
@@ -171,7 +172,7 @@
 
 .newForm-numericalQuestion,
 .newForm-openQuestion {
-    > input {
+    >input {
         width: calc(100% - 20px);
         padding: 5px 10px;
         font-size: 1em;
@@ -186,7 +187,7 @@
 }
 
 .newForm-closedQuestion {
-    > button {
+    >button {
         padding: 8px 14px;
         background: $basecolor;
         font-size: 0.9em;
@@ -200,16 +201,16 @@
 .newForm-closedQuestion-answers {
     display: block;
 
-    > label {
+    >label {
         width: 100%;
         height: 32px;
         display: flex;
 
-        > input[type="radio"] {
+        >input[type="radio"] {
             display: none;
         }
 
-        > div {
+        >div {
             width: 16px;
             height: 16px;
             border: solid 2px #000;
@@ -219,7 +220,7 @@
             float: left;
         }
 
-        > input[type="text"] {
+        >input[type="text"] {
             flex: 1 1;
             margin-left: 10px;
             margin-right: 10px;
@@ -229,7 +230,7 @@
             border: none;
         }
 
-        > img {
+        >img {
             width: 24px;
             height: 24px;
             padding: 3px;
@@ -245,7 +246,7 @@
             }
         }
 
-        > span {
+        >span {
             width: calc(100% - 20px - 20px);
             font-size: 1em;
             line-height: 32px;
