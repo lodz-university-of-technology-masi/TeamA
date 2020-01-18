@@ -5,9 +5,6 @@ const downloadPng = require('../../icons/download.png');
 const { Wait } = require('../common/wait');
 
 const {
-    Wait
-} = require('../common/wait');
-const {
     $id
 } = require('../utils');
 const sf = require('../common/form');
