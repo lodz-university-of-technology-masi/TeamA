@@ -115,7 +115,8 @@ const SignIn = {
         SignIn.stopQueue('Success');
         Cookies.set('user', SignIn.email.split('@')[0], 365);
         Cookies.set('IdToken', result.getIdToken().getJwtToken(), 365);
-        getRole().then(resultFromDatabase => {
+
+        getRole(result.getIdToken().getJwtToken()).then(resultFromDatabase => {
             if (resultFromDatabase.toString() === 'guest')
                 window.location.href = 'guest.html';
             else

@@ -342,12 +342,12 @@ exports.getUsers = () => new Promise(resolve => {
     });
 });
 
-exports.getRole = () => new Promise(resolve => {
+exports.getRole = auth => new Promise(resolve => {
     $.ajax({
         method: 'GET',
         url: 'https://iqxvh51xp7.execute-api.us-east-1.amazonaws.com/CognitoStage/role',
         headers: {
-            Authorization: authMetod
+            Authorization: auth
         },
         contentType: 'application/json',
         success: resp => resolve(resp.body),
